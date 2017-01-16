@@ -9,3 +9,4 @@
 /.vscode
 /.babelrc
 localConfig.json
+npm-debug.log

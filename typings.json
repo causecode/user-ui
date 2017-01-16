@@ -6,7 +6,12 @@
     "react": "registry:dt/react#0.14.0+20160621225615",
     "react-dom": "registry:dt/react-dom#0.14.0+20160412154040",
     "react-redux": "registry:dt/react-redux#4.4.0+20160501125835",
-    "redux": "registry:dt/redux#3.3.1+20160326112656"
+    "redux": "registry:dt/redux#3.3.1+20160326112656",
+    "enzyme": "registry:dt/enzyme#2.5.1+20161025153540",
+    "jest": "registry:dt/jest#16.0.0+20161130222235",
+    "radium": "registry:dt/radium#0.18.1+20160907102602",
+    "react-bootstrap": "registry:dt/react-bootstrap#0.0.0+20160806072414",
+    "react-fontawesome": "registry:dt/react-fontawesome#1.1.0+20161121205806"
   },
   "dependencies": {
     "react-router": "registry:npm/react-router#2.4.0+20160616150328",
