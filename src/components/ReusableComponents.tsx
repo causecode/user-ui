@@ -9,6 +9,7 @@ export const HelpBlock = Radium(Bootstrap.HelpBlock);
 export const FormGroup = Radium(Bootstrap.FormGroup);
 export const Checkbox = Radium(Bootstrap.Checkbox);
 export const Button = Radium(Bootstrap.Button);
+export const Modal = Radium(Bootstrap.Modal);
 export const Panel = Radium(Bootstrap.Panel);
 export const Radio = Radium(Bootstrap.Radio);
 export const Form = Radium(Bootstrap.Form);

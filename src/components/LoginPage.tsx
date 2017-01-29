@@ -1,8 +1,9 @@
 import * as React from 'react';
 import * as Radium from 'radium';
 import {Panel, FormControl, Button, Checkbox, FormGroup, HelpBlock} from './ReusableComponents';
-import {CSS, validationType} from '../interfaces';
-import {sendRequest} from '../utils';
+import {CSS, validationType, IState} from '../interfaces';
+import {connect, MapStateToProps} from 'react-redux';
+import {sendLoginRequest} from '../utils';
 import {
         removeMarginAndPadding, 
         defaultFooterContainer,
@@ -10,7 +11,12 @@ import {
         defaultInputStyle,
         pullRight,
         pullLeft
-    } from '../constants/palette';
+} from '../constants/palette';
+
+export interface IMapStateToProps {
+    isLoggedIn: boolean;
+    errorMessage: string;
+}
 
 export interface ILoginPageStyleProps {
     loginContainerStyle?: CSS;
@@ -22,30 +28,33 @@ export interface ILoginPageStyleProps {
 
 export interface ILoginPageProps extends ILoginPageStyleProps {
     showRememberMeCheckbox?: boolean;
-    usernamePlaceholder?: string;
-    passwordPlaceholder?: string;
     submitButtonContent?: JSX.Element | string;
-    onForgotPassword?: string;
-    onSubmitUrl: string;
-    successUrl: string;
+    emailPlaceholder?: string;
+    passwordPlaceholder?: string;
+    onForgotPassword: string;
+    onLoginSuccess: string;
+    onSignup: string;
+    onSubmit: string;
     paneltitle?: string;
-    onSignup?: string;
+    isLoggedIn?: boolean;
+    hasLoginError?: boolean;
+    errorMessage?: string;
 }
 
 export interface ILoginPageStates {
-    username?: string;
+    email?: string;
     password?: string;
     rememberMe?: boolean;
-    usernameError?: validationType;
+    emailError?: validationType;
     passwordError?: validationType;
 }
 
 @Radium
-export class LoginPage extends React.Component<ILoginPageProps, ILoginPageStates> {
+export class LoginPageImpl extends React.Component<ILoginPageProps, ILoginPageStates> {
 
     constructor() {
         super();
-        this.state = {username: '', password: '', rememberMe: false, usernameError: null, passwordError: null};
+        this.state = {email: '', password: '', rememberMe: false, emailError: null, passwordError: null};
     }
 
     handleRememberCheckbox = (): void => {
@@ -53,41 +62,35 @@ export class LoginPage extends React.Component<ILoginPageProps, ILoginPageStates
         this.setState({rememberMe: !isChecked});
     }
 
-    handleUsername = (event: React.FormEvent): void => {
+    handleInput = (event: React.FormEvent): void => {
         let value: string = event.target[`value`];
+        let inputType: string = event.target[`id`];
         if (value) {
-            this.setState({username: value, usernameError: null});
-        }
-    }
-
-    handlePassword = (event: React.FormEvent): void => {
-        let value: string = event.target[`value`];
-        if (value) {
-            this.setState({password: value, passwordError: null});
+            this.setState({[`${inputType}`]: value, [`${inputType}Error`]: null});
         }
     }
 
     submitForm = (event: React.FormEvent): void => {
         event.preventDefault();
-        let username: string = this.state.username;
+        let email: string = this.state.email;
         let password: string = this.state.password;
-        if (!username && !password) {
-            this.setState({usernameError: 'error', passwordError: 'error'});
-        } else if (!username) {
-            this.setState({usernameError: 'error'});
+        if (!email && !password) {
+            this.setState({emailError: 'error', passwordError: 'error'});
+        } else if (!email) {
+            this.setState({emailError: 'error'});
         } else if (!password) {
             this.setState({passwordError: 'error'});
         } else {
-            let requestData: {username: string, password: string, remember_me: boolean} = {
-                username,
+            let requestData: {email: string, password: string, remember_me: boolean} = {
+                email,
                 password,
                 remember_me: this.state.rememberMe
             };
-            sendRequest(this.props.onSubmitUrl, this.props.successUrl, requestData);
+            sendLoginRequest(this.props.onSubmit, requestData);
         }
     }
 
-    getPanelHeader = (): JSX.Element => {
+    renderPanelHeader = (): JSX.Element => {
         return (
             <div style={this.props.panelTitleStyle}>
                 {this.props.paneltitle || 'Please enter your details.'}
@@ -95,7 +98,7 @@ export class LoginPage extends React.Component<ILoginPageProps, ILoginPageStates
         );
     }
 
-    getPanelFooter = (): JSX.Element => {
+    renderPanelFooter = (): JSX.Element => {
         return (
             <div style={defaultFooterContainer}>
                 <div style={pullLeft}>
@@ -115,32 +118,38 @@ export class LoginPage extends React.Component<ILoginPageProps, ILoginPageStates
         );
     }
 
-    getRememberMeCheckbox = (): JSX.Element => {
+    renderRememberMeCheckbox = (): JSX.Element => {
         return (
             <Checkbox
                     id="rememberMeCheckbox"
-                    onChange={this.handleRememberCheckbox}
-            >
+                    onChange={this.handleRememberCheckbox}>
                 <strong>Remember Me</strong>
             </Checkbox>
         );
     }
 
+    renderError = (): JSX.Element => {
+        return (
+            <div style={errorStyle}>
+                {this.props.errorMessage}
+            </div>
+        );
+    }
 
     render(): JSX.Element {
         return (
             <div style={this.props.loginContainerStyle || defaultPanelContainer}>
                 <form onSubmit={this.submitForm}>
-                    <Panel header={this.getPanelHeader()} footer={this.getPanelFooter()}>
-                        <FormGroup validationState={this.state.usernameError} style={removeMarginAndPadding}>
+                    <Panel header={this.renderPanelHeader()} footer={this.renderPanelFooter()}>
+                        <FormGroup validationState={this.state.emailError} style={removeMarginAndPadding}>
                             <FormControl
-                                    id="username"
+                                    id="email"
                                     type="text"
-                                    placeholder={this.props.usernamePlaceholder || 'Username'}
+                                    placeholder={this.props.emailPlaceholder || 'email'}
                                     style={this.props.inputStyle || defaultInputStyle}
-                                    onChange={this.handleUsername}
+                                    onChange={this.handleInput}
                             />
-                            <HelpBlock>{this.state.usernameError ? 'This field is required.' : null}</HelpBlock>
+                            <HelpBlock>{this.state.emailError ? 'This field is required.' : null}</HelpBlock>
                         </FormGroup>
                         <FormGroup validationState={this.state.passwordError} style={removeMarginAndPadding}>
                             <FormControl 
@@ -148,14 +157,31 @@ export class LoginPage extends React.Component<ILoginPageProps, ILoginPageStates
                                     type="password"
                                     placeholder={this.props.passwordPlaceholder || 'Password'}
                                     style={this.props.inputStyle || defaultInputStyle}
-                                    onChange={this.handlePassword}
+                                    onChange={this.handleInput}
                             />
                             <HelpBlock>{this.state.passwordError ? 'This field is required.' : null}</HelpBlock>
                         </FormGroup>
-                        {this.props.showRememberMeCheckbox ? this.getRememberMeCheckbox() : null}
+                        {this.props.showRememberMeCheckbox ? this.renderRememberMeCheckbox() : null}
+                        {this.renderError()}
                     </Panel>
                 </form>
             </div>
         );
     }
 }
+
+let mapStateToProps: MapStateToProps<IState, ILoginPageProps> = (state: IState): IMapStateToProps => {
+    return {
+        isLoggedIn: state.currentUser.get('isLoggedIn'),
+        errorMessage: state.currentUser.get('loginErrorMessage')
+    };
+};
+
+let LoginPage: React.ComponentClass<ILoginPageProps> = connect(mapStateToProps)(LoginPageImpl);
+export {LoginPage};
+
+const errorStyle: CSS = {
+    marginBotton: '10px',
+    textAlign: 'center',
+    color: '#FB540C'
+};
