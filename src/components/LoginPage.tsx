@@ -86,7 +86,7 @@ export class LoginPageImpl extends React.Component<ILoginPageProps, ILoginPageSt
                 password,
                 remember_me: this.state.rememberMe
             };
-            sendLoginRequest(this.props.onSubmit, requestData);
+            sendLoginRequest(this.props.onSubmit, requestData, this.props.onLoginSuccess);
         }
     }
 

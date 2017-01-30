@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {LoginPage} from '../components';
-import {CSS} from '../interfaces';
 import {Link} from 'react-router';
 
 export class TestLogin extends React.Component<void, void> {
@@ -18,8 +17,3 @@ export class TestLogin extends React.Component<void, void> {
         );
     }
 }
-
-const panelTitleStyle: CSS = {
-    fontSize: '30px',
-    fontWeight: 'bold'
-};

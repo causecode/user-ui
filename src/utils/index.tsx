@@ -7,7 +7,10 @@ import {browserHistory} from 'react-router';
 import {store} from '../store';
 import {HTTP} from '../constants';
 
-export const sendLoginRequest = (requestUrl: string, requestData: Object): void => {
+export const sendLoginRequest = (
+        requestUrl: string, 
+        requestData: {email: string, password: string, remember_me: boolean},
+        successUrl: string): void => {
     Axios.post(requestUrl, requestData)
             .then((response: IAxiosResponse): void => {
                 if (response.status === HTTP.SUCCESS) {
@@ -15,6 +18,7 @@ export const sendLoginRequest = (requestUrl: string, requestData: Object): void 
                     dispatchToStore(
                             saveAccessToken(responseData.access_token), 
                             saveLoggedInUserData(responseData.roles || [], responseData.username || ''));
+                    browserHistory.push(successUrl);
                 }
             })
             .catch((error: IAxiosResponse): void => {
@@ -71,8 +75,21 @@ export function checkIfQueryParamExist() {
 };
 
 // Type `any` is assigned because `dispatchToStore` is a generic function.
-export const dispatchToStore = (...actions: any[]) => {
+export const dispatchToStore = (...actions: any[]): void => {
     actions.forEach((action: any) => {
         store.dispatch(action);
     });
+};
+
+export const getDefaultHeaders = (): {access_token: string, 'Content-Type': string} => {
+    let accessToken: string = store.getState().currentUser.get('accessToken');
+    if (!accessToken) {
+        console.error('Access Token not found. Redirecting to the Home Page');
+        browserHistory.push('');
+    }
+    
+    return {
+        access_token: accessToken,
+        'Content-Type': 'application/json'
+    };
 };
