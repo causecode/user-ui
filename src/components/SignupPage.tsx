@@ -20,9 +20,9 @@ export interface ISignupPageStyleProps {
 
 export interface ISignupPageProps extends ISignupPageStyleProps {
     paneltitle?: string;
-    onLoginButtonClick: string;
-    onSubmitUrl: string;
-    onSuccessUrl: string;
+    onLogin: string;
+    onSubmit: string;
+    onSuccess: string;
     userData?: ISignupData;
 }
 
@@ -40,7 +40,7 @@ export class SignupPageImpl extends React.Component<ISignupPageProps, ISignupPag
     }
 
     submitForm = (): void => {
-        let {userData, onSubmitUrl, onSuccessUrl} = this.props;
+        let {userData, onSubmit, onSuccess} = this.props;
         let isEmptyFieldPresent: boolean = false;
         for (let key in userData) {
             if (!userData[key]) {
@@ -48,7 +48,7 @@ export class SignupPageImpl extends React.Component<ISignupPageProps, ISignupPag
             }
         }
 
-        isEmptyFieldPresent ? this.setState({showError: true}) : sendRequest(onSubmitUrl, onSuccessUrl, userData);
+        isEmptyFieldPresent ? this.setState({showError: true}) : sendRequest(onSubmit, onSuccess, userData);
     }
 
     showSignupForm = (): void => {
@@ -56,10 +56,10 @@ export class SignupPageImpl extends React.Component<ISignupPageProps, ISignupPag
     }
 
     handleLoginButton = (): void => {
-        browserHistory.push(this.props.onLoginButtonClick);
+        browserHistory.push(this.props.onLogin);
     }
 
-    getPanelHeader = (): JSX.Element => {
+    renderPanelHeader = (): JSX.Element => {
         return (
             <div style={this.props.panelTitleStyle}>
                 {this.props.paneltitle || 'Sign up'}
@@ -67,7 +67,7 @@ export class SignupPageImpl extends React.Component<ISignupPageProps, ISignupPag
         );
     }
 
-    getPanelFooter = (): JSX.Element => {
+    renderPanelFooter = (): JSX.Element => {
         return (
             <div style={defaultFooterContainer}>
                 <div style={pullLeft}>
@@ -84,14 +84,14 @@ export class SignupPageImpl extends React.Component<ISignupPageProps, ISignupPag
         );
     }
 
-    getSignupForm = (): JSX.Element => {
+    renderSignupForm = (): JSX.Element => {
         return <SignupForm inputStyle={this.props.inputStyle}/>;
     }
 
     renderError = (): JSX.Element => {
         return (
             <div style={errorMessage}>
-                All the fields are mandatory. Kindly enter your details in the empty fields.
+                All the fields are mandatory. Kindly enter your details.
             </div>
         );
     }
@@ -111,8 +111,8 @@ export class SignupPageImpl extends React.Component<ISignupPageProps, ISignupPag
     render(): JSX.Element {
         return (
             <div style={this.props.signupContainerStyle || defaultPanelContainer}>
-                <Panel header={this.getPanelHeader()} footer={this.getPanelFooter()}>
-                    {this.state.displaySignupForm ? this.getSignupForm() : this.showSignupOptions()}
+                <Panel header={this.renderPanelHeader()} footer={this.renderPanelFooter()}>
+                    {this.state.displaySignupForm ? this.renderSignupForm() : this.showSignupOptions()}
                     {this.state.showError ? this.renderError() : null}
                 </Panel>
             </div>
