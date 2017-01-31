@@ -76,7 +76,7 @@ export class UserModel extends BaseModel {
         });
     }
 
-    static registerUser(requestUrl: string, requestData: string, successUrl: string) {
+    static registerUser(requestUrl: string, requestData: string, successUrl: string): void {
         dispatchToStore(updateSignupError(''));
         Axios.post(`${config.APIUrl}${requestUrl}`, {email: requestData}).then((response: IAxiosResponse): void => {
             browserHistory.push(successUrl);

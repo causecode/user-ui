@@ -3,6 +3,11 @@ import * as Radium from 'radium';
 import {Panel, FormControl, Button, FormGroup, HelpBlock} from './ReusableComponents';
 import {CSS, validationType} from '../interfaces';
 import {sendRequest} from '../utils';
+import {MapStateToProps} from 'react-redux';
+import {ISignupPageProps} from '../../dist/public/components/SignupPage';
+import {IState} from '../../dist/public/interfaces/index';
+import {UserModel} from '../models/UserModel';
+import * as Axios from 'axios';
 import {
         removeMarginAndPadding, 
         defaultFooterContainer,
@@ -32,8 +37,11 @@ export interface IForgotPasswordPageProps extends IForgotPasswordPageStyleProps 
 }
 
 export interface IForgotPasswordStates {
-    username?: string;
+    email?: string;
     usernameError?: validationType;
+    errorMessage?: string;
+    showInputField?: boolean;
+    successMessage?: string;
 }
 
 @Radium
@@ -41,24 +49,33 @@ export class ForgotPasswordPage extends React.Component<IForgotPasswordPageProps
 
     constructor() {
         super();
-        this.state = {username: '', usernameError: null};
+        this.state = {
+                email: '', 
+                usernameError: null, 
+                errorMessage: '',
+                successMessage: 'Follow the instructions sent to your email address to reset your password.',
+                showInputField: true
+        };
     }
 
-    handleUsername = (event: React.FormEvent): void => {
+    handleEmail = (event: React.FormEvent): void => {
         let value: string = event.target[`value`];
         if (value) {
-            this.setState({username: value, usernameError: null});
+            this.setState({email: value, usernameError: null});
         }
     }
 
     submitForm = (event: React.FormEvent): void => {
         event.preventDefault();
-        let username: string = this.state.username;
-        if (!username) {
+        let email: string = this.state.email;
+        if (!email) {
             this.setState({usernameError: 'error'});
         } else {
-            let requestData: {username: string} = {username};
-            sendRequest(this.props.onSubmitUrl, this.props.successUrl, requestData);
+            Axios.post(this.props.onSubmitUrl, {email}).then((response) => {
+                        console.log(`response`, response);
+            }).catch((error) => {
+                    console.log(`error`, error);
+            });
         }
     }
 
@@ -87,29 +104,45 @@ export class ForgotPasswordPage extends React.Component<IForgotPasswordPageProps
         );
     }
 
+    renderInputField = (): JSX.Element => {
+        return (
+            <FormGroup validationState={this.state.usernameError} style={removeMarginAndPadding}>
+                <FormControl
+                        id="email"
+                        type="text"
+                        placeholder={this.props.usernamePlaceholder || 'Username or email'}
+                        style={this.props.inputStyle || defaultInputStyle}
+                        onChange={this.handleEmail}
+                />
+                <HelpBlock>{this.state.usernameError ? 'This field is required.' : null}</HelpBlock>
+            </FormGroup>
+        );
+    }
+
     render(): JSX.Element {
+        let bodyText: string = this.props.bodyText || 'Please enter the email you use for your account.';
         return (
             <div style={this.props.forgotPasswordContainerStyle || defaultPanelContainer}>
                 <form onSubmit={this.submitForm}>
                     <Panel header={this.getPanelHeader()} footer={this.getPanelFooter()}>
                         <FormGroup style={removeMarginAndPadding}>
                             <label style={this.props.bodyTextStyle}>
-                                {this.props.bodyText || 'Please enter the username you use for your account.'}
+                                {this.state.showInputField ? bodyText : this.state.successMessage}
                             </label>
                         </FormGroup>
-                        <FormGroup validationState={this.state.usernameError} style={removeMarginAndPadding}>
-                            <FormControl
-                                    id="username"
-                                    type="text"
-                                    placeholder={this.props.usernamePlaceholder || 'Username'}
-                                    style={this.props.inputStyle || defaultInputStyle}
-                                    onChange={this.handleUsername}
-                            />
-                            <HelpBlock>{this.state.usernameError ? 'This field is required.' : null}</HelpBlock>
-                        </FormGroup>
+                        {this.state.showInputField ? this.renderInputField() : null}
+                        <div style={errorMessage}>
+                            {this.state.errorMessage}
+                        </div>
                     </Panel>
                 </form>
             </div>
         );
     }
 }
+
+const errorMessage: CSS = {
+    marginBotton: '10px',
+    textAlign: 'center',
+    color: '#FB540C'
+};
