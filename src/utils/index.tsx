@@ -1,34 +1,8 @@
 import * as Axios from 'axios';
-import {saveAccessToken, saveLoggedInUserData, saveLoginErrorMessage} from '../actions/userAction';
 import {changeConfirmationModalVisibility} from '../actions/confirmationModalAction';
 import {saveSignupFormData} from '../actions/signupAction';
-import {IAxiosResponse} from '../interfaces';
 import {browserHistory} from 'react-router';
 import {store} from '../store';
-import {HTTP} from '../constants';
-
-export const sendLoginRequest = (
-        requestUrl: string, 
-        requestData: {email: string, password: string, remember_me: boolean},
-        successUrl: string): void => {
-    Axios.post(requestUrl, requestData)
-            .then((response: IAxiosResponse): void => {
-                if (response.status === HTTP.SUCCESS) {
-                    let responseData = response.data;
-                    dispatchToStore(
-                            saveAccessToken(responseData.access_token), 
-                            saveLoggedInUserData(responseData.roles || [], responseData.username || ''));
-                    browserHistory.push(successUrl);
-                }
-            })
-            .catch((error: IAxiosResponse): void => {
-                if (error.status === HTTP.UNAUTHORIZED) {
-                    dispatchToStore(saveLoginErrorMessage('Invalid Credentials'));
-                } else {
-                    dispatchToStore(saveLoginErrorMessage('Unable to sign in. Please try again later.'));
-                }
-            });
-};
 
 /**
  * Type 'Object' is intentional for 'requestData' as sendRequest() 

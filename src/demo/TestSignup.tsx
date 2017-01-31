@@ -8,9 +8,10 @@ export class TestSignup extends React.Component<void, void> {
             <div>
                 <Link to="/userManagement/list">UserManagement</Link>
                 <SignupPage
-                        onSubmit="http://localhost:9000/api/login"
+                        onSubmit="http://localhost:9000/api/v1/user/action/signUp"
                         onLogin="/"
                         onSuccess="/"
+                        recaptchaSiteKey="6LdTzxAUAAAAADcMJb2YJ_-79JjSPjC9kP6tMmH7"
                 />
             </div>
         );

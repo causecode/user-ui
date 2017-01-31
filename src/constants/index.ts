@@ -4,8 +4,9 @@ export const SAVE_ACCESS_TOKEN: string = 'SAVE_ACCESS_TOKEN';
 export const SAVE_LOGGED_IN_USER_DATA: string = 'SAVE_LOGGED_IN_USER_DATA';
 export const CLEAR_LOGGED_IN_USER_DATA: string = 'CLEAR_LOGGED_IN_USER_DATA';
 export const SAVE_LOGIN_ERROR_MESSAGE: string = 'SAVE_LOGIN_ERROR_MESSAGE';
+export const UPDATE_SIGNUP_ERROR_MESSAGE: string = 'UPDATE_SIGNUP_ERROR_MESSAGE';
 
-export enum HTTP {
+export enum HTTP_STATUS {
     SUCCESS = 200,
     UNAUTHORIZED = 401
 }

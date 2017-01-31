@@ -20,7 +20,14 @@ export interface ISignupData {
     password?: string;
     birthdate?: string;
     gender?: string;
-    captcha?: string;
+    myRecaptchaResponse?: string;
+    signupErrorMessage?: string;
+}
+
+export interface ILoginData {
+    email: string;
+    password: string;
+    remember_me?: boolean;
 }
 
 export interface IState {

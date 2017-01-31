@@ -6,7 +6,9 @@ import {CSS, ISignupData, IState} from '../interfaces';
 import {browserHistory} from 'react-router';
 import {Panel, Button} from './ReusableComponents';
 import {SignupForm} from './SignupForm';
-import {sendRequest} from '../utils';
+import {UserModel} from '../models/UserModel';
+import {dispatchToStore} from '../utils';
+import {updateSignupError} from '../actions/signupAction';
 import FontAwesome = require('react-fontawesome');
 
 export interface ISignupPageStyleProps {
@@ -24,11 +26,11 @@ export interface ISignupPageProps extends ISignupPageStyleProps {
     onSubmit: string;
     onSuccess: string;
     userData?: ISignupData;
+    recaptchaSiteKey: string;
 }
 
 export interface ISignupPageStates {
     displaySignupForm?: boolean;
-    showError?: boolean;
 }
 
 @Radium
@@ -36,19 +38,21 @@ export class SignupPageImpl extends React.Component<ISignupPageProps, ISignupPag
 
     constructor() {
         super();
-        this.state = {displaySignupForm: false, showError: false};
+        this.state = {displaySignupForm: false};
     }
 
     submitForm = (): void => {
         let {userData, onSubmit, onSuccess} = this.props;
-        let isEmptyFieldPresent: boolean = false;
+        delete userData.signupErrorMessage;
+        let error: string = '';
+
         for (let key in userData) {
             if (!userData[key]) {
-                isEmptyFieldPresent = true;
+                error = 'All the fields are mandatory';
             }
         }
-
-        isEmptyFieldPresent ? this.setState({showError: true}) : sendRequest(onSubmit, onSuccess, userData);
+    
+        error ? dispatchToStore(updateSignupError(error)) : UserModel.signup(onSubmit, userData, onSuccess);
     }
 
     showSignupForm = (): void => {
@@ -85,15 +89,7 @@ export class SignupPageImpl extends React.Component<ISignupPageProps, ISignupPag
     }
 
     renderSignupForm = (): JSX.Element => {
-        return <SignupForm inputStyle={this.props.inputStyle}/>;
-    }
-
-    renderError = (): JSX.Element => {
-        return (
-            <div style={errorMessage}>
-                All the fields are mandatory. Kindly enter your details.
-            </div>
-        );
+        return <SignupForm inputStyle={this.props.inputStyle} recaptchaSiteKey={this.props.recaptchaSiteKey}/>;
     }
 
     showSignupOptions = (): JSX.Element => {
@@ -113,7 +109,9 @@ export class SignupPageImpl extends React.Component<ISignupPageProps, ISignupPag
             <div style={this.props.signupContainerStyle || defaultPanelContainer}>
                 <Panel header={this.renderPanelHeader()} footer={this.renderPanelFooter()}>
                     {this.state.displaySignupForm ? this.renderSignupForm() : this.showSignupOptions()}
-                    {this.state.showError ? this.renderError() : null}
+                    <div style={errorMessage}>
+                        {this.props.userData.signupErrorMessage}
+                    </div>
                 </Panel>
             </div>
         );

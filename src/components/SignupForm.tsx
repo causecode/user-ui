@@ -10,12 +10,13 @@ export interface ISignupFormStates {
     genderSelected?: string;
 }
 
-export interface ISignupFormStates {
+export interface ISignupFormProps {
+    recaptchaSiteKey: string;
     inputStyle?: CSS;
 }
 
 @Radium
-export class SignupForm extends React.Component<ISignupFormStates, ISignupFormStates> {
+export class SignupForm extends React.Component<ISignupFormProps, ISignupFormStates> {
 
     constructor() {
         super();
@@ -32,13 +33,12 @@ export class SignupForm extends React.Component<ISignupFormStates, ISignupFormSt
     }
 
     handleCaptcha = (value: string): void => {
-        handleSignupInput('captcha', value);
+        handleSignupInput('myRecaptchaResponse', value);
     }
 
     handleDateChange = (value: {toISOString: () => string}): void => {
         handleSignupInput('birthdate', value.toISOString());
     }
-
 
     render(): JSX.Element {
         return (
@@ -49,7 +49,7 @@ export class SignupForm extends React.Component<ISignupFormStates, ISignupFormSt
                     </Col>
                     <Col sm={5}>
                         <FormControl
-                                id="firstname"
+                                id="firstName"
                                 type="text"
                                 placeholder="First Name"
                                 style={this.props.inputStyle || defaultInputStyle}
@@ -58,7 +58,7 @@ export class SignupForm extends React.Component<ISignupFormStates, ISignupFormSt
                     </Col>
                     <Col sm={5}>
                         <FormControl
-                                id="lastname"
+                                id="lastName"
                                 type="text"
                                 placeholder="Last Name"
                                 style={this.props.inputStyle || defaultInputStyle}
@@ -146,7 +146,7 @@ export class SignupForm extends React.Component<ISignupFormStates, ISignupFormSt
                 <FormGroup style={removeMarginAndPadding}>
                     <ReCaptcha
                             ref="recaptcha"
-                            sitekey="6LdTzxAUAAAAADcMJb2YJ_-79JjSPjC9kP6tMmH7"
+                            sitekey={this.props.recaptchaSiteKey}
                             onChange={this.handleCaptcha}
                             style={reCaptchaStyle}
                     />

@@ -3,7 +3,7 @@ import * as Radium from 'radium';
 import {Panel, FormControl, Button, Checkbox, FormGroup, HelpBlock} from './ReusableComponents';
 import {CSS, validationType, IState} from '../interfaces';
 import {connect, MapStateToProps} from 'react-redux';
-import {sendLoginRequest} from '../utils';
+import {UserModel} from '../models/UserModel';
 import {
         removeMarginAndPadding, 
         defaultFooterContainer,
@@ -86,7 +86,7 @@ export class LoginPageImpl extends React.Component<ILoginPageProps, ILoginPageSt
                 password,
                 remember_me: this.state.rememberMe
             };
-            sendLoginRequest(this.props.onSubmit, requestData, this.props.onLoginSuccess);
+            UserModel.login(this.props.onSubmit, requestData, this.props.onLoginSuccess);
         }
     }
 
