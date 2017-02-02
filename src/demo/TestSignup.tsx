@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {SignupPage} from '../components';
 import {Link} from 'react-router';
+import {config} from 'react-hero';
 
 export class TestSignup extends React.Component<void, void> {
     render(): JSX.Element {
@@ -8,7 +9,7 @@ export class TestSignup extends React.Component<void, void> {
             <div>
                 <Link to="/userManagement/list">UserManagement</Link>
                 <SignupPage
-                        onSubmit="http://localhost:9000/api/v1/user/action/signUp"
+                        onSubmit={`${config.APIUrl}user/action/signUp`}
                         onLogin="/"
                         onSuccess="/"
                         recaptchaSiteKey="6LdTzxAUAAAAADcMJb2YJ_-79JjSPjC9kP6tMmH7"

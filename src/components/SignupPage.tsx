@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as Radium from 'radium';
-import {pullRight, pullLeft, defaultFooterContainer} from '../constants/palette';
+import {pullRight, pullLeft, errorMessage, defaultFooterContainer} from '../constants/palette';
 import {connect, MapStateToProps} from 'react-redux';
 import {CSS, ISignupData, IState} from '../interfaces';
 import {browserHistory} from 'react-router';
@@ -136,10 +136,4 @@ const defaultPanelContainer: CSS = {
     maxWidth: '650px',
     margin: '0px auto',
     padding: '30px'
-};
-
-const errorMessage: CSS = {
-    marginBotton: '10px',
-    textAlign: 'center',
-    color: '#FB540C'
 };

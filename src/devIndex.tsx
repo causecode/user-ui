@@ -7,6 +7,8 @@ import {store} from './store';
 import {TestLogin} from './demo/TestLogin';
 import {TestForgotPassword} from './demo/TestForgotPassword';
 import {ListPage, EditPage, ShowPage, ComponentService, ModelService} from 'react-hero';
+import {TestSignup} from './demo/TestSignup';
+import {TestResetPassword} from './demo/TestResetPassword';
 
 ModelService.registerAll();
 ComponentService.registerAll();
@@ -16,6 +18,7 @@ render(
         <Router history={hashHistory}>
             <Route path="/" component={BasePage}>
                 <IndexRoute component={TestForgotPassword}/>
+                <Route path="resetPassword" component={TestResetPassword}/>
                 <Route path="/:resource/list" component={ListPage}/>
                 <Route path="/:resource/show/:resourceID" component={ShowPage} />
                 <Route path="/:resource/edit/:resourceID" component={EditPage} />

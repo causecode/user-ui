@@ -9,6 +9,7 @@ import {
         defaultFooterContainer,
         defaultPanelContainer,
         defaultInputStyle,
+        errorMessage,
         pullRight,
         pullLeft
 } from '../constants/palette';
@@ -130,7 +131,7 @@ export class LoginPageImpl extends React.Component<ILoginPageProps, ILoginPageSt
 
     renderError = (): JSX.Element => {
         return (
-            <div style={errorStyle}>
+            <div style={errorMessage}>
                 {this.props.errorMessage}
             </div>
         );
@@ -179,9 +180,3 @@ let mapStateToProps: MapStateToProps<IState, ILoginPageProps> = (state: IState):
 
 let LoginPage: React.ComponentClass<ILoginPageProps> = connect(mapStateToProps)(LoginPageImpl);
 export {LoginPage};
-
-const errorStyle: CSS = {
-    marginBotton: '10px',
-    textAlign: 'center',
-    color: '#FB540C'
-};

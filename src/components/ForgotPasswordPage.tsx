@@ -1,18 +1,14 @@
 import * as React from 'react';
 import * as Radium from 'radium';
+import * as Axios from 'axios';
 import {Panel, FormControl, Button, FormGroup, HelpBlock} from './ReusableComponents';
 import {CSS, validationType} from '../interfaces';
-import {sendRequest} from '../utils';
-import {MapStateToProps} from 'react-redux';
-import {ISignupPageProps} from '../../dist/public/components/SignupPage';
-import {IState} from '../../dist/public/interfaces/index';
-import {UserModel} from '../models/UserModel';
-import * as Axios from 'axios';
 import {
         removeMarginAndPadding, 
         defaultFooterContainer,
         defaultPanelContainer,
         defaultInputStyle,
+        errorMessage,
         pullRight,
         pullLeft
     } from '../constants/palette';
@@ -20,6 +16,7 @@ import {
 export interface IForgotPasswordPageStyleProps {
     forgotPasswordContainerStyle?: CSS;
     submitButtonStyle?: CSS;
+    tryAgainLinkStyle?: CSS;
     loginButtonStyle?: CSS;
     panelTitleStyle?: CSS;
     bodyTextStyle?: CSS;
@@ -27,9 +24,9 @@ export interface IForgotPasswordPageStyleProps {
 }
 
 export interface IForgotPasswordPageProps extends IForgotPasswordPageStyleProps {
-    submitButtonContent?: JSX.Element | string;
-    loginButtonContent?: JSX.Element | string;
     usernamePlaceholder?: string;
+    submitButtonText?: string;
+    loginButtonText?: string;
     paneltitle?: string;
     onSubmitUrl: string;
     successUrl: string;
@@ -37,11 +34,10 @@ export interface IForgotPasswordPageProps extends IForgotPasswordPageStyleProps 
 }
 
 export interface IForgotPasswordStates {
-    email?: string;
+    showInputField?: boolean;
     usernameError?: validationType;
     errorMessage?: string;
-    showInputField?: boolean;
-    successMessage?: string;
+    email?: string;
 }
 
 @Radium
@@ -53,7 +49,6 @@ export class ForgotPasswordPage extends React.Component<IForgotPasswordPageProps
                 email: '', 
                 usernameError: null, 
                 errorMessage: '',
-                successMessage: 'Follow the instructions sent to your email address to reset your password.',
                 showInputField: true
         };
     }
@@ -72,33 +67,46 @@ export class ForgotPasswordPage extends React.Component<IForgotPasswordPageProps
             this.setState({usernameError: 'error'});
         } else {
             Axios.post(this.props.onSubmitUrl, {email}).then((response) => {
-                        console.log(`response`, response);
-            }).catch((error) => {
-                    console.log(`error`, error);
+                this.setState({showInputField: false, errorMessage: ''});
+            }).catch((error: {data: {message: string}}) => {
+                this.setState({errorMessage: error.data.message});
             });
         }
     }
 
-    getPanelHeader = (): JSX.Element => {
+    renderSuccessMessage = (): JSX.Element => {
         return (
-            <div style={this.props.panelTitleStyle}>
-                {this.props.paneltitle || 'Forgot Password?'}
+            <div>
+                Follow the instructions sent to your email address to reset your password.<br/><br/>
+                <span style={{fontSize: '16px', fontWeight: 400}}>
+                    Didn't receive the email? 
+                    <a style={this.props.tryAgainLinkStyle} onClick={this.resetState}>Try Again</a>.
+                </span>
             </div>
         );
     }
 
-    getPanelFooter = (): JSX.Element => {
+    renderPanelHeader = (): JSX.Element => {
+        return (
+            <div style={this.props.panelTitleStyle}>
+                {this.state.showInputField ? this.props.paneltitle || 'Forgot Password?' : 'Check Your Email'}
+            </div>
+        );
+    }
+
+    renderPanelFooter = (): JSX.Element => {
         return (
             <div style={defaultFooterContainer}>
                 <div style={pullLeft}>
-                    <Button style={this.props.loginButtonStyle}>
-                        {this.props.loginButtonContent || 'Log in'}
-                    </Button>
+                    {this.renderButtons(this.props.loginButtonStyle, this.props.loginButtonText || 'Log in')}
                 </div>
                 <div style={pullRight}>
-                    <Button type="submit" style={this.props.submitButtonStyle}>
-                        {this.props.submitButtonContent || 'Reset Password'}
-                    </Button>
+                    {
+                        this.renderButtons(
+                                this.props.submitButtonStyle, 
+                                this.props.submitButtonText || 'Reset Password', 
+                                true)
+                    }
                 </div>
             </div>
         );
@@ -119,15 +127,43 @@ export class ForgotPasswordPage extends React.Component<IForgotPasswordPageProps
         );
     }
 
+    resetState = (): void => {
+        this.setState({
+                email: '', 
+                usernameError: null, 
+                errorMessage: '',
+                showInputField: true
+        });
+    }
+
+    renderButtons = (buttonStyle: CSS, buttonText?: string, isSubmit: boolean = false): JSX.Element => {
+        let buttonProps: {style: CSS, type?: string} = {
+            style: buttonStyle
+        };
+        
+        if (isSubmit) {
+            buttonProps = {
+                style: [buttonStyle, {visibility: this.state.showInputField ? 'visible' : 'hidden'}],
+                type: 'submit'
+            };
+        }
+
+        return (
+            <Button {...buttonProps}>
+                {buttonText}
+            </Button>
+        );
+    }
+
     render(): JSX.Element {
         let bodyText: string = this.props.bodyText || 'Please enter the email you use for your account.';
         return (
             <div style={this.props.forgotPasswordContainerStyle || defaultPanelContainer}>
                 <form onSubmit={this.submitForm}>
-                    <Panel header={this.getPanelHeader()} footer={this.getPanelFooter()}>
+                    <Panel header={this.renderPanelHeader()} footer={this.renderPanelFooter()}>
                         <FormGroup style={removeMarginAndPadding}>
                             <label style={this.props.bodyTextStyle}>
-                                {this.state.showInputField ? bodyText : this.state.successMessage}
+                                {this.state.showInputField ? bodyText : this.renderSuccessMessage()}
                             </label>
                         </FormGroup>
                         {this.state.showInputField ? this.renderInputField() : null}
@@ -140,9 +176,3 @@ export class ForgotPasswordPage extends React.Component<IForgotPasswordPageProps
         );
     }
 }
-
-const errorMessage: CSS = {
-    marginBotton: '10px',
-    textAlign: 'center',
-    color: '#FB540C'
-};
