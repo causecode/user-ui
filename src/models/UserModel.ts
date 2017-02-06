@@ -1,19 +1,22 @@
 import * as Axios from 'axios';
 import {saveAccessToken, saveLoggedInUserData, saveLoginErrorMessage} from '../actions/userAction';
-import {BaseModel, ModelPropTypes, config} from 'react-hero';
-import {dispatchToStore} from '../utils';
+import {BaseModel, ModelPropTypes, config, HTTP} from 'react-hero';
+import {dispatchToStore, getDefaultHeaders, toggleConfirmationModal} from '../utils';
 import {IAxiosResponse, ISignupData, ILoginData} from '../interfaces';
 import {browserHistory} from 'react-router';
 import {HTTP_STATUS} from '../constants';
 import {updateSignupError} from '../actions/signupAction';
+
+const FileDownload: any = require('react-file-download');
 
 export interface IUser {
     id: number;
     firstName: string;
     lastName: string;
     email: string;
-    dateCreated: Date;
-    lastUpdated: Date;
+    dateCreated?: Date;
+    lastUpdated?: Date;
+    birthdate?: Date;
 }
 
 export class UserModel extends BaseModel {
@@ -23,8 +26,6 @@ export class UserModel extends BaseModel {
         firstName: ModelPropTypes.STRING,
         lastName: ModelPropTypes.STRING,
         email: ModelPropTypes.STRING,
-        dateCreated: ModelPropTypes.DATE,
-        lastUpdated: ModelPropTypes.DATE,
         birthdate: ModelPropTypes.DATE
     };
 
@@ -39,11 +40,11 @@ export class UserModel extends BaseModel {
     static resourceName: string = 'userManagement';
 
     static columnNames: string[] = [
+        'id',
         'firstName',
         'lastName',
         'email',
-        'dateCreated',
-        'lastUpdated'
+        'birthdate'
     ];
 
     static login(requestUrl: string, requestData: ILoginData, successUrl: string): void {
@@ -66,7 +67,7 @@ export class UserModel extends BaseModel {
 
     static signup(requestUrl: string, requestData: ISignupData, successUrl: string): void {
         dispatchToStore(updateSignupError(''));
-        Axios.post(requestUrl, requestData).then((response: IAxiosResponse): void => {
+        HTTP.postRequest(requestUrl, requestData).then((response: IAxiosResponse): void => {
             if (response.status === HTTP_STATUS.SUCCESS) {
                 let responseData: {access_token: string, user: {email: string}} = response.data;
                 UserModel.registerUser(`register/action/registerEmployee`, responseData.user.email, successUrl);
@@ -78,11 +79,33 @@ export class UserModel extends BaseModel {
 
     static registerUser(requestUrl: string, requestData: string, successUrl: string): void {
         dispatchToStore(updateSignupError(''));
-        Axios.post(`${config.APIUrl}${requestUrl}`, {email: requestData}).then((response: IAxiosResponse): void => {
+        HTTP.postRequest(`${requestUrl}`, {email: requestData}).then((response: IAxiosResponse): void => {
             browserHistory.push(successUrl);
         }).catch((error: IAxiosResponse): void => {
             dispatchToStore(updateSignupError(error.data.message));
         });
+    }
+
+    static exportUserReport(selectAll: boolean, selectedIds: string): void {
+        let url: string = `userManagement/action/export?selectAll=${selectAll}&selectedIds=${selectedIds}`;
+        HTTP.getRequest(url, getDefaultHeaders()).then((response: IAxiosResponse): void => {
+            FileDownload(response.data, 'userData.csv');
+            toggleConfirmationModal(false);
+        });
+    }
+
+    static lockUnlockUserAccounts(lockAccount: boolean, selectedIds: string): void {
+        HTTP.getRequest(
+                `userManagement/action/lockUnlockUserAccounts?lockAccount=${lockAccount}&selectedIds=${selectedIds}`,
+                getDefaultHeaders());
+        toggleConfirmationModal(false);
+    }
+
+    static modifyRoles(addToExisting: boolean, userIds: number[], roleIds: string[]): void {
+        let roleActionType: string = !addToExisting ? 'refresh' : '';
+        let url: string = `userManagement/action/modifyRoles?roleActionType=${roleActionType}&userIds=${userIds}
+                &roleIds=${roleIds}`;
+        HTTP.getRequest(url, getDefaultHeaders());
     }
 
     constructor(properties: IUser) {

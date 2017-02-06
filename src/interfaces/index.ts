@@ -38,7 +38,7 @@ export interface IState {
 
 export interface IGenericAction {
     type: string;
-    payload?: string | number; 
+    payload?: string | number | boolean; 
 }
 
 export interface IState {

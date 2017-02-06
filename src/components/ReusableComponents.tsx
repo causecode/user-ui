@@ -5,6 +5,7 @@ const ReCAPTCHA = require<any>('react-google-recaptcha');
 // Bootstrap components
 export const ControlLabel = Radium(Bootstrap.ControlLabel);
 export const FormControl = Radium(Bootstrap.FormControl);
+export const Pagination = Radium(Bootstrap.Pagination);
 export const HelpBlock = Radium(Bootstrap.HelpBlock);
 export const FormGroup = Radium(Bootstrap.FormGroup);
 export const Checkbox = Radium(Bootstrap.Checkbox);

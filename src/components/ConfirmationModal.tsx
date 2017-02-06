@@ -1,30 +1,55 @@
 import * as React from 'react';
 import * as Radium from 'radium';
-import * as Axios from 'axios';
 import {Modal, Col, Row, Button} from './ReusableComponents';
-import {toggleConfirmationModal} from '../utils';
 import {connect, MapStateToProps} from 'react-redux';
 import {CSS} from '../interfaces';
+import {toggleConfirmationModal, toggleRolesListModal} from '../utils';
+import {UserModel} from '../models/UserModel';
 import FontAwesome = require('react-fontawesome');
 
 export interface IConfirmationModalProps {
     visibility?: boolean;
     actionName?: string;
     recordsSelected?: number;
+    selectedIds?: number[];
+    selectAll?: boolean;
 }
 
 @Radium
 export class ConfirmationModalImpl extends React.Component<IConfirmationModalProps, void> {
 
-    handleSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
-        let url: string = 'http://localhost:8080/api/v1/userManagement/action/export?selectAll=false&selectedIds=426%2C424';
-        Axios.get(url);
+    handleAction = (event: React.FormEvent): void => {
+        let selectedIds: string = this.props.selectedIds.join(',') || '';
+        switch (this.props.actionName) {
+            case 'Export Report':
+                UserModel.exportUserReport(this.props.selectAll, selectedIds);
+                break;
+
+            case 'Lock account(s)':
+                UserModel.lockUnlockUserAccounts(true, selectedIds);
+                break;
+
+            case 'Unlock account(s)':
+                UserModel.lockUnlockUserAccounts(false, selectedIds);
+                break;
+
+            case 'Change role':
+                this.hideModal();
+                toggleRolesListModal(true);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    hideModal = (): void => {
+        toggleConfirmationModal(false);
     }
 
     render(): JSX.Element {
         return (
-                <Modal onHide={toggleConfirmationModal} show={this.props.visibility} backdrop="static">
+                <Modal onHide={this.hideModal} show={this.props.visibility} backdrop="static">
                     <Modal.Body>
                         <Row>
                             <Col sm={3} style={modalIcon}>
@@ -39,10 +64,8 @@ export class ConfirmationModalImpl extends React.Component<IConfirmationModalPro
                         </Row>
                     </Modal.Body>
                     <Modal.Footer>
-                        <form onSubmit={this.handleSubmit}>
-                            <Button type="submit" bsStyle="primary">OK</Button>
-                        </form>
-                        <Button onClick={toggleConfirmationModal}>Cancel</Button>
+                        <Button onClick={this.handleAction} bsStyle="primary">OK</Button>
+                        <Button onClick={this.hideModal}>Cancel</Button>
                     </Modal.Footer>
                 </Modal>
         );
@@ -51,9 +74,11 @@ export class ConfirmationModalImpl extends React.Component<IConfirmationModalPro
 
 let mapStateToProps = (state): IConfirmationModalProps => {
     return {
-        visibility: state.showConfirmationModal,
+        visibility: state.modalVisibility.toJS().confirmationModal,
         actionName: state.userAction.action,
-        recordsSelected: state.userAction.records
+        recordsSelected: state.userAction.records,
+        selectedIds: state.checkbox.selectedIds,
+        selectAll: state.checkbox.selectAll,
     };
 };
 

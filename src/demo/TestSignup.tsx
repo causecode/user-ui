@@ -9,7 +9,7 @@ export class TestSignup extends React.Component<void, void> {
             <div>
                 <Link to="/userManagement/list">UserManagement</Link>
                 <SignupPage
-                        onSubmit={`${config.APIUrl}user/action/signUp`}
+                        onSubmit={`user/action/signUp`}
                         onLogin="/"
                         onSuccess="/"
                         recaptchaSiteKey="6LdTzxAUAAAAADcMJb2YJ_-79JjSPjC9kP6tMmH7"

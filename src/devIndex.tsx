@@ -17,7 +17,7 @@ render(
    <Provider store={store}>
         <Router history={hashHistory}>
             <Route path="/" component={BasePage}>
-                <IndexRoute component={TestForgotPassword}/>
+                <IndexRoute component={TestLogin}/>
                 <Route path="resetPassword" component={TestResetPassword}/>
                 <Route path="/:resource/list" component={ListPage}/>
                 <Route path="/:resource/show/:resourceID" component={ShowPage} />

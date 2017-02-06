@@ -1,21 +1,22 @@
 import * as React from 'react';
+import * as Radium from 'radium';
 import {connect} from 'react-redux';
-import {Button, Row, Col} from './ReusableComponents';
+import {Row, Col, Pagination} from './ReusableComponents';
 import {CSS} from '../interfaces';
-import {checkIfQueryParamExist, getParameterByName, toggleConfirmationModal} from '../utils';
 import {ModelService} from 'react-hero';
 import {ConfirmationModal} from './ConfirmationModal';
+import {getDefaultHeaders, checkIfQueryParamExist, getParameterByName, showConfirmationModal} from '../utils';
+import {RolesModal} from './RolesModal';
 import {
-    DataGrid, 
-    clearUserAction, 
-    config, 
+    DataGrid,
     IFromJS,
     UserActions,
     IBulkUserActionType,
     IUserActionStateProps,
     BaseModel,
     PagedListFilters,
-    DropDownFilter
+    DropDownFilter,
+    resetCheckboxState
 } from 'react-hero';
 
 export interface IUserListDispatchProps {
@@ -33,16 +34,17 @@ export interface IUserListProps extends IUserListStateProps, IUserListDispatchPr
     resource: string;
 }
 
+@Radium
 export class UserListPageImpl extends React.Component<IUserListProps, void> {
 
     static resourceName: string = 'userManagement';
     private max: number = 10;
 
     private userActions: IBulkUserActionType[]  = [
-        {label: 'Export Report', action: toggleConfirmationModal},
-        {label: 'Lock account(s)', action: toggleConfirmationModal},
-        {label: 'Unlock account(s)', action: toggleConfirmationModal},
-        {label: 'Change role', action: toggleConfirmationModal}
+        {label: 'Export Report', action: showConfirmationModal},
+        {label: 'Lock account(s)', action: showConfirmationModal},
+        {label: 'Unlock account(s)', action: showConfirmationModal},
+        {label: 'Change role', action: showConfirmationModal}
     ];
 
     componentWillMount = (): void => {
@@ -58,8 +60,22 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
         if (this.max > 0) {
             filters.max = this.max;
         }
-        ModelService.getModel(resource).list(filters);
+        ModelService.getModel(resource).list(filters, false, getDefaultHeaders());
     }
+
+    handlePagination: any = (pageNumber: number): void => {
+        const {resource} = this.props;
+        if (checkIfQueryParamExist()) {
+            let listID: string = getParameterByName('listID');
+            let listName: string = getParameterByName('listName');
+            this.fetchInstanceList(resource, {action: 'list', listID: listID, 
+                    listName: listName, offset: (pageNumber - 1) * this.max});
+        } else {
+            this.fetchInstanceList(this.props.resource, {action: 'list', offset: (pageNumber - 1) * this.max});
+        }
+        this.props.setPage(pageNumber, this.props.resource);
+        resetCheckboxState();
+    };
 
     render(): JSX.Element {
               
@@ -67,9 +83,6 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
             <div style={listContainer}>
                 <h2>User Management</h2>
                 <Row>
-                    <Col md={8}>
-                            SEARCH COMPONENT
-                    </Col>
                     <Col md={4}>
                         <span style={{float: 'right'}}>
                             <UserActions
@@ -97,6 +110,7 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
                         totalCount={this.props.totalCount}
                 />
                 <ConfirmationModal/>
+                <RolesModal/>
             </div>
         );
     }
@@ -109,19 +123,8 @@ let mapStateToProps = (state, ownProps): IUserListStateProps => {
         properties: resourceData.properties,
         instanceList: resourceData.instanceList,
         totalCount:  resourceData.totalCount,
-        selectedIds: state.checkbox.selectedIds,
-        selectAllOnPage: state.checkbox.selectAllOnPage,
-        selectAll: state.checkbox.selectAll,
     };
 };
-
-// let mapDispatchToProps = (dispatch): IUserListDispatchProps => {
-//     return {
-//         setPage: (pageNumber, resource) => {
-//             dispatch(setPage(pageNumber, resource));
-//         }
-//     };
-// };
 
 let UserListPage = connect(mapStateToProps)(UserListPageImpl);
 export {UserListPage};

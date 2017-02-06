@@ -1,5 +1,5 @@
 import * as Axios from 'axios';
-import {changeConfirmationModalVisibility} from '../actions/confirmationModalAction';
+import {changeConfirmationModalVisibility, changeRolesListModalVisibility} from '../actions/modalAction';
 import {saveSignupFormData} from '../actions/signupAction';
 import {browserHistory} from 'react-router';
 import {store} from '../store';
@@ -19,8 +19,12 @@ export const handleSignupInput = (key, value): void => {
     dispatchToStore(saveSignupFormData(key, value));
 };
 
-export const toggleConfirmationModal = (): void => {
-    dispatchToStore(changeConfirmationModalVisibility());
+export const toggleConfirmationModal = (visible: boolean): void => {
+    dispatchToStore(changeConfirmationModalVisibility(visible));
+};
+
+export const toggleRolesListModal = (visible: boolean) => {
+    dispatchToStore(changeRolesListModalVisibility(visible));
 };
 
 export function getParameterByName(name: string) {
@@ -55,7 +59,7 @@ export const dispatchToStore = (...actions: any[]): void => {
     });
 };
 
-export const getDefaultHeaders = (): {access_token: string, 'Content-Type': string} => {
+export const getDefaultHeaders = (): {'X-Auth-Token': string, 'Content-Type': string} => {
     let accessToken: string = store.getState().currentUser.get('accessToken');
     if (!accessToken) {
         console.error('Access Token not found. Redirecting to the Home Page');
@@ -63,7 +67,11 @@ export const getDefaultHeaders = (): {access_token: string, 'Content-Type': stri
     }
     
     return {
-        access_token: accessToken,
+        'X-Auth-Token': accessToken,
         'Content-Type': 'application/json'
     };
+};
+
+export const showConfirmationModal = (): void => {
+    toggleConfirmationModal(true);
 };
