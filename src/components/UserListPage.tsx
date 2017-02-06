@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as Radium from 'radium';
-import {connect} from 'react-redux';
-import {Row, Col, Pagination} from './ReusableComponents';
-import {CSS} from '../interfaces';
+import {connect, MapStateToProps} from 'react-redux';
+import {Row, Col} from './ReusableComponents';
+import {CSS, IState} from '../interfaces';
 import {ModelService} from 'react-hero';
 import {ConfirmationModal} from './ConfirmationModal';
-import {getDefaultHeaders, checkIfQueryParamExist, getParameterByName, showConfirmationModal} from '../utils';
+import {getDefaultHeaders, showConfirmationModal} from '../utils';
 import {RolesModal} from './RolesModal';
 import {
     DataGrid,
@@ -15,8 +15,7 @@ import {
     IUserActionStateProps,
     BaseModel,
     PagedListFilters,
-    DropDownFilter,
-    resetCheckboxState
+    DropDownFilter
 } from 'react-hero';
 
 export interface IUserListDispatchProps {
@@ -52,30 +51,12 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
         this.fetchInstanceList(resource, {action: 'list'});
     };
 
-    componentWillUnmount = (): void => {
-        // resetSelectedRecords();
-    }
-
     fetchInstanceList(resource: string, filters: any = {}): void {
         if (this.max > 0) {
             filters.max = this.max;
         }
         ModelService.getModel(resource).list(filters, false, getDefaultHeaders());
     }
-
-    handlePagination: any = (pageNumber: number): void => {
-        const {resource} = this.props;
-        if (checkIfQueryParamExist()) {
-            let listID: string = getParameterByName('listID');
-            let listName: string = getParameterByName('listName');
-            this.fetchInstanceList(resource, {action: 'list', listID: listID, 
-                    listName: listName, offset: (pageNumber - 1) * this.max});
-        } else {
-            this.fetchInstanceList(this.props.resource, {action: 'list', offset: (pageNumber - 1) * this.max});
-        }
-        this.props.setPage(pageNumber, this.props.resource);
-        resetCheckboxState();
-    };
 
     render(): JSX.Element {
               
@@ -116,7 +97,8 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
     }
 }
 
-let mapStateToProps = (state, ownProps): IUserListStateProps => {
+let mapStateToProps: MapStateToProps<IState, IUserListProps> = 
+        (state: IState, ownProps: IUserListProps): IUserListStateProps => {
     let resourceData: IUserListStateProps & IFromJS = state.data.get(`${ownProps.resource}List`, {});
     resourceData = resourceData.toJS ? resourceData.toJS() : resourceData;
     return {
@@ -126,7 +108,7 @@ let mapStateToProps = (state, ownProps): IUserListStateProps => {
     };
 };
 
-let UserListPage = connect(mapStateToProps)(UserListPageImpl);
+let UserListPage: React.ComponentClass<IUserListProps> = connect(mapStateToProps)(UserListPageImpl);
 export {UserListPage};
 
 const listContainer: CSS = {

@@ -1,9 +1,9 @@
-import {IGenericAction} from '../interfaces';
+import {IGenericAction, ILoggedinData} from '../interfaces';
 import {
-        SAVE_ACCESS_TOKEN, 
-        SAVE_LOGGED_IN_USER_DATA, 
-        CLEAR_LOGGED_IN_USER_DATA, 
-        SAVE_LOGIN_ERROR_MESSAGE
+    SAVE_ACCESS_TOKEN, 
+    SAVE_LOGGED_IN_USER_DATA, 
+    CLEAR_LOGGED_IN_USER_DATA, 
+    SAVE_LOGIN_ERROR_MESSAGE
 } from '../constants';
 
 export const saveAccessToken = (token: string): IGenericAction => {
@@ -13,7 +13,7 @@ export const saveAccessToken = (token: string): IGenericAction => {
     };
 };
 
-export const saveLoggedInUserData = (userRoles: string[], username: string) => {
+export const saveLoggedInUserData = (userRoles: string[], username: string): ILoggedinData => {
     return {
         type: SAVE_LOGGED_IN_USER_DATA,
         payload: {

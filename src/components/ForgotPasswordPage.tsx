@@ -2,16 +2,16 @@ import * as React from 'react';
 import * as Radium from 'radium';
 import * as Axios from 'axios';
 import {Panel, FormControl, Button, FormGroup, HelpBlock} from './ReusableComponents';
-import {CSS, validationType} from '../interfaces';
+import {CSS, validationType, IAxiosResponse} from '../interfaces';
 import {
-        removeMarginAndPadding, 
-        defaultFooterContainer,
-        defaultPanelContainer,
-        defaultInputStyle,
-        errorMessage,
-        pullRight,
-        pullLeft
-    } from '../constants/palette';
+    removeMarginAndPadding, 
+    defaultFooterContainer,
+    defaultPanelContainer,
+    defaultInputStyle,
+    errorMessage,
+    pullRight,
+    pullLeft
+} from '../constants/palette';
 
 export interface IForgotPasswordPageStyleProps {
     forgotPasswordContainerStyle?: CSS;
@@ -46,10 +46,10 @@ export class ForgotPasswordPage extends React.Component<IForgotPasswordPageProps
     constructor() {
         super();
         this.state = {
-                email: '', 
-                usernameError: null, 
-                errorMessage: '',
-                showInputField: true
+            email: '', 
+            usernameError: null, 
+            errorMessage: '',
+            showInputField: true
         };
     }
 
@@ -66,7 +66,7 @@ export class ForgotPasswordPage extends React.Component<IForgotPasswordPageProps
         if (!email) {
             this.setState({usernameError: 'error'});
         } else {
-            Axios.post(this.props.onSubmitUrl, {email}).then((response) => {
+            Axios.post(this.props.onSubmitUrl, {email}).then((response: IAxiosResponse): void => {
                 this.setState({showInputField: false, errorMessage: ''});
             }).catch((error: {data: {message: string}}) => {
                 this.setState({errorMessage: error.data.message});
@@ -129,10 +129,10 @@ export class ForgotPasswordPage extends React.Component<IForgotPasswordPageProps
 
     resetState = (): void => {
         this.setState({
-                email: '', 
-                usernameError: null, 
-                errorMessage: '',
-                showInputField: true
+            email: '', 
+            usernameError: null, 
+            errorMessage: '',
+            showInputField: true
         });
     }
 

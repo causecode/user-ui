@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as Radium from 'radium';
 import {Modal, Col, Row, Button} from './ReusableComponents';
 import {connect, MapStateToProps} from 'react-redux';
-import {CSS} from '../interfaces';
+import {CSS, IState} from '../interfaces';
 import {toggleConfirmationModal, toggleRolesListModal} from '../utils';
 import {UserModel} from '../models/UserModel';
 import FontAwesome = require('react-fontawesome');
@@ -39,7 +39,7 @@ export class ConfirmationModalImpl extends React.Component<IConfirmationModalPro
                 break;
 
             default:
-                break;
+                this.hideModal();
         }
     }
 
@@ -72,7 +72,7 @@ export class ConfirmationModalImpl extends React.Component<IConfirmationModalPro
     }
 }
 
-let mapStateToProps = (state): IConfirmationModalProps => {
+let mapStateToProps: MapStateToProps<IState, IConfirmationModalProps> = (state: IState): IConfirmationModalProps => {
     return {
         visibility: state.modalVisibility.toJS().confirmationModal,
         actionName: state.userAction.action,

@@ -1,6 +1,6 @@
 import * as Axios from 'axios';
 import {saveAccessToken, saveLoggedInUserData, saveLoginErrorMessage} from '../actions/userAction';
-import {BaseModel, ModelPropTypes, config, HTTP} from 'react-hero';
+import {BaseModel, ModelPropTypes, HTTP} from 'react-hero';
 import {dispatchToStore, getDefaultHeaders, toggleConfirmationModal} from '../utils';
 import {IAxiosResponse, ISignupData, ILoginData} from '../interfaces';
 import {browserHistory} from 'react-router';

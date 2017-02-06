@@ -43,8 +43,17 @@ export interface IGenericAction {
 
 export interface IState {
     signupData?: IFromJS;
-    showConfirmationModal?: boolean;
+    modalVisibility?: IFromJS;
     currentUser?: IFromJS;
+    userAction?: {
+        action: string,
+        records: number
+    };
+    checkbox?: {
+        selectedIds: number[],
+        selectAll: boolean
+    };
+    data?: IFromJS;
 }
 
 // Type `any` is intentional because response data can be anything.
@@ -52,4 +61,12 @@ export interface IAxiosResponse {
     status: number;
     access_token?: string;
     data: any;
+}
+
+export interface ILoggedinData {
+    type: string;
+    payload: {
+        username: string,
+        roles: string[]
+    };
 }

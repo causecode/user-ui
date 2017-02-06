@@ -1,10 +1,11 @@
 import * as React from 'react';
 import * as Radium from 'radium';
-import {Modal, Row, Col, Button, Checkbox} from './ReusableComponents';
+import {Modal, Row, Button, Checkbox} from './ReusableComponents';
 import {connect, MapStateToProps} from 'react-redux';
-import {CSS} from '../interfaces';
+import {CSS, IState} from '../interfaces';
 import {UserModel} from '../models/UserModel';
 import {toggleRolesListModal} from '../utils';
+import {rolesList} from '../constants';
 
 export interface IRolesModalProps {
     visibility?: boolean;
@@ -41,24 +42,7 @@ export class RolesModalImpl extends React.Component<IRolesModalProps, IRolesModa
     }
 
     getRolesChecklist = (): JSX.Element[] => {
-        const rolesList: {id: number, value: string}[] = [
-            {id: 1, value: 'ROLE_USER'},
-            {id: 2, value: 'ROLE_ADMIN'},
-            {id: 3, value: 'ROLE_CONTENT_MANAGER'},
-            {id: 4, value: 'ROLE_JOB_BOARD_MANAGER'},
-            {id: 5, value: 'ROLE_EMPLOYEE_MANAGER'},
-            {id: 6, value: 'ROLE_EMPLOYEE'},
-            {id: 7, value: 'ROLE_ACCELERATOR_USER'},
-            {id: 8, value: 'ROLE_ACCELERATOR_JUDGE'},
-            {id: 9, value: 'ROLE_ACCELERATOR_MENTOR'},
-            {id: 10, value: 'ROLE_USER_RATER'},
-            {id: 11, value: 'ROLE_CRM_MANAGER'},
-            {id: 12, value: 'ROLE_USER_MANAGER'},
-            {id: 13, value: 'ROLE_CRM_USER'},
-            {id: 14, value: 'ROLE_HR'}
-        ];
-
-       return rolesList.map((item: {id: number, value: string}): JSX.Element => {
+        return rolesList.map((item: {id: number, value: string}): JSX.Element => {
             return (
                     <Checkbox
                             id={`${item.id}`}
@@ -108,7 +92,7 @@ export class RolesModalImpl extends React.Component<IRolesModalProps, IRolesModa
     }
 }
 
-let mapStateToProps = (state): IRolesModalProps => {
+let mapStateToProps: MapStateToProps<IState, IRolesModalProps> = (state: IState): IRolesModalProps => {
     return {
         visibility: state.modalVisibility.toJS().rolesModal,
         recordsSelected: state.userAction.records,

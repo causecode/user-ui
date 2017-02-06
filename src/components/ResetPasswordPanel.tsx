@@ -4,13 +4,13 @@ import * as Axios from 'axios';
 import {Panel, FormControl, Button, FormGroup, HelpBlock} from './ReusableComponents';
 import {CSS, validationType} from '../interfaces';
 import {
-        removeMarginAndPadding, 
-        defaultFooterContainer,
-        defaultPanelContainer,
-        defaultInputStyle,
-        errorMessage,
-        pullRight
-    } from '../constants/palette';
+    removeMarginAndPadding, 
+    defaultFooterContainer,
+    defaultPanelContainer,
+    defaultInputStyle,
+    errorMessage,
+    pullRight
+} from '../constants/palette';
 
 export interface IForgotPasswordPageStyleProps {
     resetPasswordContainerStyle?: CSS;
@@ -35,20 +35,22 @@ export interface IForgotPasswordStates {
     passwordChanged?: boolean;
     errorMessage?: string;
 }
+
 let token: string = '';
 let email: string = '';
+
 @Radium
 export class ResetPasswordPanel extends React.Component<IForgotPasswordPageProps, IForgotPasswordStates> {
 
     constructor() {
         super();
         this.state = {
-                newPassword: '', 
-                confirmPassword: '', 
-                newPasswordError: null,
-                confirmPasswordError: null,
-                passwordChanged: false,
-                errorMessage: ''
+            newPassword: '', 
+            confirmPassword: '', 
+            newPasswordError: null,
+            confirmPasswordError: null,
+            passwordChanged: false,
+            errorMessage: ''
         };
     }
 

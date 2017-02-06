@@ -1,30 +1,19 @@
-import * as Axios from 'axios';
-import {changeConfirmationModalVisibility, changeRolesListModalVisibility} from '../actions/modalAction';
+import {TOGGLE_CONFIRMATION_MODAL, TOGGLE_ROLES_LIST_MODAL} from '../constants';
+import {changeModalVisibility} from '../actions/modalAction';
 import {saveSignupFormData} from '../actions/signupAction';
 import {browserHistory} from 'react-router';
 import {store} from '../store';
-
-/**
- * Type 'Object' is intentional for 'requestData' as sendRequest() 
- * is a generic function for sending request to the server.
- */
-export const sendRequest = (requestUrl: string, successUrl: string, requestData: Object): void => {
-    Axios.post(requestUrl, requestData)
-    .then(function (response: Axios.AxiosXHR<any>) {
-        browserHistory.push(successUrl);
-    });
-};
 
 export const handleSignupInput = (key, value): void => {
     dispatchToStore(saveSignupFormData(key, value));
 };
 
 export const toggleConfirmationModal = (visible: boolean): void => {
-    dispatchToStore(changeConfirmationModalVisibility(visible));
+    dispatchToStore(changeModalVisibility(TOGGLE_CONFIRMATION_MODAL, visible));
 };
 
 export const toggleRolesListModal = (visible: boolean) => {
-    dispatchToStore(changeRolesListModalVisibility(visible));
+    dispatchToStore(changeModalVisibility(TOGGLE_ROLES_LIST_MODAL, visible));
 };
 
 export function getParameterByName(name: string) {

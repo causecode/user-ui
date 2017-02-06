@@ -5,13 +5,13 @@ import {CSS, validationType, IState} from '../interfaces';
 import {connect, MapStateToProps} from 'react-redux';
 import {UserModel} from '../models/UserModel';
 import {
-        removeMarginAndPadding, 
-        defaultFooterContainer,
-        defaultPanelContainer,
-        defaultInputStyle,
-        errorMessage,
-        pullRight,
-        pullLeft
+    removeMarginAndPadding, 
+    defaultFooterContainer,
+    defaultPanelContainer,
+    defaultInputStyle,
+    errorMessage,
+    pullRight,
+    pullLeft
 } from '../constants/palette';
 
 export interface IMapStateToProps {

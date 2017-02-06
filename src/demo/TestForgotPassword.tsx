@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as Axios from 'axios';
 import {ForgotPasswordPage} from '../components';
 import {Link} from 'react-router';
 import {config} from 'react-hero';
