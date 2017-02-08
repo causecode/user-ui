@@ -5,3 +5,7 @@ declare interface NodeRequire {
 }
 
 declare var require: NodeRequire;
+
+declare interface String {
+    capitalize(): string;
+}

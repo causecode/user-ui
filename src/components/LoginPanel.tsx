@@ -1,15 +1,16 @@
 import * as React from 'react';
 import * as Radium from 'radium';
-import {Panel, FormControl, Button, Checkbox, FormGroup, HelpBlock} from './ReusableComponents';
-import {CSS, validationType, IState} from '../interfaces';
+import {Panel, FormControl, Button, Checkbox, FormGroup, HelpBlock, Link} from './ReusableComponents';
+import {CSS, validationType, IStateProps} from '../interfaces';
 import {connect, MapStateToProps} from 'react-redux';
+import {ErrorMessage} from './ErrorMessage';
+import {PanelHeader} from './PanelHeader';
 import {UserModel} from '../models/UserModel';
 import {
     removeMarginAndPadding, 
     defaultFooterContainer,
     defaultPanelContainer,
     defaultInputStyle,
-    errorMessage,
     pullRight,
     pullLeft
 } from '../constants/palette';
@@ -19,7 +20,7 @@ export interface IMapStateToProps {
     errorMessage: string;
 }
 
-export interface ILoginPageStyleProps {
+export interface ILoginPanelStyleProps {
     loginContainerStyle?: CSS;
     submitButtonStyle?: CSS;
     panelTitleStyle?: CSS;
@@ -27,7 +28,7 @@ export interface ILoginPageStyleProps {
     inputStyle?: CSS;
 }
 
-export interface ILoginPageProps extends ILoginPageStyleProps {
+export interface ILoginPanelProps extends ILoginPanelStyleProps {
     showRememberMeCheckbox?: boolean;
     submitButtonContent?: JSX.Element | string;
     emailPlaceholder?: string;
@@ -36,13 +37,13 @@ export interface ILoginPageProps extends ILoginPageStyleProps {
     onLoginSuccess: string;
     onSignup: string;
     onSubmit: string;
-    paneltitle?: string;
+    panelTitle?: string;
     isLoggedIn?: boolean;
     hasLoginError?: boolean;
     errorMessage?: string;
 }
 
-export interface ILoginPageStates {
+export interface ILoginPanelStates {
     email?: string;
     password?: string;
     rememberMe?: boolean;
@@ -51,7 +52,7 @@ export interface ILoginPageStates {
 }
 
 @Radium
-export class LoginPageImpl extends React.Component<ILoginPageProps, ILoginPageStates> {
+export class LoginPanelImpl extends React.Component<ILoginPanelProps, ILoginPanelStates> {
 
     constructor() {
         super();
@@ -91,24 +92,16 @@ export class LoginPageImpl extends React.Component<ILoginPageProps, ILoginPageSt
         }
     }
 
-    renderPanelHeader = (): JSX.Element => {
-        return (
-            <div style={this.props.panelTitleStyle}>
-                {this.props.paneltitle || 'Please enter your details.'}
-            </div>
-        );
-    }
-
     renderPanelFooter = (): JSX.Element => {
         return (
             <div style={defaultFooterContainer}>
                 <div style={pullLeft}>
-                    <a href={this.props.onForgotPassword} style={this.props.footerLinkStyle}>
+                    <Link to={this.props.onForgotPassword} style={this.props.footerLinkStyle}>
                         <strong>Forgot password?</strong>
-                    </a><br/>
-                    <a href={this.props.onSignup} style={this.props.footerLinkStyle}>
+                    </Link><br/>
+                    <Link to={this.props.onSignup} style={this.props.footerLinkStyle}>
                         <strong>Sign up now</strong>
-                    </a>
+                    </Link>
                 </div>
                 <div style={pullRight}>
                     <Button type="submit" style={this.props.submitButtonStyle}>
@@ -129,19 +122,17 @@ export class LoginPageImpl extends React.Component<ILoginPageProps, ILoginPageSt
         );
     }
 
-    renderError = (): JSX.Element => {
-        return (
-            <div style={errorMessage}>
-                {this.props.errorMessage}
-            </div>
-        );
-    }
-
     render(): JSX.Element {
         return (
             <div style={this.props.loginContainerStyle || defaultPanelContainer}>
                 <form onSubmit={this.submitForm}>
-                    <Panel header={this.renderPanelHeader()} footer={this.renderPanelFooter()}>
+                    <Panel 
+                            header={
+                                <PanelHeader
+                                        headerStyle={this.props.panelTitleStyle} 
+                                        headerText={this.props.panelTitle || 'Please enter your details.'}/>
+                            } 
+                            footer={this.renderPanelFooter()}>
                         <FormGroup validationState={this.state.emailError} style={removeMarginAndPadding}>
                             <FormControl
                                     id="email"
@@ -163,7 +154,7 @@ export class LoginPageImpl extends React.Component<ILoginPageProps, ILoginPageSt
                             <HelpBlock>{this.state.passwordError ? 'This field is required.' : null}</HelpBlock>
                         </FormGroup>
                         {this.props.showRememberMeCheckbox ? this.renderRememberMeCheckbox() : null}
-                        {this.renderError()}
+                        <ErrorMessage message={this.props.errorMessage}/>
                     </Panel>
                 </form>
             </div>
@@ -171,12 +162,12 @@ export class LoginPageImpl extends React.Component<ILoginPageProps, ILoginPageSt
     }
 }
 
-let mapStateToProps: MapStateToProps<IState, ILoginPageProps> = (state: IState): IMapStateToProps => {
+let mapStateToProps: MapStateToProps<IStateProps, ILoginPanelProps> = (state: IStateProps): IMapStateToProps => {
     return {
         isLoggedIn: state.currentUser.get('isLoggedIn'),
         errorMessage: state.currentUser.get('loginErrorMessage')
     };
 };
 
-let LoginPage: React.ComponentClass<ILoginPageProps> = connect(mapStateToProps)(LoginPageImpl);
-export {LoginPage};
+let LoginPanel: React.ComponentClass<ILoginPanelProps> = connect(mapStateToProps)(LoginPanelImpl);
+export {LoginPanel};

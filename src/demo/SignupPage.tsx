@@ -1,16 +1,15 @@
 import * as React from 'react';
-import {SignupPage} from '../components';
+import {SignupPanel} from '../components';
 import {Link} from 'react-router';
-import {config} from 'react-hero';
 
-export class TestSignup extends React.Component<void, void> {
+export class SignupPage extends React.Component<void, void> {
     render(): JSX.Element {
         return (
             <div>
                 <Link to="/userManagement/list">UserManagement</Link>
-                <SignupPage
-                        onSubmit={`user/action/signUp`}
-                        onLogin="/"
+                <SignupPanel
+                        onSubmitUrl={`user/action/signUp`}
+                        onLoginUrl="/"
                         onSuccess="/"
                         recaptchaSiteKey="6LdTzxAUAAAAADcMJb2YJ_-79JjSPjC9kP6tMmH7"
                 />

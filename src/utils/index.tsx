@@ -1,10 +1,15 @@
-import {TOGGLE_CONFIRMATION_MODAL, TOGGLE_ROLES_LIST_MODAL} from '../constants';
 import {changeModalVisibility} from '../actions/modalAction';
 import {saveSignupFormData} from '../actions/signupAction';
 import {browserHistory} from 'react-router';
 import {store} from '../store';
+import {
+    TOGGLE_CONFIRMATION_MODAL,
+    TOGGLE_ROLES_LIST_MODAL,
+    AUTH_TOKEN_KEY,
+    AUTH_TOKEN_KEY_TIMESTAMP
+} from '../constants';
 
-export const handleSignupInput = (key, value): void => {
+export const handleSignupInput = (key: string, value: string): void => {
     dispatchToStore(saveSignupFormData(key, value));
 };
 
@@ -12,33 +17,8 @@ export const toggleConfirmationModal = (visible: boolean): void => {
     dispatchToStore(changeModalVisibility(TOGGLE_CONFIRMATION_MODAL, visible));
 };
 
-export const toggleRolesListModal = (visible: boolean) => {
+export const toggleRolesListModal = (visible: boolean): void => {
     dispatchToStore(changeModalVisibility(TOGGLE_ROLES_LIST_MODAL, visible));
-};
-
-export function getParameterByName(name: string) {
-    let url: string = window.location.href;
-    name = name.replace(/[\[\]]/g, '\\$&');
-    let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-    results = regex.exec(url);
-    if (!results) {
-        return null;
-    }
-
-    if (!results[2]) {
-        return '';
-    }
-
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
-};
-
-export function checkIfQueryParamExist() {
-    let url = window.location.href;
-    if (url.indexOf('?') !== -1 && url.indexOf('&') !== -1 && url.indexOf('=') !== -1) {
-        return true;
-    }
-
-    return false;
 };
 
 // Type `any` is assigned because `dispatchToStore` is a generic function.
@@ -49,9 +29,9 @@ export const dispatchToStore = (...actions: any[]): void => {
 };
 
 export const getDefaultHeaders = (): {'X-Auth-Token': string, 'Content-Type': string} => {
-    let accessToken: string = store.getState().currentUser.get('accessToken');
+    let accessToken: string = getTokenFromLocalStorage();
     if (!accessToken) {
-        console.error('Access Token not found. Redirecting to the Home Page');
+        console.warn('Access Token not found. Redirecting to the Home Page');
         browserHistory.push('');
     }
     
@@ -63,4 +43,30 @@ export const getDefaultHeaders = (): {'X-Auth-Token': string, 'Content-Type': st
 
 export const showConfirmationModal = (): void => {
     toggleConfirmationModal(true);
+};
+
+export const setTokenInLocalStorage = (token: string) => {
+    if (!token) {
+        console.warn('No Token sent to setTokenInLocalStorage');
+        return;
+    }
+
+    localStorage.setItem(AUTH_TOKEN_KEY, token);
+    localStorage.setItem(AUTH_TOKEN_KEY_TIMESTAMP, new Date().toString());
+};
+
+export const getTokenFromLocalStorage = (): string => {
+    let token: string = localStorage.getItem(AUTH_TOKEN_KEY);
+    let tokenCreationDate: Date = new Date(localStorage.getItem(AUTH_TOKEN_KEY_TIMESTAMP));
+    let tokenAgeInDays: number = Math.abs(new Date().getDate() - tokenCreationDate.getDate());
+
+    if (!token || tokenAgeInDays > 60) {
+        return '';
+    }
+
+    return token;
+};
+
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
 };

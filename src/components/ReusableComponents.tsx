@@ -1,5 +1,6 @@
 import * as Radium from 'radium';
 import * as Bootstrap from 'react-bootstrap';
+import {Link as RouterLink} from 'react-router';
 const ReCAPTCHA = require<any>('react-google-recaptcha');
 
 // Bootstrap components
@@ -16,6 +17,9 @@ export const Radio = Radium(Bootstrap.Radio);
 export const Form = Radium(Bootstrap.Form);
 export const Col = Radium(Bootstrap.Col);
 export const Row = Radium(Bootstrap.Row);
+
+// React-router components
+export const Link = Radium(RouterLink);
 
 // Google ReCaptcha
 export const ReCaptcha = Radium(ReCAPTCHA);

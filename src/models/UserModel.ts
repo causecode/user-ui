@@ -1,7 +1,7 @@
 import * as Axios from 'axios';
-import {saveAccessToken, saveLoggedInUserData, saveLoginErrorMessage} from '../actions/userAction';
+import {saveLoggedInUserData, saveLoginErrorMessage, loginSuccess} from '../actions/userAction';
 import {BaseModel, ModelPropTypes, HTTP} from 'react-hero';
-import {dispatchToStore, getDefaultHeaders, toggleConfirmationModal} from '../utils';
+import {dispatchToStore, getDefaultHeaders, toggleConfirmationModal, setTokenInLocalStorage} from '../utils';
 import {IAxiosResponse, ISignupData, ILoginData} from '../interfaces';
 import {browserHistory} from 'react-router';
 import {HTTP_STATUS} from '../constants';
@@ -51,9 +51,11 @@ export class UserModel extends BaseModel {
         Axios.post(requestUrl, requestData).then((response: IAxiosResponse): void => {
             if (response.status === HTTP_STATUS.SUCCESS) {
                 let responseData: {access_token: string, roles: string[], username: string} = response.data;
+                setTokenInLocalStorage(responseData.access_token);
                 dispatchToStore(
-                        saveAccessToken(responseData.access_token), 
-                        saveLoggedInUserData(responseData.roles || [], responseData.username || ''));
+                        saveLoggedInUserData(responseData.roles || [], responseData.username || ''),
+                        loginSuccess()
+                );
                 browserHistory.push(successUrl);
             }
         }).catch((error: IAxiosResponse): void => {
@@ -101,11 +103,18 @@ export class UserModel extends BaseModel {
         toggleConfirmationModal(false);
     }
 
-    static modifyRoles(addToExisting: boolean, userIds: number[], roleIds: string[]): void {
-        let roleActionType: string = !addToExisting ? 'refresh' : '';
-        let url: string = `userManagement/action/modifyRoles?roleActionType=${roleActionType}&userIds=${userIds}
-                &roleIds=${roleIds}`;
-        HTTP.getRequest(url, getDefaultHeaders());
+    static modifyRoles(addToExisting: boolean, userIds: number[], roleIds: string[]): Axios.IPromise<IAxiosResponse> {
+        let roleActionType: string = addToExisting ? 'append' : 'refresh';
+        let url: string = `userManagement/action/modifyRoles`;
+        return HTTP.postRequest(url, getDefaultHeaders(), {roleActionType, userIds, roleIds});
+    }
+
+    static forgotPassword(url: string, email: string): Axios.IPromise<IAxiosResponse> {
+        return HTTP.postRequest(url, {}, {email});
+    }
+
+    static resetPassword(url: string, token: string, email: string): Axios.IPromise<IAxiosResponse> {
+        return HTTP.postRequest(url, {}, {token, email});
     }
 
     constructor(properties: IUser) {

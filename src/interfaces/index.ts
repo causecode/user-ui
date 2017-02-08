@@ -1,8 +1,9 @@
+import * as React from 'react';
 import {IFromJS} from 'react-hero';
 
 export {CSSProperties as CSS} from 'react';
 
-export type validationType = 'success' | 'warning' | 'error';
+export type validationType = 'error';
 
 export interface ISignupAction {
     type: string;
@@ -30,18 +31,12 @@ export interface ILoginData {
     remember_me?: boolean;
 }
 
-export interface IState {
-    signupData?: IFromJS;
-    currentUser?: IFromJS;
-    showConfirmationModal?: boolean;
-}
-
 export interface IGenericAction {
     type: string;
     payload?: string | number | boolean; 
 }
 
-export interface IState {
+export interface IStateProps {
     signupData?: IFromJS;
     modalVisibility?: IFromJS;
     currentUser?: IFromJS;
@@ -69,4 +64,15 @@ export interface ILoggedinData {
         username: string,
         roles: string[]
     };
+}
+
+export interface ISubmitButton {
+    submitButtonStyle?: React.CSSProperties;
+    submitButtonContent?: string;
+}
+
+export interface ILoginButton {
+    loginButtonStyle?: React.CSSProperties;
+    loginButtonContent?: string;
+    onLoginUrl?: string;
 }

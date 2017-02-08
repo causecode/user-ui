@@ -1,15 +1,14 @@
 import {IGenericAction, ILoggedinData} from '../interfaces';
 import {
-    SAVE_ACCESS_TOKEN, 
+    LOGIN_SUCCESS, 
     SAVE_LOGGED_IN_USER_DATA, 
     CLEAR_LOGGED_IN_USER_DATA, 
     SAVE_LOGIN_ERROR_MESSAGE
 } from '../constants';
 
-export const saveAccessToken = (token: string): IGenericAction => {
+export const loginSuccess = (): IGenericAction => {
     return {
-        type: SAVE_ACCESS_TOKEN,
-        payload: token
+        type: LOGIN_SUCCESS
     };
 };
 

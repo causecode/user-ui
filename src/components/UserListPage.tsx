@@ -1,12 +1,12 @@
 import * as React from 'react';
 import * as Radium from 'radium';
-import {connect, MapStateToProps} from 'react-redux';
-import {Row, Col} from './ReusableComponents';
-import {CSS, IState} from '../interfaces';
-import {ModelService} from 'react-hero';
-import {ConfirmationModal} from './ConfirmationModal';
 import {getDefaultHeaders, showConfirmationModal} from '../utils';
-import {RolesModal} from './RolesModal';
+import {connect, MapStateToProps} from 'react-redux';
+import {ConfirmationModal} from './Modals/ConfirmationModal';
+import {CSS, IStateProps} from '../interfaces';
+import {ModelService} from 'react-hero';
+import {RolesModal} from './Modals/RolesModal';
+import {Row, Col} from './ReusableComponents';
 import {
     DataGrid,
     IFromJS,
@@ -77,12 +77,22 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
                     <DropDownFilter
                             label="Sort"
                             paramName="sort"
-                            possibleValues={['id', 'firstName', 'lastName', 'email', 'dateCreated', 'lastUpdated']}
+                            possibleValues={[
+                                {label: 'Id', value: 'id'},
+                                {label: 'First Name', value: 'firstName'},
+                                {label: 'Last Name', value: 'lastName'},
+                                {label: 'Email', value: 'email'},
+                                {label: 'Date Created', value: 'dateCreated'},
+                                {label: 'Last Updated', value: 'lastUpdated'}
+                            ]}
                     />
                     <DropDownFilter
                             label="Order"
                             paramName="order"
-                            possibleValues={['ascending', 'descending']}
+                            possibleValues={[
+                                {label: 'Ascending', value: 'ascending'},
+                                {label: 'Descending', value: 'descending'}
+                            ]}
                     />
                 </PagedListFilters>
                 <DataGrid
@@ -97,8 +107,8 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
     }
 }
 
-let mapStateToProps: MapStateToProps<IState, IUserListProps> = 
-        (state: IState, ownProps: IUserListProps): IUserListStateProps => {
+let mapStateToProps: MapStateToProps<IStateProps, IUserListProps> = 
+        (state: IStateProps, ownProps: IUserListProps): IUserListStateProps => {
     let resourceData: IUserListStateProps & IFromJS = state.data.get(`${ownProps.resource}List`, {});
     resourceData = resourceData.toJS ? resourceData.toJS() : resourceData;
     return {

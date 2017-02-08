@@ -28,9 +28,3 @@ export const defaultFooterContainer: CSS = {
     width: '100%',
     display: 'inline-block'
 };
-
-export const errorMessage: CSS = {
-    marginBotton: '10px',
-    textAlign: 'center',
-    color: '#FB540C'
-};

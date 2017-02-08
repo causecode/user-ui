@@ -2,14 +2,13 @@ import {IGenericAction} from '../interfaces';
 import {IFromJS} from 'react-hero';
 import {fromJS} from 'immutable';
 import {
-        SAVE_ACCESS_TOKEN, 
-        SAVE_LOGGED_IN_USER_DATA, 
-        CLEAR_LOGGED_IN_USER_DATA, 
-        SAVE_LOGIN_ERROR_MESSAGE
+    LOGIN_SUCCESS, 
+    SAVE_LOGGED_IN_USER_DATA, 
+    CLEAR_LOGGED_IN_USER_DATA, 
+    SAVE_LOGIN_ERROR_MESSAGE
 } from '../constants';
 
 export const initialState: IFromJS = fromJS({
-    accessToken: '',
     isLoggedIn: false,
     hasLoginError: false,
     loginErrorMessage: '',
@@ -18,9 +17,8 @@ export const initialState: IFromJS = fromJS({
 
 export const userReducer = (state: IFromJS = initialState, action: IGenericAction): IFromJS => {
     switch (action.type) {
-        case SAVE_ACCESS_TOKEN:
+        case LOGIN_SUCCESS:
             return state
-                    .set('accessToken', action.payload)
                     .set('isLoggedIn', true)
                     .set('hasLoginError', false)
                     .set('loginErrorMessage', '');

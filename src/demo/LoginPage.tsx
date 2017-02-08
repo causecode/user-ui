@@ -1,16 +1,16 @@
 import * as React from 'react';
-import {LoginPage} from '../components';
+import {LoginPanel} from '../components';
 import {Link} from 'react-router';
 
-export class TestLogin extends React.Component<void, void> {
+export class LoginPage extends React.Component<void, void> {
     render(): JSX.Element {
         return (
             <div>
                 <Link to="/userManagement/list">UserManagement</Link>
-                <LoginPage
+                <LoginPanel
                         onSubmit="http://localhost/api/login"
                         onLoginSuccess="/"
-                        onForgotPassword="/"
+                        onForgotPassword="forgotPassword"
                         onSignup="/"
                 />
             </div>

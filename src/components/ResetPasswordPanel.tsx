@@ -1,33 +1,27 @@
 import * as React from 'react';
 import * as Radium from 'radium';
-import * as Axios from 'axios';
-import {Panel, FormControl, Button, FormGroup, HelpBlock} from './ReusableComponents';
-import {CSS, validationType} from '../interfaces';
-import {
-    removeMarginAndPadding, 
-    defaultFooterContainer,
-    defaultPanelContainer,
-    defaultInputStyle,
-    errorMessage,
-    pullRight
-} from '../constants/palette';
+import {removeMarginAndPadding, defaultPanelContainer, defaultInputStyle} from '../constants/palette';
+import {Panel, FormControl, FormGroup, HelpBlock} from './ReusableComponents';
+import {CSS, validationType, ISubmitButton} from '../interfaces';
+import {ErrorMessage} from './ErrorMessage';
+import {PanelHeader} from './PanelHeader';
+import {PanelFooter} from './PanelFooter';
+import {UserModel} from '../models/UserModel';
 
-export interface IForgotPasswordPageStyleProps {
+export interface IResetPasswordPanelStyleProps {
     resetPasswordContainerStyle?: CSS;
-    submitButtonStyle?: CSS;
     panelTitleStyle?: CSS;
     bodyTextStyle?: CSS;
     inputStyle?: CSS;
 }
 
-export interface IForgotPasswordPageProps extends IForgotPasswordPageStyleProps {
-    submitButtonText?: string;
+export interface IResetPasswordPanelProps extends IResetPasswordPanelStyleProps, ISubmitButton {
     paneltitle?: string;
     onSubmitUrl: string;
     successUrl: string;
 }
 
-export interface IForgotPasswordStates {
+export interface IResetPasswordPanelStates {
     newPassword?: string;
     confirmPassword?: string;
     newPasswordError?: validationType;
@@ -40,7 +34,7 @@ let token: string = '';
 let email: string = '';
 
 @Radium
-export class ResetPasswordPanel extends React.Component<IForgotPasswordPageProps, IForgotPasswordStates> {
+export class ResetPasswordPanel extends React.Component<IResetPasswordPanelProps, IResetPasswordPanelStates> {
 
     constructor() {
         super();
@@ -86,44 +80,38 @@ export class ResetPasswordPanel extends React.Component<IForgotPasswordPageProps
         } else if (newPassword !== confirmPassword) {
             this.setState({passwordChanged: false, errorMessage: 'Passwords do not match.'});
         } else {
-            Axios.post(this.props.onSubmitUrl, {token, email}).then((response) => {
-                this.setState({passwordChanged: true, errorMessage: ''});
-            }).catch((error: {data: {message: string}}) => {
-                this.setState({passwordChanged: false, errorMessage: error.data.message});
-            });
+            UserModel.resetPassword(this.props.onSubmitUrl, token, email)
+                .then((response) => {
+                    this.setState({passwordChanged: true, errorMessage: ''});
+                }).catch((error: {data: {message: string}}) => {
+                    this.setState({passwordChanged: false, errorMessage: error.data.message});
+                });
         }
     }
 
-    renderPanelHeader = (): JSX.Element => {
-        return (
-            <div style={this.props.panelTitleStyle}>
-                {!this.state.passwordChanged ? this.props.paneltitle || 'Enter your new password' : 'Password Changed'}
-            </div>
-        );
-    }
-
     renderPanelFooter = (): JSX.Element => {
-        let buttonProps: {style: CSS, type?: string} = {
-            style: [this.props.submitButtonText, {visibility: this.state.passwordChanged ? 'hidden' : 'visible'}],
-            type: 'submit'
-        };
-
         return (
-            <div style={defaultFooterContainer}>
-                <div style={pullRight}>
-                    <Button {...buttonProps}>
-                        {this.props.submitButtonText || 'Reset Password'}
-                    </Button>
-                </div>
-            </div>
+            <PanelFooter
+                    showOnlySubmitButton
+                    submitForm
+                    submitButtonStyle={
+                        [this.props.submitButtonStyle, {visibility: this.state.passwordChanged ? 'hidden' : 'visible'}]
+                    }
+                    submitButtonContent={this.props.submitButtonContent || 'Reset Password'}
+            />
         );
     }
 
     render(): JSX.Element {
+        let headerText: string = !this.state.passwordChanged ?
+                 this.props.paneltitle || 'Enter your new password' : 'Password Changed';
+
         return (
             <div style={this.props.resetPasswordContainerStyle || defaultPanelContainer}>
                 <form style={{padding: '10px 0px'}} onSubmit={this.submitForm}>
-                    <Panel header={this.renderPanelHeader()} footer={this.renderPanelFooter()}>
+                    <Panel 
+                            header={<PanelHeader headerText={headerText} headerStyle={this.props.panelTitleStyle}/>} 
+                            footer={this.renderPanelFooter()}>
                         <label style={{visibility: this.state.passwordChanged ? 'visible' : 'hidden'}}>
                             Password changed successfully. Please login to continue.
                         </label>
@@ -155,9 +143,7 @@ export class ResetPasswordPanel extends React.Component<IForgotPasswordPageProps
                                 </HelpBlock>
                             </FormGroup>
                         </div>
-                        <div style={errorMessage}>
-                            {this.state.errorMessage}
-                        </div>
+                        <ErrorMessage message={this.state.errorMessage}/>
                     </Panel>
                 </form>
             </div>

@@ -1,40 +1,40 @@
 import * as React from 'react';
 import * as Radium from 'radium';
-import {pullRight, pullLeft, errorMessage, defaultFooterContainer} from '../constants/palette';
 import {connect, MapStateToProps} from 'react-redux';
-import {CSS, ISignupData, IState} from '../interfaces';
+import {CSS, ISignupData, IStateProps, ISubmitButton, ILoginButton} from '../../interfaces';
 import {browserHistory} from 'react-router';
-import {Panel, Button} from './ReusableComponents';
+import {Panel, Button} from '../ReusableComponents';
 import {SignupForm} from './SignupForm';
-import {UserModel} from '../models/UserModel';
-import {dispatchToStore} from '../utils';
-import {updateSignupError} from '../actions/signupAction';
+import {UserModel} from '../../models/UserModel';
+import {dispatchToStore} from '../../utils';
+import {updateSignupError} from '../../actions/signupAction';
+import {ErrorMessage} from '../ErrorMessage';
+import {PanelHeader} from '../PanelHeader';
+import {PanelFooter} from '../PanelFooter';
 import FontAwesome = require('react-fontawesome');
 
-export interface ISignupPageStyleProps {
+export interface ISignupPanelStyleProps {
     inputStyle?: CSS;
     signupContainerStyle?: CSS;
     panelTitleStyle?: CSS;
-    signupButtonStyle?: CSS;
-    loginButtonStyle?: CSS;
     signupOptionsButtonStyle?: CSS;
 }
 
-export interface ISignupPageProps extends ISignupPageStyleProps {
-    paneltitle?: string;
-    onLogin: string;
-    onSubmit: string;
+export interface ISignupPanelProps extends ISignupPanelStyleProps, ISubmitButton, ILoginButton {
+    panelTitle?: string;
+    onSubmitUrl: string;
+    onLoginUrl: string;
     onSuccess: string;
     userData?: ISignupData;
     recaptchaSiteKey: string;
 }
 
-export interface ISignupPageStates {
+export interface ISignupPanelState {
     displaySignupForm?: boolean;
 }
 
 @Radium
-export class SignupPageImpl extends React.Component<ISignupPageProps, ISignupPageStates> {
+export class SignupPanelImpl extends React.Component<ISignupPanelProps, ISignupPanelState> {
 
     constructor() {
         super();
@@ -42,7 +42,7 @@ export class SignupPageImpl extends React.Component<ISignupPageProps, ISignupPag
     }
 
     submitForm = (): void => {
-        let {userData, onSubmit, onSuccess} = this.props;
+        let {userData, onSubmitUrl, onSuccess} = this.props;
         delete userData.signupErrorMessage;
         let error: string = '';
 
@@ -51,8 +51,8 @@ export class SignupPageImpl extends React.Component<ISignupPageProps, ISignupPag
                 error = 'All the fields are mandatory';
             }
         }
-    
-        error ? dispatchToStore(updateSignupError(error)) : UserModel.signup(onSubmit, userData, onSuccess);
+
+        error ? dispatchToStore(updateSignupError(error)) : UserModel.signup(onSubmitUrl, userData, onSuccess);
     }
 
     showSignupForm = (): void => {
@@ -60,31 +60,19 @@ export class SignupPageImpl extends React.Component<ISignupPageProps, ISignupPag
     }
 
     handleLoginButton = (): void => {
-        browserHistory.push(this.props.onLogin);
-    }
-
-    renderPanelHeader = (): JSX.Element => {
-        return (
-            <div style={this.props.panelTitleStyle}>
-                {this.props.paneltitle || 'Sign up'}
-            </div>
-        );
+        browserHistory.push(this.props.onLoginUrl);
     }
 
     renderPanelFooter = (): JSX.Element => {
         return (
-            <div style={defaultFooterContainer}>
-                <div style={pullLeft}>
-                    <Button style={this.props.loginButtonStyle} onClick={this.handleLoginButton}>
-                        Log in
-                    </Button>
-                </div>
-                <div style={pullRight}>
-                    <Button style={this.props.signupButtonStyle} onClick={this.submitForm}>
-                        Sign up
-                    </Button>
-                </div>
-            </div>
+            <PanelFooter
+                    submitButtonContent={this.props.submitButtonContent || 'Sign Up'}
+                    submitButtonStyle={this.props.loginButtonStyle}
+                    onSubmit={this.submitForm}
+                    otherButtonContent={this.props.loginButtonContent || 'Log in'}
+                    otherButtonStyle={this.props.loginButtonStyle}
+                    otherButtonOnClick={this.handleLoginButton}
+            />
         );
     }
 
@@ -107,25 +95,31 @@ export class SignupPageImpl extends React.Component<ISignupPageProps, ISignupPag
     render(): JSX.Element {
         return (
             <div style={this.props.signupContainerStyle || defaultPanelContainer}>
-                <Panel header={this.renderPanelHeader()} footer={this.renderPanelFooter()}>
+                <Panel 
+                        header={
+                            <PanelHeader
+                                    headerText={this.props.panelTitle || 'Sign up'}
+                                    headerStyle={this.props.panelTitleStyle}
+                            />
+                        } 
+                        footer={this.renderPanelFooter()}>
                     {this.state.displaySignupForm ? this.renderSignupForm() : this.showSignupOptions()}
-                    <div style={errorMessage}>
-                        {this.props.userData.signupErrorMessage}
-                    </div>
+                    <ErrorMessage message={this.props.userData.signupErrorMessage}/>
                 </Panel>
             </div>
         );
     }
 }
 
-let mapStateToProps: MapStateToProps<IState, ISignupPageProps> = (state: IState): {userData: ISignupData} => {
+let mapStateToProps: MapStateToProps<IStateProps, ISignupPanelProps> = 
+        (state: IStateProps): {userData: ISignupData} => {
     return {
         userData: state.signupData.toJS()
     };
 };
 
-let SignupPage: React.ComponentClass<ISignupPageProps> = connect(mapStateToProps)(SignupPageImpl);
-export {SignupPage}
+let SignupPanel: React.ComponentClass<ISignupPanelProps> = connect(mapStateToProps)(SignupPanelImpl);
+export {SignupPanel}
 
 const defaultOptionStyle: CSS = {
     width: '100%',

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import * as Radium from 'radium';
-import {Modal, Col, Row, Button} from './ReusableComponents';
+import {Modal, Col, Row, Button} from '../ReusableComponents';
 import {connect, MapStateToProps} from 'react-redux';
-import {CSS, IState} from '../interfaces';
-import {toggleConfirmationModal, toggleRolesListModal} from '../utils';
-import {UserModel} from '../models/UserModel';
+import {CSS, IStateProps} from '../../interfaces';
+import {toggleConfirmationModal, toggleRolesListModal} from '../../utils';
+import {UserModel} from '../../models/UserModel';
 import FontAwesome = require('react-fontawesome');
 
 export interface IConfirmationModalProps {
@@ -49,30 +49,31 @@ export class ConfirmationModalImpl extends React.Component<IConfirmationModalPro
 
     render(): JSX.Element {
         return (
-                <Modal onHide={this.hideModal} show={this.props.visibility} backdrop="static">
-                    <Modal.Body>
-                        <Row>
-                            <Col sm={3} style={modalIcon}>
-                                <FontAwesome name="question-circle" size="3x"/>
-                            </Col>
-                            <Col sm={9}>
-                                <strong>
-                                    Are you sure you want to perform this action:<br/>
-                                    {this.props.actionName} on {this.props.recordsSelected} records ?
-                                </strong>
-                            </Col>
-                        </Row>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button onClick={this.handleAction} bsStyle="primary">OK</Button>
-                        <Button onClick={this.hideModal}>Cancel</Button>
-                    </Modal.Footer>
-                </Modal>
+            <Modal onHide={this.hideModal} show={this.props.visibility} backdrop="static">
+                <Modal.Body>
+                    <Row>
+                        <Col sm={3} style={modalIcon}>
+                            <FontAwesome name="question-circle" size="3x"/>
+                        </Col>
+                        <Col sm={9}>
+                            <strong>
+                                Are you sure you want to perform this action:<br/>
+                                {this.props.actionName} on {this.props.recordsSelected} records ?
+                            </strong>
+                        </Col>
+                    </Row>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={this.handleAction} bsStyle="primary">OK</Button>
+                    <Button onClick={this.hideModal}>Cancel</Button>
+                </Modal.Footer>
+            </Modal>
         );
     }
 }
 
-let mapStateToProps: MapStateToProps<IState, IConfirmationModalProps> = (state: IState): IConfirmationModalProps => {
+let mapStateToProps: MapStateToProps<IStateProps, IConfirmationModalProps> = (state: IStateProps): 
+        IConfirmationModalProps => {
     return {
         visibility: state.modalVisibility.toJS().confirmationModal,
         actionName: state.userAction.action,

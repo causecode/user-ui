@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as Radium from 'radium';
-import {ControlLabel, FormControl, FormGroup, ReCaptcha, Radio, Form, Col} from './ReusableComponents';
-import {removeMarginAndPadding, defaultInputStyle} from '../constants/palette';
-import {handleSignupInput} from '../utils';
-import {CSS} from '../interfaces';
+import {ControlLabel, FormControl, FormGroup, ReCaptcha, Radio, Form, Col} from '../ReusableComponents';
+import {removeMarginAndPadding, defaultInputStyle} from '../../constants/palette';
+import {handleSignupInput} from '../../utils';
+import {CSS} from '../../interfaces';
 const ReactDateTime = require<any>('react-datetime');
 
 export interface ISignupFormStates {
@@ -38,6 +38,22 @@ export class SignupForm extends React.Component<ISignupFormProps, ISignupFormSta
 
     handleDateChange = (value: {toISOString: () => string}): void => {
         handleSignupInput('birthdate', value.toISOString());
+    }
+
+    renderGenderButtons = (): JSX.Element[] => {
+        return ['male', 'female'].map((item: string, index: number): JSX.Element => {
+            return (
+                <Radio
+                    inline 
+                    value={item}
+                    onChange={this.changeGender}
+                    checked={item === this.state.genderSelected}
+                    key={index}
+                >
+                    {item.capitalize()}
+                </Radio>
+            );
+        });
     }
 
     render(): JSX.Element {
@@ -125,22 +141,7 @@ export class SignupForm extends React.Component<ISignupFormProps, ISignupFormSta
                         Gender
                     </Col>
                     <Col sm={10}>
-                        <Radio 
-                                inline 
-                                value="male"
-                                onChange={this.changeGender}
-                                checked={'male' === this.state.genderSelected}
-                        >
-                            Male
-                        </Radio>
-                        <Radio
-                                inline 
-                                value="female"
-                                onChange={this.changeGender}
-                                checked={'female' === this.state.genderSelected}
-                        >
-                            Female
-                        </Radio>
+                        {this.renderGenderButtons()}
                     </Col>
                 </FormGroup>
                 <FormGroup style={removeMarginAndPadding}>

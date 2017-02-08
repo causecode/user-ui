@@ -1,14 +1,14 @@
 import * as React from 'react';
-import {render} from 'react-dom';
-import {Router, Route, IndexRoute, hashHistory} from 'react-router';
-import {Provider} from 'react-redux';
-import {BasePage} from './components/BasePage';
-import {store} from './store';
-import {TestLogin} from './demo/TestLogin';
-import {TestForgotPassword} from './demo/TestForgotPassword';
 import {ListPage, EditPage, ShowPage, ComponentService, ModelService} from 'react-hero';
-import {TestSignup} from './demo/TestSignup';
-import {TestResetPassword} from './demo/TestResetPassword';
+import {Router, Route, IndexRoute, hashHistory} from 'react-router';
+import {ForgotPasswordPage} from './demo/ForgotPasswordPage';
+import {ResetPasswordPage} from './demo/ResetPasswordPage';
+import {SignupPage} from './demo/SignupPage';
+import {LoginPage} from './demo/LoginPage';
+import {BasePage} from './components/BasePage';
+import {Provider} from 'react-redux';
+import {render} from 'react-dom';
+import {store} from './store';
 
 ModelService.registerAll();
 ComponentService.registerAll();
@@ -17,8 +17,10 @@ render(
    <Provider store={store}>
         <Router history={hashHistory}>
             <Route path="/" component={BasePage}>
-                <IndexRoute component={TestLogin}/>
-                <Route path="resetPassword" component={TestResetPassword}/>
+                <IndexRoute component={LoginPage}/>
+                <Route path="resetPassword" component={ResetPasswordPage}/>
+                <Route path="forgotPassword" component={ForgotPasswordPage}/>
+                <Route path="signup" component={SignupPage}/>
                 <Route path="/:resource/list" component={ListPage}/>
                 <Route path="/:resource/show/:resourceID" component={ShowPage} />
                 <Route path="/:resource/edit/:resourceID" component={EditPage} />
