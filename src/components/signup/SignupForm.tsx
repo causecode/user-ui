@@ -6,7 +6,7 @@ import {handleSignupInput} from '../../utils';
 import {CSS} from '../../interfaces';
 const ReactDateTime = require<any>('react-datetime');
 
-export interface ISignupFormStates {
+export interface ISignupFormState {
     genderSelected?: string;
 }
 
@@ -16,7 +16,7 @@ export interface ISignupFormProps {
 }
 
 @Radium
-export class SignupForm extends React.Component<ISignupFormProps, ISignupFormStates> {
+export class SignupForm extends React.Component<ISignupFormProps, ISignupFormState> {
 
     constructor() {
         super();
@@ -44,11 +44,11 @@ export class SignupForm extends React.Component<ISignupFormProps, ISignupFormSta
         return ['male', 'female'].map((item: string, index: number): JSX.Element => {
             return (
                 <Radio
-                    inline 
-                    value={item}
-                    onChange={this.changeGender}
-                    checked={item === this.state.genderSelected}
-                    key={index}
+                        inline 
+                        value={item}
+                        onChange={this.changeGender}
+                        checked={item === this.state.genderSelected}
+                        key={index}
                 >
                     {item.capitalize()}
                 </Radio>
@@ -129,7 +129,8 @@ export class SignupForm extends React.Component<ISignupFormProps, ISignupFormSta
                         Birthdate
                     </Col>
                     <Col sm={10}>
-                        <ReactDateTime 
+                        <ReactDateTime
+                                id="date"
                                 timeFormat={false} 
                                 closeOnSelect={true} 
                                 onChange={this.handleDateChange}
@@ -146,6 +147,7 @@ export class SignupForm extends React.Component<ISignupFormProps, ISignupFormSta
                 </FormGroup>
                 <FormGroup style={removeMarginAndPadding}>
                     <ReCaptcha
+                            id="captcha"
                             ref="recaptcha"
                             sitekey={this.props.recaptchaSiteKey}
                             onChange={this.handleCaptcha}

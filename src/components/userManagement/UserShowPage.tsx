@@ -47,7 +47,7 @@ export class UserShowPage extends React.Component<IUserShowPageProps, void> {
                     </tr>
                     <tr>
                         <td><strong>Date of Birth</strong></td>
-                        <td>{moment(instance.properties.birthdate).format('MM-DD-YYYY HH:mm:ss')}</td>
+                        <td>{moment(instance.properties.birthdate).format('MM-DD-YYYY')}</td>
                     </tr>
                 </tbody>
             </Table>

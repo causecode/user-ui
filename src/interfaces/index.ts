@@ -7,7 +7,7 @@ export type validationType = 'error';
 
 export interface ISignupAction {
     type: string;
-    payload: {
+    payload?: {
         key: string,
         value: string
     };

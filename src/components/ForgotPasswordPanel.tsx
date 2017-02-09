@@ -75,7 +75,7 @@ export class ForgotPasswordPanel extends React.Component<IForgotPasswordPanelPro
         return (
             <div>
                 Follow the instructions sent to your email address to reset your password.<br/><br/>
-                <span style={{fontSize: '16px', fontWeight: 400}}>
+                <span style={successMessage}>
                     Didn't receive the email? 
                     <a style={this.props.tryAgainLinkStyle} onClick={this.resetState}>Try Again</a>.
                 </span>
@@ -146,3 +146,8 @@ export class ForgotPasswordPanel extends React.Component<IForgotPasswordPanelPro
         );
     }
 }
+
+const successMessage: CSS = {
+    fontSize: '16px',
+    fontWeight: 400
+};

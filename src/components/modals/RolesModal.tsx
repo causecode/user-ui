@@ -69,12 +69,12 @@ export class RolesModalImpl extends React.Component<IRolesModalProps, IRolesModa
 
     handleSubmit = (): void => {
         UserModel.modifyRoles(this.state.addToExistingRoles, this.props.selectedIds, this.state.selectedRoles)
-                .then((response: IAxiosResponse): void => {
-                    this.hideModal();
-                })
-                .catch((error: IAxiosResponse): void => {
-                    this.setState({errorMessage: error.data.message});
-                });
+            .then((response: IAxiosResponse): void => {
+                this.hideModal();
+            })
+            .catch((error: IAxiosResponse): void => {
+                this.setState({errorMessage: error.data.message});
+            });
     }
 
     render(): JSX.Element {

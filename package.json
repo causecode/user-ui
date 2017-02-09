@@ -54,7 +54,6 @@
     "react-datetime": "2.8.3",
     "react-file-download": "0.3.2",
     "redux": "3.6.0",
-    "ts-loader": "1.2.2",
     "tslint": "3.11.0",
     "tslint-loader": "2.1.4",
     "typescript": "2.1.1",
@@ -86,6 +85,7 @@
     "react-router": "2.8.1",
     "react-router-redux": "4.0.7",
     "react-test-renderer": "15.4.1",
+    "ts-loader": "1.2.2",
     "typescript": "2.1.1",
     "unroll": "1.2.0"
   }

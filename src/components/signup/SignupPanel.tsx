@@ -84,6 +84,7 @@ export class SignupPanelImpl extends React.Component<ISignupPanelProps, ISignupP
         return (
             <div>
                 <Button 
+                        id="signupWithEmail"
                         style={this.props.signupOptionsButtonStyle || defaultOptionStyle}
                         onClick={this.showSignupForm}>
                     <FontAwesome name="envelope"/>Sign up with Email

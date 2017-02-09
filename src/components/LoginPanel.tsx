@@ -43,7 +43,7 @@ export interface ILoginPanelProps extends ILoginPanelStyleProps {
     errorMessage?: string;
 }
 
-export interface ILoginPanelStates {
+export interface ILoginPanelState {
     email?: string;
     password?: string;
     rememberMe?: boolean;
@@ -52,7 +52,7 @@ export interface ILoginPanelStates {
 }
 
 @Radium
-export class LoginPanelImpl extends React.Component<ILoginPanelProps, ILoginPanelStates> {
+export class LoginPanelImpl extends React.Component<ILoginPanelProps, ILoginPanelState> {
 
     constructor() {
         super();

@@ -22,8 +22,8 @@ export class UserEditPage extends React.Component<IUserEditPageProps, void> {
     static resourceName: string = 'userManagement';
 
     fetchStoreInstance = (): UserModel => {
-        let instance = this.props.instance;
-        let instanceKey = `${instance.resourceName}Edit`;
+        let instance: UserModel = this.props.instance;
+        let instanceKey: string = `${instance.resourceName}Edit`;
         if (store.getState() && store.getState().forms) {
             instance.properties = store.getState().forms[`rhForms`][instanceKey].properties;
         }
@@ -51,7 +51,6 @@ export class UserEditPage extends React.Component<IUserEditPageProps, void> {
                                 propertyName="Last Name"
                                 model="rhForms.userManagementEdit.properties.lastname"
                         />
-                        
                         <FormInput
                                 type="date"
                                 propertyName="Date of birth"

@@ -21,7 +21,7 @@ export interface IResetPasswordPanelProps extends IResetPasswordPanelStyleProps,
     successUrl: string;
 }
 
-export interface IResetPasswordPanelStates {
+export interface IResetPasswordPanelState {
     newPassword?: string;
     confirmPassword?: string;
     newPasswordError?: validationType;
@@ -34,7 +34,7 @@ let token: string = '';
 let email: string = '';
 
 @Radium
-export class ResetPasswordPanel extends React.Component<IResetPasswordPanelProps, IResetPasswordPanelStates> {
+export class ResetPasswordPanel extends React.Component<IResetPasswordPanelProps, IResetPasswordPanelState> {
 
     constructor() {
         super();

@@ -2,11 +2,12 @@ import * as React from 'react';
 import * as Radium from 'radium';
 import {getDefaultHeaders, showConfirmationModal} from '../../utils';
 import {connect, MapStateToProps} from 'react-redux';
-import {ConfirmationModal} from '../Modals/ConfirmationModal';
+import {ConfirmationModal} from '../modals/ConfirmationModal';
 import {CSS, IStateProps} from '../../interfaces';
 import {ModelService} from 'react-hero';
-import {RolesModal} from '../Modals/RolesModal';
+import {RolesModal} from '../modals/RolesModal';
 import {Row, Col} from '../ReusableComponents';
+import {pullRight} from '../../constants/palette';
 import {
     DataGrid,
     IFromJS,
@@ -65,7 +66,7 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
                 <h2>User Management</h2>
                 <Row>
                     <Col md={4}>
-                        <span style={{float: 'right'}}>
+                        <span style={pullRight}>
                             <UserActions
                                     totalCount={this.props.totalCount} 
                                     isDisabled={false} 
@@ -90,8 +91,8 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
                             label="Order"
                             paramName="order"
                             possibleValues={[
-                                {label: 'Ascending', value: 'ascending'},
-                                {label: 'Descending', value: 'descending'}
+                                {label: 'Ascending', value: 'asc'},
+                                {label: 'Descending', value: 'desc'}
                             ]}
                     />
                 </PagedListFilters>
