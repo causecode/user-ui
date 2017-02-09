@@ -13,8 +13,10 @@ export const Checkbox = Radium(Bootstrap.Checkbox);
 export const Button = Radium(Bootstrap.Button);
 export const Modal = Radium(Bootstrap.Modal);
 export const Panel = Radium(Bootstrap.Panel);
+export const Table = Radium(Bootstrap.Table);
 export const Radio = Radium(Bootstrap.Radio);
 export const Form = Radium(Bootstrap.Form);
+export const Grid = Radium(Bootstrap.Grid);
 export const Col = Radium(Bootstrap.Col);
 export const Row = Radium(Bootstrap.Row);
 

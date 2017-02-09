@@ -19,6 +19,20 @@ export const defaultPanelContainer: CSS = {
     padding: '30px'
 };
 
+export const listStyle: CSS = {
+    display: 'inline'
+};
+
+export const listContainer: CSS = {
+    display: 'inline-block',
+    width: '100%'
+};
+
+export const listItem: CSS = {
+    width: '33%',
+    display: 'inline-block'
+};
+
 export const defaultInputStyle: CSS = {
     padding : '15px',
     marginBottom: '15px'
@@ -27,4 +41,10 @@ export const defaultInputStyle: CSS = {
 export const defaultFooterContainer: CSS = {
     width: '100%',
     display: 'inline-block'
+};
+
+export const defaultTableStyle: CSS = {
+    maxWidth: '700px',
+    marginLeft: 'auto',
+    marginRight: 'auto'
 };

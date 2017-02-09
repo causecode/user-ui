@@ -1,7 +1,8 @@
 import * as React from 'react';
 import * as Radium from 'radium';
-import {CSS, IStateProps, IAxiosResponse} from '../../interfaces';
+import {listStyle, listContainer, listItem} from '../../constants/palette';
 import {Modal, Row, Button, Checkbox} from '../ReusableComponents';
+import {IStateProps, IAxiosResponse} from '../../interfaces';
 import {connect, MapStateToProps} from 'react-redux';
 import {toggleRolesListModal} from '../../utils';
 import {ErrorMessage} from '../ErrorMessage';
@@ -44,11 +45,13 @@ export class RolesModalImpl extends React.Component<IRolesModalProps, IRolesModa
     }
 
     renderRolesChecklist = (): JSX.Element[] => {
-        return rolesList.map((item: {id: number, value: string}): JSX.Element => {
+        return rolesList.map((item: {id: number, value: string}, index: number): JSX.Element => {
             return (
                 <Checkbox
                         id={`${item.id}`}
-                        onChange={this.updateRoles}>
+                        onChange={this.updateRoles}
+                        key={index}
+                        style={listItem}>
                     {item.value}
                 </Checkbox>
             );
@@ -82,7 +85,9 @@ export class RolesModalImpl extends React.Component<IRolesModalProps, IRolesModa
                 </Modal.Header>
                 <Modal.Body>
                     <Row style={listStyle}>
-                        {this.renderRolesChecklist()}
+                        <div style={listContainer}>
+                            {this.renderRolesChecklist()}
+                        </div>
                     </Row><hr/>
                     <Row style={listStyle}>
                         <Checkbox onChange={this.updateExistingRoleState} checked={this.state.addToExistingRoles}>
@@ -113,7 +118,3 @@ let mapStateToProps: MapStateToProps<IStateProps, IRolesModalProps> = (state: IS
 
 let RolesModal: React.ComponentClass<IRolesModalProps> = connect(mapStateToProps)(RolesModalImpl);
 export {RolesModal};
-
-const listStyle: CSS = {
-    display: 'inline'
-};

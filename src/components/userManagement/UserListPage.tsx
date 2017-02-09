@@ -1,12 +1,12 @@
 import * as React from 'react';
 import * as Radium from 'radium';
-import {getDefaultHeaders, showConfirmationModal} from '../utils';
+import {getDefaultHeaders, showConfirmationModal} from '../../utils';
 import {connect, MapStateToProps} from 'react-redux';
-import {ConfirmationModal} from './Modals/ConfirmationModal';
-import {CSS, IStateProps} from '../interfaces';
+import {ConfirmationModal} from '../Modals/ConfirmationModal';
+import {CSS, IStateProps} from '../../interfaces';
 import {ModelService} from 'react-hero';
-import {RolesModal} from './Modals/RolesModal';
-import {Row, Col} from './ReusableComponents';
+import {RolesModal} from '../Modals/RolesModal';
+import {Row, Col} from '../ReusableComponents';
 import {
     DataGrid,
     IFromJS,
