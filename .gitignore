@@ -7,5 +7,6 @@
 *.iml
 /dist
 /.vscode
-/.babelrc
 localConfig.json
+npm-debug.log
+.DS_Store
