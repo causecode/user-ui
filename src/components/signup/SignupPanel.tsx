@@ -77,7 +77,13 @@ export class SignupPanelImpl extends React.Component<ISignupPanelProps, ISignupP
     }
 
     renderSignupForm = (): JSX.Element => {
-        return <SignupForm inputStyle={this.props.inputStyle} recaptchaSiteKey={this.props.recaptchaSiteKey}/>;
+        return (
+            <SignupForm 
+                    id="signupForm"
+                    inputStyle={this.props.inputStyle}
+                    recaptchaSiteKey={this.props.recaptchaSiteKey}
+            />
+        );
     }
 
     showSignupOptions = (): JSX.Element => {

@@ -125,7 +125,7 @@ export class LoginPanelImpl extends React.Component<ILoginPanelProps, ILoginPane
     render(): JSX.Element {
         return (
             <div style={this.props.loginContainerStyle || defaultPanelContainer}>
-                <form onSubmit={this.submitForm}>
+                <form onSubmit={this.submitForm} id="loginForm">
                     <Panel 
                             header={
                                 <PanelHeader

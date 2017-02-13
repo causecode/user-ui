@@ -11,6 +11,7 @@ export interface ISignupFormState {
 }
 
 export interface ISignupFormProps {
+    id?: string;
     recaptchaSiteKey: string;
     inputStyle?: CSS;
 }
@@ -44,6 +45,7 @@ export class SignupForm extends React.Component<ISignupFormProps, ISignupFormSta
         return ['male', 'female'].map((item: string, index: number): JSX.Element => {
             return (
                 <Radio
+                        id={item}
                         inline 
                         value={item}
                         onChange={this.changeGender}
@@ -58,7 +60,7 @@ export class SignupForm extends React.Component<ISignupFormProps, ISignupFormSta
 
     render(): JSX.Element {
         return (
-            <Form horizontal style={signupForm}>
+            <Form horizontal style={signupForm} id={this.props.id}>
                 <FormGroup style={removeMarginAndPadding}>
                     <Col componentClass={ControlLabel} sm={2}>
                         Name

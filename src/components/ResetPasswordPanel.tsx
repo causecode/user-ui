@@ -3,6 +3,7 @@ import * as Radium from 'radium';
 import {removeMarginAndPadding, defaultPanelContainer, defaultInputStyle} from '../constants/palette';
 import {Panel, FormControl, FormGroup, HelpBlock} from './ReusableComponents';
 import {CSS, validationType, ISubmitButton} from '../interfaces';
+import {browserHistory} from 'react-router';
 import {ErrorMessage} from './ErrorMessage';
 import {PanelHeader} from './PanelHeader';
 import {PanelFooter} from './PanelFooter';
@@ -83,6 +84,7 @@ export class ResetPasswordPanel extends React.Component<IResetPasswordPanelProps
             UserModel.resetPassword(this.props.onSubmitUrl, token, email)
                 .then((response) => {
                     this.setState({passwordChanged: true, errorMessage: ''});
+                    browserHistory.push(this.props.successUrl);
                 }).catch((error: {data: {message: string}}) => {
                     this.setState({passwordChanged: false, errorMessage: error.data.message});
                 });
@@ -108,7 +110,7 @@ export class ResetPasswordPanel extends React.Component<IResetPasswordPanelProps
 
         return (
             <div style={this.props.resetPasswordContainerStyle || defaultPanelContainer}>
-                <form style={{padding: '10px 0px'}} onSubmit={this.submitForm}>
+                <form style={{padding: '10px 0px'}} onSubmit={this.submitForm} id="resetPaswordForm">
                     <Panel 
                             header={<PanelHeader headerText={headerText} headerStyle={this.props.panelTitleStyle}/>} 
                             footer={this.renderPanelFooter()}>

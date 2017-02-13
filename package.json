@@ -32,8 +32,13 @@
   "jest": {
     "verbose": true,
     "transform": {
-      "^.+\\.(ts|tsx)$": "<rootDir>/preprocessor.js"
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
+    "testResultsProcessor": "<rootDir>/node_modules/ts-jest/coverageprocessor.js",
+    "moduleDirectories": [
+      "node_modules",
+      "<rootDir>/src"
+    ],
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
       "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
@@ -85,6 +90,7 @@
     "react-router": "2.8.1",
     "react-router-redux": "4.0.7",
     "react-test-renderer": "15.4.1",
+    "ts-jest": "17.0.3",
     "ts-loader": "1.2.2",
     "typescript": "2.1.1",
     "unroll": "1.2.0"

@@ -3,7 +3,7 @@ import * as Radium from 'radium';
 import {CSS} from '../interfaces';
 
 export interface IErrorMessageProps {
-    message: string;
+    message?: string;
 }
 
 @Radium
@@ -12,7 +12,7 @@ export class ErrorMessage extends React.Component<IErrorMessageProps, void> {
     render(): JSX.Element {
         return (
             <div style={errorMessage}>
-                {this.props.message}
+                {this.props.message || ''}
             </div>
         );
     }

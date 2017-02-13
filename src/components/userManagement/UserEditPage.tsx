@@ -10,7 +10,6 @@ import {CSS} from '../../interfaces';
 export interface IUserEditPageProps extends IInstancePageProps {
     handleSubmit: (instance: UserModel) => void;
     instance: UserModel;
-    isCreatePage: boolean;
     submitButtonStyle?: CSS;
     cancelButtonStyle?: CSS;
     gridStyle?: CSS;

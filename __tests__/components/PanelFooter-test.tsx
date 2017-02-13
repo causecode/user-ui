@@ -116,7 +116,7 @@ describe('PanelFooter Tests', () => {
         }, [
             ['prop', 'value'],
             ['showOnlySubmitButton', undefined],
-            ['submitForm', undefined],
+            ['submitForm', true],
             ['submitButtonContent', testString],
             ['submitButtonStyle', testStyle],
             ['otherButtonContent', testString],

@@ -77,7 +77,7 @@ export class ForgotPasswordPanel extends React.Component<IForgotPasswordPanelPro
                 Follow the instructions sent to your email address to reset your password.<br/><br/>
                 <span style={successMessage}>
                     Didn't receive the email? 
-                    <a style={this.props.tryAgainLinkStyle} onClick={this.resetState}>Try Again</a>.
+                    <a id="tryAgain" style={this.props.tryAgainLinkStyle} onClick={this.resetState}>Try Again</a>.
                 </span>
             </div>
         );
@@ -129,7 +129,7 @@ export class ForgotPasswordPanel extends React.Component<IForgotPasswordPanelPro
                 this.props.panelTitle || 'Forgot Password?' : 'Check Your Email';
         return (
             <div style={this.props.forgotPasswordContainerStyle || defaultPanelContainer}>
-                <form onSubmit={this.submitForm}>
+                <form onSubmit={this.submitForm} id="forgotPasswordForm">
                     <Panel 
                             header={<PanelHeader headerText={panelTitle} headerStyle={this.props.panelTitleStyle}/>} 
                             footer={this.renderFooter()}>

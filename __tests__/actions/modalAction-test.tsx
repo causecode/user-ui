@@ -5,10 +5,15 @@ import {changeModalVisibility} from '../../src/actions/modalAction';
 import {IGenericAction} from '../../src/interfaces';
 
 const unroll: any = require<any>('unroll');
-
 unroll.use(it);
 
-describe('Tests for modalAction.', () => {
+interface IUnrollArgs {
+    modalName: string;
+    actionType: string;
+    expectedAction: {type: string, payload: boolean};
+}
+
+describe('Tests for modalAction.', (): void => {
 
     let expectedAction = (type: string, visibility: boolean): IGenericAction => {
         return {
@@ -17,7 +22,7 @@ describe('Tests for modalAction.', () => {
         };
     };
 
-    unroll('It should create an action to toggle #modalName', (done, args) => {
+    unroll('It should create an action to toggle #modalName', (done: () => void, args: IUnrollArgs): void => {
         expect(changeModalVisibility(args.actionType, true)).toEqual(args.expectedAction);
         done();
     }, [

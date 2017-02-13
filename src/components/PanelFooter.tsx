@@ -19,7 +19,7 @@ export class PanelFooter extends React.Component<IPanelFooterProps, void> {
     renderOtherButton = (): JSX.Element => {
         return (
             <div style={pullLeft}>
-                <Button style={this.props.otherButtonStyle} onClick={this.props.otherButtonOnClick}>
+                <Button id="otherButton" style={this.props.otherButtonStyle} onClick={this.props.otherButtonOnClick}>
                     {this.props.otherButtonContent}
                 </Button>
             </div>
@@ -38,7 +38,7 @@ export class PanelFooter extends React.Component<IPanelFooterProps, void> {
             <div style={defaultFooterContainer}>
                 {!this.props.showOnlySubmitButton ? this.renderOtherButton() : null}
                 <div style={pullRight}>
-                    <Button style={this.props.submitButtonStyle} {...submitButtonProp}>
+                    <Button id="submitButton" style={this.props.submitButtonStyle} {...submitButtonProp}>
                         {this.props.submitButtonContent}
                     </Button>
                 </div>

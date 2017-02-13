@@ -8,32 +8,42 @@ import {IFromJS} from 'react-hero';
 const unroll: any = require<any>('unroll');
 unroll.use(it);
 
-describe('Tests for signupReducer.', () => {
+interface IUnrollArgs {
+    title: string;
+    actionData: ISignupAction;
+    key: string;
+    value: string;
+}
 
-    let testKey: string = 'username';
-    let testValue: string = 'dummy.name';
-    let testErrorMessage: string = 'This is a test message';
+describe('Tests for signupReducer.', (): void => {
 
-    function getActionData(type: string, payload: {key: string, value: string}): ISignupAction {
+    let key: string = 'username';
+    let value: string = 'dummy.name';
+    let errorMessage: string = 'This is a test message';
+
+    const getActionData = (type: string, payload: {key: string, value: string}): ISignupAction => {
         return {
             type,
             payload
         };
-    }
+    };
 
-    it('It should return the initial value.', () => {
-        expect(signupReducer(initialState, {})).toEqual(initialState);
+    it('It should throw an error when the state is not available', (): void => {
+        expect((): void => { signupReducer(); }).toThrow();
     });
 
-    unroll('It should save the signup #title to the store.', (done, args) => {
+    it('It should return the initial value.', (): void => {
+        expect(signupReducer(initialState, getActionData('TEST_ACTION_TYPE', {key, value}))).toEqual(initialState);
+    });
+
+    unroll('It should save the signup #title to the store.', (done: () => void, args: IUnrollArgs): void => {
         let result: IFromJS = signupReducer(initialState, args.actionData);
         expect(result.get(`${args.key}`)).toEqual(args.value);
         done();
     }, [
         ['title', 'actionData', 'key', 'value'],
-        ['form data', getActionData(SAVE_INPUT_VALUE, {key: testKey, value: testValue}), testKey, testValue],
-        ['error message', {type: UPDATE_SIGNUP_ERROR_MESSAGE, payload: testErrorMessage}, 'signupErrorMessage', 
-                testErrorMessage]
+        ['form data', getActionData(SAVE_INPUT_VALUE, {key: key, value: value}), key, value],
+        ['error message', {type: UPDATE_SIGNUP_ERROR_MESSAGE, payload: errorMessage}, 'signupErrorMessage', 
+                errorMessage]
     ]);
-
 });

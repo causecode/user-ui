@@ -1,7 +1,7 @@
 jest.unmock('../../src/reducers/userReducer');
 
 import {userReducer, initialState} from '../../src/reducers/userReducer';
-import {IGenericAction, ILoggedinData} from '../../src/interfaces';
+import {IGenericAction} from '../../src/interfaces';
 import {IFromJS} from 'react-hero';
 import {
     LOGIN_SUCCESS, 
@@ -13,7 +13,7 @@ import {
 const unroll: any = require<any>('unroll');
 unroll.use(it);
 
-describe('Tests for userReducer.', () => {
+describe('Tests for userReducer.', (): void => {
 
     let testError: string = 'This is a test error message';
     let userData: {roles: string[], username: string} = {
@@ -21,20 +21,24 @@ describe('Tests for userReducer.', () => {
         username: 'dummy.name'
     };
 
-    function getActionWithPayload(type: string, payload): IGenericAction {
+    const getActionWithPayload = (type: string, payload): IGenericAction => {
         return {
             type,
             payload
         };
     }
 
-    function getActionWithoutPayload(type: string): IGenericAction {
+    const getActionWithoutPayload = (type: string): IGenericAction => {
         return {
             type
         };
-    }
+    };
 
-    unroll('It should return the initial value #title', (done, args) => {
+    it('It should throw an error when the state is not available', (): void => {
+        expect((): void => { userReducer(); }).toThrow();
+    });
+
+    unroll('It should return the initial value #title', (done: () => void, args): void => {
         expect(userReducer(initialState, args.actionData)).toEqual(initialState);
         done();
     }, [
@@ -45,7 +49,7 @@ describe('Tests for userReducer.', () => {
 
     let loginSuccess: IFromJS = userReducer(initialState, getActionWithoutPayload(LOGIN_SUCCESS));
 
-    unroll('It should set #key to #value on succesful login.', (done, args) => {
+    unroll('It should set #key to #value on succesful login.', (done: () => void, args): void => {
         expect(loginSuccess.get(args.key)).toEqual(args.value);
         done();
     }, [
@@ -57,7 +61,7 @@ describe('Tests for userReducer.', () => {
 
     let loginFailure: IFromJS = userReducer(initialState, getActionWithPayload(SAVE_LOGIN_ERROR_MESSAGE, testError));
 
-    unroll('It should set #key to #value on login failure.', (done, args) => {
+    unroll('It should set #key to #value on login failure.', (done: () => void, args): void => {
         expect(loginFailure.get(args.key)).toEqual(args.value);
         done();
     }, [
