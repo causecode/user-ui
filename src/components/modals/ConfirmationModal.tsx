@@ -19,7 +19,7 @@ export interface IConfirmationModalProps {
 export class ConfirmationModalImpl extends React.Component<IConfirmationModalProps, void> {
 
     handleAction = (event: React.FormEvent): void => {
-        let selectedIds: string = this.props.selectedIds.join(',') || '';
+        let selectedIds: string = this.props.selectedIds ? this.props.selectedIds.join(',') : '';
         switch (this.props.actionName) {
             case 'Export Report':
                 UserModel.exportUserReport(this.props.selectAll, selectedIds);
@@ -64,8 +64,8 @@ export class ConfirmationModalImpl extends React.Component<IConfirmationModalPro
                     </Row>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.handleAction} bsStyle="primary">OK</Button>
-                    <Button onClick={this.hideModal}>Cancel</Button>
+                    <Button id="ok" onClick={this.handleAction} bsStyle="primary">OK</Button>
+                    <Button id="cancel" onClick={this.hideModal}>Cancel</Button>
                 </Modal.Footer>
             </Modal>
         );

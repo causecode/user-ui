@@ -9,3 +9,4 @@
 /.vscode
 localConfig.json
 npm-debug.log
+.DS_Store

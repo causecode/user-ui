@@ -90,7 +90,10 @@ export class RolesModalImpl extends React.Component<IRolesModalProps, IRolesModa
                         </div>
                     </Row><hr/>
                     <Row style={listStyle}>
-                        <Checkbox onChange={this.updateExistingRoleState} checked={this.state.addToExistingRoles}>
+                        <Checkbox
+                                id="addToExistingRoles" 
+                                onChange={this.updateExistingRoleState}
+                                checked={this.state.addToExistingRoles}>
                             Add to existing roles
                         </Checkbox>
                     </Row>
@@ -99,8 +102,8 @@ export class RolesModalImpl extends React.Component<IRolesModalProps, IRolesModa
                     </Row>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.handleSubmit} bsStyle="primary">Submit</Button>
-                    <Button onClick={this.hideModal}>Cancel</Button>
+                    <Button id="submit" onClick={this.handleSubmit} bsStyle="primary">Submit</Button>
+                    <Button id="cancel" onClick={this.hideModal}>Cancel</Button>
                 </Modal.Footer>
             </Modal>
         );
