@@ -7,7 +7,8 @@ var path = require('path');
 var plugins = [];
 
 var entryPoints = [
-    './src/devIndex.tsx'
+    './src/devIndex.tsx',
+    './styles/react-datetime.css'
 ];
 
 if (isProduction) {
