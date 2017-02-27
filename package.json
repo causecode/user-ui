@@ -1,6 +1,6 @@
 {
   "name": "user-ui",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "public/index.js",
   "typings": "public/index.d.ts",
@@ -78,7 +78,7 @@
     "html-webpack-plugin": "2.19.0",
     "jest": "17.0.3",
     "jest-cli": "17.0.3",
-    "moment": "^2.15.2",
+    "moment": "2.15.2",
     "radium": "0.18.1",
     "react": "15.1.0",
     "react-addons-test-utils": "15.2.0",

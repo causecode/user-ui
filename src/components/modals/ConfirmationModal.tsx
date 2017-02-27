@@ -26,11 +26,11 @@ export class ConfirmationModalImpl extends React.Component<IConfirmationModalPro
                 break;
 
             case 'Lock account(s)':
-                UserModel.lockUnlockUserAccounts(true, selectedIds);
+                UserModel.lockUnlockUserAccounts(true, this.props.selectedIds || []);
                 break;
 
             case 'Unlock account(s)':
-                UserModel.lockUnlockUserAccounts(false, selectedIds);
+                UserModel.lockUnlockUserAccounts(false, this.props.selectedIds || []);
                 break;
 
             case 'Change role':
@@ -79,7 +79,7 @@ let mapStateToProps: MapStateToProps<IStateProps, IConfirmationModalProps> = (st
         actionName: state.userAction.action,
         recordsSelected: state.userAction.records,
         selectedIds: state.checkbox.selectedIds,
-        selectAll: state.checkbox.selectAll,
+        selectAll: state.checkbox.selectAll
     };
 };
 

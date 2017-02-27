@@ -115,7 +115,7 @@ let mapStateToProps: MapStateToProps<IStateProps, IRolesModalProps> = (state: IS
         visibility: state.modalVisibility.toJS().rolesModal,
         recordsSelected: state.userAction.records,
         selectedIds: state.checkbox.selectedIds,
-        selectAll: state.checkbox.selectAll,
+        selectAll: state.checkbox.selectAll
     };
 };
 
