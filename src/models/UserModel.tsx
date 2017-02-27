@@ -1,7 +1,9 @@
 import * as Axios from 'axios';
+import * as React from 'react';
+import * as moment from 'moment';
 import {saveLoggedInUserData, saveLoginErrorMessage, loginSuccess} from '../actions/userAction';
-import {BaseModel, ModelPropTypes, HTTP} from 'react-hero';
-import {dispatchToStore, getDefaultHeaders, toggleConfirmationModal, setTokenInLocalStorage} from '../utils';
+import {BaseModel, ModelPropTypes, HTTP, setTokenInLocalStorage} from 'react-hero';
+import {dispatchToStore, toggleConfirmationModal} from '../utils';
 import {IAxiosResponse, ISignupData, ILoginData} from '../interfaces';
 import {browserHistory} from 'react-router';
 import {HTTP_STATUS} from '../constants';
@@ -47,6 +49,14 @@ export class UserModel extends BaseModel {
         'birthdate'
     ];
 
+    getHTMLBirthdate(properties: IUser): JSX.Element {
+        let birthdate: Date = properties.birthdate;
+        let formattedDate: string = isNaN(Date.parse(`${birthdate}`)) ? '' : moment(birthdate).format('Do MMM YYYY');
+        return (
+            <span>{formattedDate}</span>
+        );
+    }
+
     static login(requestUrl: string, requestData: ILoginData, successUrl: string): void {
         Axios.post(requestUrl, requestData).then((response: IAxiosResponse): void => {
             if (response.status === HTTP_STATUS.SUCCESS) {
@@ -69,20 +79,10 @@ export class UserModel extends BaseModel {
 
     static signup(requestUrl: string, requestData: ISignupData, successUrl: string): void {
         dispatchToStore(updateSignupError(''));
-        HTTP.postRequest(requestUrl, requestData).then((response: IAxiosResponse): void => {
+        HTTP.postRequest(requestUrl, {}, requestData).then((response: IAxiosResponse): void => {
             if (response.status === HTTP_STATUS.SUCCESS) {
-                let responseData: {access_token: string, user: {email: string}} = response.data;
-                UserModel.registerUser(`register/action/registerEmployee`, responseData.user.email, successUrl);
+                browserHistory.push(successUrl);
             }
-        }).catch((error: IAxiosResponse): void => {
-            dispatchToStore(updateSignupError(error.data.message));
-        });
-    }
-
-    static registerUser(requestUrl: string, requestData: string, successUrl: string): void {
-        dispatchToStore(updateSignupError(''));
-        HTTP.postRequest(`${requestUrl}`, {email: requestData}).then((response: IAxiosResponse): void => {
-            browserHistory.push(successUrl);
         }).catch((error: IAxiosResponse): void => {
             dispatchToStore(updateSignupError(error.data.message));
         });
@@ -90,31 +90,35 @@ export class UserModel extends BaseModel {
 
     static exportUserReport(selectAll: boolean, selectedIds: string): void {
         let url: string = `userManagement/action/export?selectAll=${selectAll}&selectedIds=${selectedIds}`;
-        HTTP.getRequest(url, getDefaultHeaders()).then((response: IAxiosResponse): void => {
+        HTTP.getRequest(url).then((response: IAxiosResponse): void => {
             FileDownload(response.data, 'userData.csv');
             toggleConfirmationModal(false);
         });
     }
 
-    static lockUnlockUserAccounts(lockAccount: boolean, selectedIds: string): void {
-        HTTP.getRequest(
-                `userManagement/action/lockUnlockUserAccounts?lockAccount=${lockAccount}&selectedIds=${selectedIds}`,
-                getDefaultHeaders());
+    static lockUnlockUserAccounts(lockAccount: boolean, selectedIds: number[]): void {
+        HTTP.postRequest(`userManagement/action/lockUnlockUserAccounts`, {}, {lockAccount, selectedIds});
         toggleConfirmationModal(false);
     }
 
     static modifyRoles(addToExisting: boolean, userIds: number[], roleIds: string[]): Axios.IPromise<IAxiosResponse> {
         let roleActionType: string = addToExisting ? 'append' : 'refresh';
         let url: string = `userManagement/action/modifyRoles`;
-        return HTTP.postRequest(url, getDefaultHeaders(), {roleActionType, userIds, roleIds});
+        return HTTP.postRequest(url, {}, {roleActionType, userIds, roleIds});
     }
 
     static forgotPassword(url: string, email: string): Axios.IPromise<IAxiosResponse> {
         return HTTP.postRequest(url, {}, {email});
     }
 
-    static resetPassword(url: string, token: string, email: string): Axios.IPromise<IAxiosResponse> {
-        return HTTP.postRequest(url, {}, {token, email});
+    static resetPassword(
+            url: string,
+            token: string,
+            email: string,
+            password: string,
+            password2: string
+    ): Axios.IPromise<IAxiosResponse> {
+        return HTTP.postRequest(url, {}, {token, email, password, password2});
     }
 
     constructor(properties: IUser) {
