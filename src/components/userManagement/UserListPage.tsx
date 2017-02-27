@@ -1,22 +1,18 @@
 import * as React from 'react';
 import * as Radium from 'radium';
-import {getDefaultHeaders, showConfirmationModal} from '../../utils';
 import {connect, MapStateToProps} from 'react-redux';
+import {showConfirmationModal} from '../../utils';
 import {ConfirmationModal} from '../modals/ConfirmationModal';
 import {CSS, IStateProps} from '../../interfaces';
 import {ModelService} from 'react-hero';
 import {RolesModal} from '../modals/RolesModal';
-import {Row, Col} from '../ReusableComponents';
-import {pullRight} from '../../constants/palette';
 import {
-    DataGrid,
     IFromJS,
-    UserActions,
     IBulkUserActionType,
     IUserActionStateProps,
     BaseModel,
-    PagedListFilters,
-    DropDownFilter
+    DropDownFilter,
+    PagedList
 } from 'react-hero';
 
 export interface IUserListDispatchProps {
@@ -47,34 +43,34 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
         {label: 'Change role', action: showConfirmationModal}
     ];
 
+    private pageTitle: JSX.Element = (
+        <h1 className="caps"> User Management </h1>
+    );
+
     componentWillMount = (): void => {
         const {resource} = this.props;
         this.fetchInstanceList(resource, {action: 'list'});
-    };
+    }
 
     fetchInstanceList(resource: string, filters: any = {}): void {
         if (this.max > 0) {
             filters.max = this.max;
         }
-        ModelService.getModel(resource).list(filters, false, getDefaultHeaders());
+        ModelService.getModel(resource).list(filters, false);
     }
 
     render(): JSX.Element {
               
         return (
             <div style={listContainer}>
-                <h2>User Management</h2>
-                <Row>
-                    <Col md={4}>
-                        <span style={pullRight}>
-                            <UserActions
-                                    totalCount={this.props.totalCount} 
-                                    isDisabled={false} 
-                                    userActionsMap={this.userActions} />
-                        </span>
-                    </Col>
-                </Row>
-                <PagedListFilters resource={UserListPageImpl.resourceName}>
+                <PagedList
+                        max={20}
+                        resource={UserListPageImpl.resourceName}
+                        totalCount={this.props.totalCount}
+                        userActionsMap={this.userActions}
+                        pageHeader={this.pageTitle}
+                        showDefaultActions={false}
+                >
                     <DropDownFilter
                             label="Sort"
                             paramName="sort"
@@ -95,12 +91,7 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
                                 {label: 'Descending', value: 'desc'}
                             ]}
                     />
-                </PagedListFilters>
-                <DataGrid
-                        instanceList={this.props.instanceList}
-                        properties={this.props.properties}
-                        totalCount={this.props.totalCount}
-                />
+                </PagedList>
                 <ConfirmationModal/>
                 <RolesModal/>
             </div>
@@ -115,7 +106,7 @@ let mapStateToProps: MapStateToProps<IStateProps, IUserListProps> =
     return {
         properties: resourceData.properties,
         instanceList: resourceData.instanceList,
-        totalCount:  resourceData.totalCount,
+        totalCount:  resourceData.totalCount
     };
 };
 
