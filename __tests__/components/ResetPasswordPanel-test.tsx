@@ -52,8 +52,6 @@ describe('ResetPasswordPanel Tests.', (): void => {
         );
     });
 
-    
-
     unroll('It should render #elementName elements.', (
             done: () => void,
             args: {elementName: string, count: number}
