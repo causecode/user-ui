@@ -48,8 +48,7 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
     );
 
     componentWillMount = (): void => {
-        const {resource} = this.props;
-        this.fetchInstanceList(resource, {action: 'list'});
+        this.fetchInstanceList(UserListPageImpl.resourceName, {action: 'list'});
     }
 
     fetchInstanceList(resource: string, filters: any = {}): void {
@@ -101,7 +100,7 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
 
 let mapStateToProps: MapStateToProps<IStateProps, IUserListProps> = 
         (state: IStateProps, ownProps: IUserListProps): IUserListStateProps => {
-    let resourceData: IUserListStateProps & IFromJS = state.data.get(`${ownProps.resource}List`, {});
+    let resourceData: IUserListStateProps & IFromJS = state.data.get(`${UserListPageImpl.resourceName}List`, {});
     resourceData = resourceData.toJS ? resourceData.toJS() : resourceData;
     return {
         properties: resourceData.properties,
