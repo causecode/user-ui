@@ -21,7 +21,7 @@ export interface IResetPasswordPanelProps extends IResetPasswordPanelStyleProps,
     paneltitle?: string;
     onSubmitUrl: string;
     successUrl?: string;
-    onLoginUrl?: string
+    onLoginUrl?: string;
 }
 
 export interface IResetPasswordPanelState {

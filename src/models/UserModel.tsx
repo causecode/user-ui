@@ -1,8 +1,8 @@
 import * as Axios from 'axios';
 import * as React from 'react';
 import * as moment from 'moment';
-import {saveLoggedInUserData, saveLoginErrorMessage, loginSuccess} from '../actions/userAction';
-import {BaseModel, ModelPropTypes, HTTP, setTokenInLocalStorage} from 'react-hero';
+import {saveLoggedInUserData, saveLoginErrorMessage, loginSuccess, clearLoggedInUserData} from '../actions/userAction';
+import {BaseModel, ModelPropTypes, HTTP, setTokenInLocalStorage, config, getTokenFromLocalStorage} from 'react-hero';
 import {dispatchToStore, toggleConfirmationModal} from '../utils';
 import {IAxiosResponse, ISignupData, ILoginData} from '../interfaces';
 import {browserHistory} from 'react-router';
@@ -58,7 +58,7 @@ export class UserModel extends BaseModel {
     }
 
     static login(requestUrl: string, requestData: ILoginData, successUrl: string): void {
-        Axios.post(requestUrl, requestData).then((response: IAxiosResponse): void => {
+        Axios.post(`${config.serverUrl}${requestUrl}`, requestData).then((response: IAxiosResponse): void => {
             if (response.status === HTTP_STATUS.SUCCESS) {
                 let responseData: {access_token: string, roles: string[], username: string} = response.data;
                 setTokenInLocalStorage(responseData.access_token);
@@ -73,6 +73,19 @@ export class UserModel extends BaseModel {
                 dispatchToStore(saveLoginErrorMessage('Invalid Credentials'));
             } else {
                 dispatchToStore(saveLoginErrorMessage('Unable to sign in. Please try again later.'));
+            }
+        });
+    }
+
+    static logout(requestUrl: string): void {
+        Axios({
+            method: 'post',
+            url: `${config.serverUrl}${requestUrl}`,
+            headers: {'X-Auth-Tpken': getTokenFromLocalStorage()},
+        }).then((response: IAxiosResponse): void => {
+            if (response.status === HTTP_STATUS.SUCCESS) {
+                dispatchToStore(clearLoggedInUserData());
+                browserHistory.push('');
             }
         });
     }
