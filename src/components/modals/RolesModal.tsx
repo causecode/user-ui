@@ -5,9 +5,9 @@ import {Modal, Row, Button, Checkbox} from '../ReusableComponents';
 import {IStateProps, IAxiosResponse} from '../../interfaces';
 import {connect, MapStateToProps} from 'react-redux';
 import {toggleRolesListModal} from '../../utils';
-import {ErrorMessage} from '../ErrorMessage';
 import {UserModel} from '../../models/UserModel';
-import {rolesList} from '../../constants';
+import {HTTP_STATUS, rolesList, ALERT_DANGER, ALERT_INFO} from '../../constants';
+import {showAlert} from 'react-hero';
 
 export interface IRolesModalProps {
     visibility?: boolean;
@@ -19,7 +19,6 @@ export interface IRolesModalProps {
 export interface IRolesModalState {
     selectedRoles?: string[];
     addToExistingRoles?: boolean;
-    errorMessage?: string;
 }
 
 @Radium
@@ -27,7 +26,7 @@ export class RolesModalImpl extends React.Component<IRolesModalProps, IRolesModa
 
     constructor() {
         super();
-        this.state = {selectedRoles: [], addToExistingRoles: true, errorMessage: ''};
+        this.state = {selectedRoles: [], addToExistingRoles: true};
     }
 
     updateRoles = (event: React.FormEvent): void => {
@@ -70,11 +69,15 @@ export class RolesModalImpl extends React.Component<IRolesModalProps, IRolesModa
     handleSubmit = (): void => {
         UserModel.modifyRoles(this.state.addToExistingRoles, this.props.selectedIds, this.state.selectedRoles)
             .then((response: IAxiosResponse): void => {
-                this.hideModal();
+                if (response.status === HTTP_STATUS.SUCCESS) {
+                    showAlert(ALERT_INFO, 'Roles modified successfully.');
+                }
             })
             .catch((error: IAxiosResponse): void => {
-                this.setState({errorMessage: error.data.message});
+                showAlert(ALERT_DANGER, 'Unable to modify roles.');
             });
+        
+        this.hideModal();
     }
 
     render(): JSX.Element {
@@ -96,9 +99,6 @@ export class RolesModalImpl extends React.Component<IRolesModalProps, IRolesModa
                                 checked={this.state.addToExistingRoles}>
                             Add to existing roles
                         </Checkbox>
-                    </Row>
-                    <Row>
-                        <ErrorMessage message={this.state.errorMessage}/>
                     </Row>
                 </Modal.Body>
                 <Modal.Footer>

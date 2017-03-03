@@ -1,13 +1,27 @@
 import * as Axios from 'axios';
 import * as React from 'react';
 import * as moment from 'moment';
-import {saveLoggedInUserData, saveLoginErrorMessage, loginSuccess, clearLoggedInUserData} from '../actions/userAction';
-import {BaseModel, ModelPropTypes, HTTP, setTokenInLocalStorage, config, getTokenFromLocalStorage} from 'react-hero';
 import {dispatchToStore, toggleConfirmationModal} from '../utils';
-import {IAxiosResponse, ISignupData, ILoginData} from '../interfaces';
+import {IAxiosResponse, ISignupData, ILoginData, IUserBasicData} from '../interfaces';
 import {browserHistory} from 'react-router';
-import {HTTP_STATUS} from '../constants';
+import {HTTP_STATUS, ALERT_DANGER, ALERT_INFO} from '../constants';
 import {updateSignupError} from '../actions/signupAction';
+import {
+    saveLoggedInUserData,
+    saveLoginErrorMessage,
+    loginSuccess,
+    clearLoggedInUserData,
+    saveBasicData
+} from '../actions/userAction';
+import {
+    BaseModel,
+    ModelPropTypes,
+    HTTP,
+    setTokenInLocalStorage,
+    config,
+    getTokenFromLocalStorage,
+    showAlert,
+} from 'react-hero';
 
 const FileDownload: any = require('react-file-download');
 
@@ -61,12 +75,14 @@ export class UserModel extends BaseModel {
         Axios.post(`${config.serverUrl}${requestUrl}`, requestData).then((response: IAxiosResponse): void => {
             if (response.status === HTTP_STATUS.SUCCESS) {
                 let responseData: {access_token: string, roles: string[], username: string} = response.data;
-                setTokenInLocalStorage(responseData.access_token);
-                dispatchToStore(
-                        saveLoggedInUserData(responseData.roles || [], responseData.username || ''),
-                        loginSuccess()
-                );
-                browserHistory.push(successUrl);
+                    setTokenInLocalStorage(responseData.access_token, () => {
+                    dispatchToStore(
+                            saveLoggedInUserData(responseData.roles || [], responseData.username || ''),
+                            loginSuccess()
+                    );
+                    this.getUserData();
+                    browserHistory.push(successUrl);
+                });
             }
         }).catch((error: IAxiosResponse): void => {
             if (error.status === HTTP_STATUS.UNAUTHORIZED) {
@@ -77,11 +93,20 @@ export class UserModel extends BaseModel {
         });
     }
 
+    static getUserData() {
+        HTTP.getRequest('home/action/basicData')
+            .then((response: Axios.AxiosXHR<{userInstance: IUserBasicData}>): void => {
+                if (HTTP_STATUS.SUCCESS) {
+                    dispatchToStore(saveBasicData(response.data.userInstance));
+                }
+            });
+    }
+
     static logout(requestUrl: string): void {
         Axios({
             method: 'post',
             url: `${config.serverUrl}${requestUrl}`,
-            headers: {'X-Auth-Tpken': getTokenFromLocalStorage()},
+            headers: {'X-Auth-Token': getTokenFromLocalStorage()},
         }).then((response: IAxiosResponse): void => {
             if (response.status === HTTP_STATUS.SUCCESS) {
                 dispatchToStore(clearLoggedInUserData());
@@ -103,14 +128,28 @@ export class UserModel extends BaseModel {
 
     static exportUserReport(selectAll: boolean, selectedIds: string): void {
         let url: string = `userManagement/action/export?selectAll=${selectAll}&selectedIds=${selectedIds}`;
-        HTTP.getRequest(url).then((response: IAxiosResponse): void => {
-            FileDownload(response.data, 'userData.csv');
-            toggleConfirmationModal(false);
-        });
+        HTTP.getRequest(url)
+            .then((response: IAxiosResponse): void => {
+                FileDownload(response.data, 'userData.csv');
+            })
+            .catch((): void => {
+                showAlert(ALERT_DANGER, 'Error occured while exporting the user data.');
+            });
+
+        toggleConfirmationModal(false);
     }
 
     static lockUnlockUserAccounts(lockAccount: boolean, selectedIds: number[]): void {
-        HTTP.postRequest(`userManagement/action/lockUnlockUserAccounts`, {}, {lockAccount, selectedIds});
+        HTTP.postRequest(`userManagement/action/lockUnlockUserAccounts`, {}, {lockAccount, selectedIds})
+            .then((response: IAxiosResponse): void => {
+                if (response.status === HTTP_STATUS.SUCCESS) {
+                    showAlert(ALERT_INFO, 'Operation performed successfully.');
+                }
+            })
+            .catch((): void => {
+                showAlert(ALERT_DANGER, 'Unable to perform the operation.');
+            });
+            
         toggleConfirmationModal(false);
     }
 

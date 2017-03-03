@@ -23,6 +23,14 @@ export const CLEAR_LOGGED_IN_USER_DATA: string = 'CLEAR_LOGGED_IN_USER_DATA';
 export const AUTH_TOKEN_KEY: string = 'AUTH_TOKEN_KEY';
 export const AUTH_TOKEN_KEY_TIMESTAMP: string = 'AUTH_TOKEN_KEY_TIMESTAMP';
 
+export const ALERT_INFO = 'info';
+export const ALERT_WARNING = 'warning';
+export const ALERT_DANGER = 'danger';
+export const ALERT_SUCCESS = 'success';
+
+export const SAVE_BASIC_DATA: string = 'SAVE_BASIC_DATA';
+export const DELETE_BASIC_DATA: string = 'DELETE_BASIC_DATA';
+
 /**
  * Hardcoding the roles list because there is no end point to get all the existing roles from the server.
  */
