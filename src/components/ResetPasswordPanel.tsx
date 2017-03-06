@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as Radium from 'radium';
 import {removeMarginAndPadding, defaultPanelContainer, defaultInputStyle} from '../constants/palette';
 import {Panel, FormControl, FormGroup, HelpBlock} from './ReusableComponents';
-import {CSS, validationType, ISubmitButton} from '../interfaces';
+import {CSS, validationType, ISubmitButton, IAxiosResponse} from '../interfaces';
 import {browserHistory} from 'react-router';
 import {ErrorMessage} from './ErrorMessage';
 import {PanelHeader} from './PanelHeader';
@@ -84,12 +84,12 @@ export class ResetPasswordPanel extends React.Component<IResetPasswordPanelProps
             this.setState({passwordChanged: false, errorMessage: 'Passwords do not match.'});
         } else {
             UserModel.resetPassword(this.props.onSubmitUrl, token, email, newPassword, confirmPassword)
-                .then((response) => {
+                .then((response: IAxiosResponse): void => {
                     this.setState({passwordChanged: true, errorMessage: ''});
                     if (this.props.successUrl) {
                         browserHistory.push(this.props.successUrl);
                     }
-                }).catch((error: {data: {message: string}}) => {
+                }).catch((error: {data: {message: string}}): void => {
                     this.setState({passwordChanged: false, errorMessage: error.data.message});
                 });
         }

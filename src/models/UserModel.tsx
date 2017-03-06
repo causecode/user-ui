@@ -82,7 +82,6 @@ export class UserModel extends BaseModel {
                 );
                 this.getUserData();
                 browserHistory.push(successUrl);
-                
             }
         }).catch((error: IAxiosResponse): void => {
             if (error.status === HTTP_STATUS.UNAUTHORIZED) {
