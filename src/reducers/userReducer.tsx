@@ -5,7 +5,9 @@ import {
     LOGIN_SUCCESS, 
     SAVE_LOGGED_IN_USER_DATA, 
     CLEAR_LOGGED_IN_USER_DATA, 
-    SAVE_LOGIN_ERROR_MESSAGE
+    SAVE_LOGIN_ERROR_MESSAGE,
+    SAVE_BASIC_DATA,
+    DELETE_BASIC_DATA,
 } from '../constants';
 
 export const initialState: IFromJS = fromJS({
@@ -34,6 +36,12 @@ export const userReducer = (state: IFromJS = initialState, action: IGenericActio
                     .set('hasLoginError', true)
                     .set('isLoggedIn', false)
                     .set('loginErrorMessage', action.payload);
+
+        case SAVE_BASIC_DATA:
+            return state.set('userInstance', action.payload);
+
+        case DELETE_BASIC_DATA:
+            return state.set('userInstance', {});
 
         default:
             return state;

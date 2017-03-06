@@ -12,7 +12,8 @@ import {
     IUserActionStateProps,
     BaseModel,
     DropDownFilter,
-    PagedList
+    PagedList,
+    AlertDismissable,
 } from 'react-hero';
 
 export interface IUserListDispatchProps {
@@ -62,8 +63,9 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
               
         return (
             <div style={listContainer}>
+                <AlertDismissable />
                 <PagedList
-                        max={20}
+                        max={10}
                         resource={UserListPageImpl.resourceName}
                         totalCount={this.props.totalCount}
                         userActionsMap={this.userActions}

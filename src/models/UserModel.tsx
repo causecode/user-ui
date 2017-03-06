@@ -75,14 +75,14 @@ export class UserModel extends BaseModel {
         Axios.post(`${config.serverUrl}${requestUrl}`, requestData).then((response: IAxiosResponse): void => {
             if (response.status === HTTP_STATUS.SUCCESS) {
                 let responseData: {access_token: string, roles: string[], username: string} = response.data;
-                    setTokenInLocalStorage(responseData.access_token, () => {
-                    dispatchToStore(
-                            saveLoggedInUserData(responseData.roles || [], responseData.username || ''),
-                            loginSuccess()
-                    );
-                    this.getUserData();
-                    browserHistory.push(successUrl);
-                });
+                setTokenInLocalStorage(responseData.access_token) 
+                dispatchToStore(
+                        saveLoggedInUserData(responseData.roles || [], responseData.username || ''),
+                        loginSuccess()
+                );
+                this.getUserData();
+                browserHistory.push(successUrl);
+                
             }
         }).catch((error: IAxiosResponse): void => {
             if (error.status === HTTP_STATUS.UNAUTHORIZED) {
