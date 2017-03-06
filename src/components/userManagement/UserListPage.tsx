@@ -35,7 +35,7 @@ export interface IUserListProps extends IUserListStateProps, IUserListDispatchPr
 export class UserListPageImpl extends React.Component<IUserListProps, void> {
 
     static resourceName: string = 'userManagement';
-    private max: number = 10;
+    private max: number = 20;
 
     private userActions: IBulkUserActionType[]  = [
         {label: 'Export Report', action: showConfirmationModal},
@@ -65,7 +65,7 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
             <div style={listContainer}>
                 <AlertDismissable />
                 <PagedList
-                        max={10}
+                        max={20}
                         resource={UserListPageImpl.resourceName}
                         totalCount={this.props.totalCount}
                         userActionsMap={this.userActions}

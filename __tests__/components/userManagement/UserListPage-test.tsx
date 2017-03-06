@@ -6,7 +6,7 @@ import {shallow, ShallowWrapper} from 'enzyme';
 import {UserListPageImpl, IUserListProps} from '../../../src/components/userManagement/UserListPage';
 import {userModelInstance} from '../../testData/userManagementData';
 import {UserModel} from '../../../src/models/UserModel';
-import {ModelService, PagedList, DropDownFilter} from 'react-hero';
+import {ModelService, PagedList, DropDownFilter, AlertDismissable} from 'react-hero';
 import {store} from '../../../src/store';
 import {ConfirmationModal} from '../../../src/components/modals/ConfirmationModal';
 import {RolesModal} from '../../../src/components/modals/RolesModal';
@@ -51,7 +51,8 @@ describe('UserListPage Tests.', (): void => {
         ['DropDownFilter', DropDownFilter, 2],
         ['PagedList', PagedList, 1],
         ['ConfirmationModal', ConfirmationModal, 1],
-        ['RolesModal', RolesModal, 1]
+        ['RolesModal', RolesModal, 1],
+        ['AlertDismissable', AlertDismissable, 1],
     ]);
 
     it('It should fetch the instance list on mount.', (): void => {

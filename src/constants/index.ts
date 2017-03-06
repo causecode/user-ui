@@ -48,5 +48,5 @@ export const rolesList: {id: number, value: string}[] = [
     {id: 11, value: 'CRM MANAGER'},
     {id: 12, value: 'USER MANAGER'},
     {id: 13, value: 'CRM USER'},
-    {id: 14, value: 'HR'}
+    {id: 14, value: 'HR'},
 ];
