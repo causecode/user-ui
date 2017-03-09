@@ -76,3 +76,21 @@ export interface ILoginButton {
     loginButtonContent?: string;
     onLoginUrl?: string;
 }
+
+export interface IUserBasicData {
+    id: number;
+    email: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    gender: string;
+    birthdate: string;
+}
+
+export interface IUserAction {
+    type: string;
+    payload?: {
+        userBasicData: IUserBasicData,
+        userRoles: string[]
+    };
+}

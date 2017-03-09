@@ -67,7 +67,7 @@ export class SignupPanelImpl extends React.Component<ISignupPanelProps, ISignupP
         return (
             <PanelFooter
                     submitButtonContent={this.props.submitButtonContent || 'Sign Up'}
-                    submitButtonStyle={this.props.loginButtonStyle}
+                    submitButtonStyle={this.props.submitButtonStyle}
                     onSubmit={this.submitForm}
                     otherButtonContent={this.props.loginButtonContent || 'Log in'}
                     otherButtonStyle={this.props.loginButtonStyle}

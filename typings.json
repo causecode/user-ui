@@ -11,7 +11,8 @@
     "jest": "registry:dt/jest#16.0.0+20161130222235",
     "radium": "registry:dt/radium#0.18.1+20160907102602",
     "react-bootstrap": "registry:dt/react-bootstrap#0.0.0+20160806072414",
-    "react-fontawesome": "registry:dt/react-fontawesome#1.1.0+20161121205806"
+    "react-fontawesome": "registry:dt/react-fontawesome#1.1.0+20161121205806",
+    "moment": "registry:dt/moment#2.11.1+20161010105546"
   },
   "dependencies": {
     "react-router": "registry:npm/react-router#2.4.0+20160616150328",

@@ -8,7 +8,7 @@ export class LoginPage extends React.Component<void, void> {
             <div>
                 <Link to="/userManagement/list">UserManagement</Link>
                 <LoginPanel
-                        onSubmit="http://localhost/api/login"
+                        onSubmit="api/login"
                         onLoginSuccess="/"
                         onForgotPassword="forgotPassword"
                         onSignup="/"

@@ -1,12 +1,9 @@
 import {changeModalVisibility} from '../actions/modalAction';
 import {saveSignupFormData} from '../actions/signupAction';
-import {browserHistory} from 'react-router';
 import {store} from '../store';
 import {
     TOGGLE_CONFIRMATION_MODAL,
-    TOGGLE_ROLES_LIST_MODAL,
-    AUTH_TOKEN_KEY,
-    AUTH_TOKEN_KEY_TIMESTAMP
+    TOGGLE_ROLES_LIST_MODAL
 } from '../constants';
 
 export const handleSignupInput = (key: string, value: string): void => {
@@ -28,43 +25,8 @@ export const dispatchToStore = (...actions: any[]): void => {
     });
 };
 
-export const getDefaultHeaders = (): {'X-Auth-Token': string, 'Content-Type': string} => {
-    let accessToken: string = getTokenFromLocalStorage();
-    if (!accessToken) {
-        console.warn('Access Token not found. Redirecting to the Home Page');
-        browserHistory.push('');
-    }
-    
-    return {
-        'X-Auth-Token': accessToken,
-        'Content-Type': 'application/json'
-    };
-};
-
 export const showConfirmationModal = (): void => {
     toggleConfirmationModal(true);
-};
-
-export const setTokenInLocalStorage = (token: string) => {
-    if (!token) {
-        console.warn('No Token sent to setTokenInLocalStorage');
-        return;
-    }
-
-    localStorage.setItem(AUTH_TOKEN_KEY, token);
-    localStorage.setItem(AUTH_TOKEN_KEY_TIMESTAMP, new Date().toString());
-};
-
-export const getTokenFromLocalStorage = (): string => {
-    let token: string = localStorage.getItem(AUTH_TOKEN_KEY);
-    let tokenCreationDate: Date = new Date(localStorage.getItem(AUTH_TOKEN_KEY_TIMESTAMP));
-    let tokenAgeInDays: number = Math.abs(new Date().getDate() - tokenCreationDate.getDate());
-
-    if (!token || tokenAgeInDays > 60) {
-        return '';
-    }
-
-    return token;
 };
 
 String.prototype.capitalize = function() {

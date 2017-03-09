@@ -1,13 +1,15 @@
 jest.unmock('../../src/reducers/userReducer');
 
 import {userReducer, initialState} from '../../src/reducers/userReducer';
-import {IGenericAction} from '../../src/interfaces';
+import {IGenericAction, IUserBasicData} from '../../src/interfaces';
 import {IFromJS} from 'react-hero';
 import {
     LOGIN_SUCCESS, 
     SAVE_LOGGED_IN_USER_DATA, 
     CLEAR_LOGGED_IN_USER_DATA, 
-    SAVE_LOGIN_ERROR_MESSAGE
+    SAVE_LOGIN_ERROR_MESSAGE,
+    SAVE_BASIC_DATA,
+    DELETE_BASIC_DATA
 } from '../../src/constants';
 
 const unroll: any = require<any>('unroll');
@@ -19,6 +21,16 @@ describe('Tests for userReducer.', (): void => {
     let userData: {roles: string[], username: string} = {
         roles: ['ROLE_TEST', 'ROLE_USER'],
         username: 'dummy.name'
+    };
+
+    let basicUserData: IUserBasicData = {
+        id: 1,
+        email: 'dummy@example.com',
+        username: 'dummy.user',
+        firstName: 'dummy',
+        lastName: 'doe',
+        gender: 'male',
+        birthdate: '12/03/2017',
     };
 
     const getActionWithPayload = (type: string, payload): IGenericAction => {
@@ -71,8 +83,25 @@ describe('Tests for userReducer.', (): void => {
         ['loginErrorMessage', testError]
     ]);
 
-    it('It should save the logged in user data to the store.', () => {
-        let result: IFromJS = userReducer(initialState, getActionWithPayload(SAVE_LOGGED_IN_USER_DATA, userData));
-        expect(result.get('userData')).toEqual(userData);
+    unroll('should save the #title to the store.', (
+            done: () => void,
+            args: {
+                key: string,
+                title: string,
+                actionType: string,
+                payloadData: {roles: string[], username: string} | IUserBasicData},
+        ): void => {
+        let result: IFromJS = userReducer(initialState, getActionWithPayload(args.actionType, args.payloadData));
+        expect(result.get(args.key)).toEqual(args.payloadData);
+        done();
+    }, [
+        ['title', 'actionType', 'payloadData', 'key'],
+        ['logged in user data', SAVE_LOGGED_IN_USER_DATA, userData, 'userData'],
+        ['basic user data', SAVE_BASIC_DATA, basicUserData, 'userInstance'],
+    ]);
+
+    it('should delete the basic user data from the store.', (): void => {
+        let result: IFromJS = userReducer(initialState, getActionWithoutPayload(DELETE_BASIC_DATA));
+        expect(result.get('userInstance')).toEqual({});
     });
 });
