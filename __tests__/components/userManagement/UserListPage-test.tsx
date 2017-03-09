@@ -6,8 +6,10 @@ import {shallow, ShallowWrapper} from 'enzyme';
 import {UserListPageImpl, IUserListProps} from '../../../src/components/userManagement/UserListPage';
 import {userModelInstance} from '../../testData/userManagementData';
 import {UserModel} from '../../../src/models/UserModel';
-import {ModelService} from 'react-hero';
+import {ModelService, PagedList, DropDownFilter, AlertDismissable} from 'react-hero';
 import {store} from '../../../src/store';
+import {ConfirmationModal} from '../../../src/components/modals/ConfirmationModal';
+import {RolesModal} from '../../../src/components/modals/RolesModal';
 
 const unroll: any = require<any>('unroll');
 unroll.use(it);
@@ -39,18 +41,18 @@ describe('UserListPage Tests.', (): void => {
 
     unroll('It should render #elementName elements.', (
             done: () => void,
-            args: {elementName: string, count: number}
+            args: {elementName: string, count: number, element: JSX.Element}
     ): void => {
-        expect(componentTree.find(args.elementName).length).toBe(args.count);
+        expect(componentTree.find(args.element).length).toBe(args.count);
         done();
     }, [
-        ['elementName', 'count'],
-        ['div', 1],
-        ['h2', 1],
-        ['Row', 1],
-        ['Col', 1],
-        ['span', 1],
-        ['DropDownFilter', 2]
+        ['elementName', 'element', 'count'],
+        ['div', 'div', 1],
+        ['DropDownFilter', DropDownFilter, 2],
+        ['PagedList', PagedList, 1],
+        ['ConfirmationModal', ConfirmationModal, 1],
+        ['RolesModal', RolesModal, 1],
+        ['AlertDismissable', AlertDismissable, 1],
     ]);
 
     it('It should fetch the instance list on mount.', (): void => {

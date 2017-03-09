@@ -1,22 +1,18 @@
 import * as React from 'react';
 import * as Radium from 'radium';
-import {getDefaultHeaders, showConfirmationModal} from '../../utils';
 import {connect, MapStateToProps} from 'react-redux';
+import {showConfirmationModal} from '../../utils';
 import {ConfirmationModal} from '../modals/ConfirmationModal';
 import {CSS, IStateProps} from '../../interfaces';
-import {ModelService} from 'react-hero';
 import {RolesModal} from '../modals/RolesModal';
-import {Row, Col} from '../ReusableComponents';
-import {pullRight} from '../../constants/palette';
 import {
-    DataGrid,
     IFromJS,
-    UserActions,
     IBulkUserActionType,
     IUserActionStateProps,
     BaseModel,
-    PagedListFilters,
-    DropDownFilter
+    DropDownFilter,
+    PagedList,
+    AlertDismissable,
 } from 'react-hero';
 
 export interface IUserListDispatchProps {
@@ -38,7 +34,6 @@ export interface IUserListProps extends IUserListStateProps, IUserListDispatchPr
 export class UserListPageImpl extends React.Component<IUserListProps, void> {
 
     static resourceName: string = 'userManagement';
-    private max: number = 10;
 
     private userActions: IBulkUserActionType[]  = [
         {label: 'Export Report', action: showConfirmationModal},
@@ -47,34 +42,23 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
         {label: 'Change role', action: showConfirmationModal}
     ];
 
-    componentWillMount = (): void => {
-        const {resource} = this.props;
-        this.fetchInstanceList(resource, {action: 'list'});
-    };
-
-    fetchInstanceList(resource: string, filters: any = {}): void {
-        if (this.max > 0) {
-            filters.max = this.max;
-        }
-        ModelService.getModel(resource).list(filters, false, getDefaultHeaders());
-    }
+    private pageTitle: JSX.Element = (
+        <h1 className="caps"> User Management </h1>
+    );
 
     render(): JSX.Element {
               
         return (
             <div style={listContainer}>
-                <h2>User Management</h2>
-                <Row>
-                    <Col md={4}>
-                        <span style={pullRight}>
-                            <UserActions
-                                    totalCount={this.props.totalCount} 
-                                    isDisabled={false} 
-                                    userActionsMap={this.userActions} />
-                        </span>
-                    </Col>
-                </Row>
-                <PagedListFilters resource={UserListPageImpl.resourceName}>
+                <AlertDismissable alertStyle={alertStyle}/>
+                <PagedList
+                        max={10}
+                        resource={UserListPageImpl.resourceName}
+                        totalCount={this.props.totalCount}
+                        userActionsMap={this.userActions}
+                        pageHeader={this.pageTitle}
+                        showDefaultActions={false}
+                >
                     <DropDownFilter
                             label="Sort"
                             paramName="sort"
@@ -95,12 +79,7 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
                                 {label: 'Descending', value: 'desc'}
                             ]}
                     />
-                </PagedListFilters>
-                <DataGrid
-                        instanceList={this.props.instanceList}
-                        properties={this.props.properties}
-                        totalCount={this.props.totalCount}
-                />
+                </PagedList>
                 <ConfirmationModal/>
                 <RolesModal/>
             </div>
@@ -110,12 +89,12 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
 
 let mapStateToProps: MapStateToProps<IStateProps, IUserListProps> = 
         (state: IStateProps, ownProps: IUserListProps): IUserListStateProps => {
-    let resourceData: IUserListStateProps & IFromJS = state.data.get(`${ownProps.resource}List`, {});
+    let resourceData: IUserListStateProps & IFromJS = state.data.get(`${UserListPageImpl.resourceName}List`, {});
     resourceData = resourceData.toJS ? resourceData.toJS() : resourceData;
     return {
         properties: resourceData.properties,
         instanceList: resourceData.instanceList,
-        totalCount:  resourceData.totalCount,
+        totalCount:  resourceData.totalCount
     };
 };
 
@@ -123,5 +102,12 @@ let UserListPage: React.ComponentClass<IUserListProps> = connect(mapStateToProps
 export {UserListPage};
 
 const listContainer: CSS = {
-    padding: '20px'
+    padding: '20px',
+};
+
+export const alertStyle: CSS = {
+    margin: '57px 0px 0px 0px',
+    position: 'fixed',
+    width: '95%',
+    textAlign: 'center',
 };

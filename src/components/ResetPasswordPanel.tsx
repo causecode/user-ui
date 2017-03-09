@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as Radium from 'radium';
 import {removeMarginAndPadding, defaultPanelContainer, defaultInputStyle} from '../constants/palette';
 import {Panel, FormControl, FormGroup, HelpBlock} from './ReusableComponents';
-import {CSS, validationType, ISubmitButton} from '../interfaces';
+import {CSS, validationType, ISubmitButton, IAxiosResponse} from '../interfaces';
 import {browserHistory} from 'react-router';
 import {ErrorMessage} from './ErrorMessage';
 import {PanelHeader} from './PanelHeader';
@@ -11,6 +11,7 @@ import {UserModel} from '../models/UserModel';
 
 export interface IResetPasswordPanelStyleProps {
     resetPasswordContainerStyle?: CSS;
+    loginButtonStyle?: CSS;
     panelTitleStyle?: CSS;
     bodyTextStyle?: CSS;
     inputStyle?: CSS;
@@ -19,7 +20,8 @@ export interface IResetPasswordPanelStyleProps {
 export interface IResetPasswordPanelProps extends IResetPasswordPanelStyleProps, ISubmitButton {
     paneltitle?: string;
     onSubmitUrl: string;
-    successUrl: string;
+    successUrl?: string;
+    onLoginUrl?: string;
 }
 
 export interface IResetPasswordPanelState {
@@ -81,19 +83,28 @@ export class ResetPasswordPanel extends React.Component<IResetPasswordPanelProps
         } else if (newPassword !== confirmPassword) {
             this.setState({passwordChanged: false, errorMessage: 'Passwords do not match.'});
         } else {
-            UserModel.resetPassword(this.props.onSubmitUrl, token, email)
-                .then((response) => {
+            UserModel.resetPassword(this.props.onSubmitUrl, token, email, newPassword, confirmPassword)
+                .then((response: IAxiosResponse): void => {
                     this.setState({passwordChanged: true, errorMessage: ''});
-                    browserHistory.push(this.props.successUrl);
-                }).catch((error: {data: {message: string}}) => {
+                    if (this.props.successUrl) {
+                        browserHistory.push(this.props.successUrl);
+                    }
+                }).catch((error: {data: {message: string}}): void => {
                     this.setState({passwordChanged: false, errorMessage: error.data.message});
                 });
         }
     }
 
+    handleLoginButton = (): void => {
+        browserHistory.push(this.props.onLoginUrl || 'login');
+    }
+
     renderPanelFooter = (): JSX.Element => {
         return (
             <PanelFooter
+                    otherButtonStyle={this.props.loginButtonStyle}
+                    otherButtonContent="Log in"
+                    otherButtonOnClick={this.handleLoginButton}
                     showOnlySubmitButton
                     submitForm
                     submitButtonStyle={

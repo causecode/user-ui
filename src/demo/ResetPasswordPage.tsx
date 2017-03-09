@@ -10,7 +10,6 @@ export class ResetPasswordPage extends React.Component<IInjectedProps, void> {
                 <Link to="/userManagement/list">UserManagement</Link>
                 <ResetPasswordPanel
                         onSubmitUrl="user/action/resetPassword"
-                        successUrl="/"
                 />
             </div>
         );
