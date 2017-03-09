@@ -35,6 +35,12 @@ export interface IUser {
     birthdate?: Date;
 }
 
+export interface IUserDataResponse {
+    userInstance: IUserBasicData;
+    userRoles: number[];
+    roleList: {id: number, authority: string}[];
+}
+
 export class UserModel extends BaseModel {
 
     static propTypes = {
@@ -76,10 +82,7 @@ export class UserModel extends BaseModel {
             if (response.status === HTTP_STATUS.SUCCESS) {
                 let responseData: {access_token: string, roles: string[], username: string} = response.data;
                 setTokenInLocalStorage(responseData.access_token) 
-                dispatchToStore(
-                        saveLoggedInUserData(responseData.roles || [], responseData.username || ''),
-                        loginSuccess()
-                );
+                dispatchToStore(loginSuccess());
                 this.getUserData();
                 browserHistory.push(successUrl);
             }
@@ -94,10 +97,19 @@ export class UserModel extends BaseModel {
 
     static getUserData() {
         HTTP.getRequest('home/action/basicData')
-            .then((response: Axios.AxiosXHR<{userInstance: IUserBasicData}>): void => {
-                if (HTTP_STATUS.SUCCESS) {
-                    dispatchToStore(saveBasicData(response.data.userInstance));
-                }
+            .then((response: Axios.AxiosXHR<IUserDataResponse>): void => {
+                let userRoles: string[] = [];
+                response.data.userRoles.forEach((roleId: number): void => {
+                    response.data.roleList.forEach((item: {id: number, authority: string}): void => {
+                        if (item.id === roleId) {
+                            userRoles.push(item.authority);    
+                        }
+                    });
+                });
+                dispatchToStore(saveBasicData(response.data.userInstance, userRoles));
+            })
+            .catch((): void => {
+                browserHistory.push('login');
             });
     }
 

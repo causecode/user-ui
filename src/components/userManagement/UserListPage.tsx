@@ -4,7 +4,6 @@ import {connect, MapStateToProps} from 'react-redux';
 import {showConfirmationModal} from '../../utils';
 import {ConfirmationModal} from '../modals/ConfirmationModal';
 import {CSS, IStateProps} from '../../interfaces';
-import {ModelService} from 'react-hero';
 import {RolesModal} from '../modals/RolesModal';
 import {
     IFromJS,
@@ -35,7 +34,6 @@ export interface IUserListProps extends IUserListStateProps, IUserListDispatchPr
 export class UserListPageImpl extends React.Component<IUserListProps, void> {
 
     static resourceName: string = 'userManagement';
-    private max: number = 20;
 
     private userActions: IBulkUserActionType[]  = [
         {label: 'Export Report', action: showConfirmationModal},
@@ -48,24 +46,13 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
         <h1 className="caps"> User Management </h1>
     );
 
-    componentWillMount = (): void => {
-        this.fetchInstanceList(UserListPageImpl.resourceName, {action: 'list'});
-    }
-
-    fetchInstanceList(resource: string, filters: any = {}): void {
-        if (this.max > 0) {
-            filters.max = this.max;
-        }
-        ModelService.getModel(resource).list(filters, false);
-    }
-
     render(): JSX.Element {
               
         return (
             <div style={listContainer}>
-                <AlertDismissable />
+                <AlertDismissable alertStyle={alertStyle}/>
                 <PagedList
-                        max={20}
+                        max={10}
                         resource={UserListPageImpl.resourceName}
                         totalCount={this.props.totalCount}
                         userActionsMap={this.userActions}
@@ -115,5 +102,12 @@ let UserListPage: React.ComponentClass<IUserListProps> = connect(mapStateToProps
 export {UserListPage};
 
 const listContainer: CSS = {
-    padding: '20px'
+    padding: '20px',
+};
+
+export const alertStyle: CSS = {
+    margin: '57px 0px 0px 0px',
+    position: 'fixed',
+    width: '95%',
+    textAlign: 'center',
 };

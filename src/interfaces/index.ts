@@ -89,5 +89,8 @@ export interface IUserBasicData {
 
 export interface IUserAction {
     type: string;
-    payload?: IUserBasicData;
+    payload?: {
+        userBasicData: IUserBasicData,
+        userRoles: string[]
+    };
 }
