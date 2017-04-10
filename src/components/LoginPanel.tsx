@@ -41,6 +41,7 @@ export interface ILoginPanelProps extends ILoginPanelStyleProps {
     isLoggedIn?: boolean;
     hasLoginError?: boolean;
     errorMessage?: string;
+    getBasicUserData?: boolean;
 }
 
 export interface ILoginPanelState {
@@ -74,6 +75,7 @@ export class LoginPanelImpl extends React.Component<ILoginPanelProps, ILoginPane
 
     submitForm = (event: React.FormEvent): void => {
         event.preventDefault();
+        let {onSubmit, onLoginSuccess, getBasicUserData} = this.props;
         let email: string = this.state.email;
         let password: string = this.state.password;
         if (!email && !password) {
@@ -88,7 +90,7 @@ export class LoginPanelImpl extends React.Component<ILoginPanelProps, ILoginPane
                 password,
                 remember_me: this.state.rememberMe
             };
-            UserModel.login(this.props.onSubmit, requestData, this.props.onLoginSuccess);
+            UserModel.login(onSubmit, requestData, onLoginSuccess, getBasicUserData);
         }
     }
 

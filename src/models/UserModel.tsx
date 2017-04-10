@@ -77,13 +77,13 @@ export class UserModel extends BaseModel {
         );
     }
 
-    static login(requestUrl: string, requestData: ILoginData, successUrl: string): void {
+    static login(requestUrl: string, requestData: ILoginData, successUrl: string, getUserData: boolean = false): void {
         Axios.post(`${config.serverUrl}${requestUrl}`, requestData).then((response: IAxiosResponse): void => {
             if (response.status === HTTP_STATUS.SUCCESS) {
                 let responseData: {access_token: string, roles: string[], username: string} = response.data;
                 setTokenInLocalStorage(responseData.access_token) 
                 dispatchToStore(loginSuccess());
-                this.getUserData();
+                getUserData && this.getUserData();
                 browserHistory.push(successUrl);
             }
         }).catch((error: IAxiosResponse): void => {
@@ -106,7 +106,7 @@ export class UserModel extends BaseModel {
                         }
                     });
                 });
-                dispatchToStore(saveBasicData(response.data.userInstance, userRoles));
+                dispatchToStore(saveBasicData(userRoles, response.data.userInstance));
             })
             .catch((): void => {
                 browserHistory.push('login');
