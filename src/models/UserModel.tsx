@@ -83,7 +83,11 @@ export class UserModel extends BaseModel {
                 let responseData: {access_token: string, roles: string[], username: string} = response.data;
                 setTokenInLocalStorage(responseData.access_token) 
                 dispatchToStore(loginSuccess());
-                getUserData && this.getUserData();
+                if (getUserData) {
+                    this.getUserData();
+                } else {
+                    dispatchToStore(saveBasicData(responseData.roles, {username: responseData.username}));
+                }
                 browserHistory.push(successUrl);
             }
         }).catch((error: IAxiosResponse): void => {

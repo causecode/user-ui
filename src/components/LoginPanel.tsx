@@ -42,6 +42,7 @@ export interface ILoginPanelProps extends ILoginPanelStyleProps {
     hasLoginError?: boolean;
     errorMessage?: string;
     getBasicUserData?: boolean;
+    allowSignup?: boolean;
 }
 
 export interface ILoginPanelState {
@@ -59,6 +60,10 @@ export class LoginPanelImpl extends React.Component<ILoginPanelProps, ILoginPane
         super();
         this.state = {email: '', password: '', rememberMe: false, emailError: null, passwordError: null};
     }
+
+    static defaultProps = {
+        allowSignup: true,
+    };
 
     handleRememberCheckbox = (): void => {
         let isChecked: boolean = this.state.rememberMe;
@@ -102,7 +107,7 @@ export class LoginPanelImpl extends React.Component<ILoginPanelProps, ILoginPane
                         <strong>Forgot password?</strong>
                     </Link><br/>
                     <Link to={this.props.onSignup} style={this.props.footerLinkStyle}>
-                        <strong>Sign up now</strong>
+                        <strong>{this.props.allowSignup ? 'Sign up now' : ''}</strong>
                     </Link>
                 </div>
                 <div style={pullRight}>
