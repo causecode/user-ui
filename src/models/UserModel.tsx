@@ -1,7 +1,7 @@
 import * as Axios from 'axios';
 import * as React from 'react';
 import * as moment from 'moment';
-import {dispatchToStore, toggleConfirmationModal} from '../utils';
+import {dispatchToStore, toggleConfirmationModal, setRolesInLocalStorage, removeRolesFromLocalStorage} from '../utils';
 import {IAxiosResponse, ISignupData, ILoginData, IUserBasicData} from '../interfaces';
 import {browserHistory} from 'react-router';
 import {HTTP_STATUS, ALERT_DANGER, ALERT_INFO} from '../constants';
@@ -21,6 +21,7 @@ import {
     config,
     getTokenFromLocalStorage,
     showAlert,
+    removeTokenFromLocalStorage,
 } from 'react-hero';
 
 const FileDownload: any = require('react-file-download');
@@ -87,6 +88,7 @@ export class UserModel extends BaseModel {
                     this.getUserData();
                 } else {
                     dispatchToStore(saveBasicData(responseData.roles, {username: responseData.username}));
+                    setRolesInLocalStorage(responseData.roles);
                 }
                 browserHistory.push(successUrl);
             }
@@ -125,6 +127,8 @@ export class UserModel extends BaseModel {
         }).then((response: IAxiosResponse): void => {
             if (response.status === HTTP_STATUS.SUCCESS) {
                 dispatchToStore(clearLoggedInUserData());
+                removeRolesFromLocalStorage();
+                removeTokenFromLocalStorage();
                 browserHistory.push('');
             }
         });
