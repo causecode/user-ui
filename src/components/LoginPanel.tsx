@@ -41,6 +41,8 @@ export interface ILoginPanelProps extends ILoginPanelStyleProps {
     isLoggedIn?: boolean;
     hasLoginError?: boolean;
     errorMessage?: string;
+    getBasicUserData?: boolean;
+    allowSignup?: boolean;
 }
 
 export interface ILoginPanelState {
@@ -59,6 +61,10 @@ export class LoginPanelImpl extends React.Component<ILoginPanelProps, ILoginPane
         this.state = {email: '', password: '', rememberMe: false, emailError: null, passwordError: null};
     }
 
+    static defaultProps = {
+        allowSignup: true,
+    };
+
     handleRememberCheckbox = (): void => {
         let isChecked: boolean = this.state.rememberMe;
         this.setState({rememberMe: !isChecked});
@@ -74,6 +80,7 @@ export class LoginPanelImpl extends React.Component<ILoginPanelProps, ILoginPane
 
     submitForm = (event: React.FormEvent): void => {
         event.preventDefault();
+        let {onSubmit, onLoginSuccess, getBasicUserData} = this.props;
         let email: string = this.state.email;
         let password: string = this.state.password;
         if (!email && !password) {
@@ -88,7 +95,7 @@ export class LoginPanelImpl extends React.Component<ILoginPanelProps, ILoginPane
                 password,
                 remember_me: this.state.rememberMe
             };
-            UserModel.login(this.props.onSubmit, requestData, this.props.onLoginSuccess);
+            UserModel.login(onSubmit, requestData, onLoginSuccess, getBasicUserData);
         }
     }
 
@@ -100,7 +107,7 @@ export class LoginPanelImpl extends React.Component<ILoginPanelProps, ILoginPane
                         <strong>Forgot password?</strong>
                     </Link><br/>
                     <Link to={this.props.onSignup} style={this.props.footerLinkStyle}>
-                        <strong>Sign up now</strong>
+                        <strong>{this.props.allowSignup ? 'Sign up now' : ''}</strong>
                     </Link>
                 </div>
                 <div style={pullRight}>

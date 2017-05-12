@@ -78,13 +78,13 @@ export interface ILoginButton {
 }
 
 export interface IUserBasicData {
-    id: number;
-    email: string;
-    username: string;
-    firstName: string;
-    lastName: string;
-    gender: string;
-    birthdate: string;
+    id?: number;
+    email?: string;
+    username?: string;
+    firstName?: string;
+    lastName?: string;
+    gender?: string;
+    birthdate?: string;
 }
 
 export interface IUserAction {

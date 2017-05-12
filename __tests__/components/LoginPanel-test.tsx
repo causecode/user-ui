@@ -3,9 +3,12 @@ jest.mock('../../src/utils');
 jest.mock('../../src/models/UserModel');
 
 import * as React from 'react';
-import {shallow, ShallowWrapper} from 'enzyme';
-import {LoginPanelImpl, ILoginPanelProps} from '../../src/components/LoginPanel';
+import {shallow, ShallowWrapper, mount, ReactWrapper} from 'enzyme';
+import {LoginPanelImpl, ILoginPanelProps, LoginPanel} from '../../src/components/LoginPanel';
 import {UserModel} from '../../src/models/UserModel';
+import {Provider} from 'react-redux';
+import {configureStore} from 'react-hero';
+import {fromJS} from 'immutable';
 
 const unroll: any = require<any>('unroll');
 unroll.use(it);
@@ -67,6 +70,10 @@ describe('LoginPanel Tests.', (): void => {
                 />
         );
 
+        it('should show signup link in the panel.', (): void => {
+            expect(componentTree.instance().props.allowSignup).toEqual(true);
+        });
+
         it('It should render the remember me check box.', (): void => {
             expect(componentTree.instance().props.showRememberMeCheckbox).toBeTruthy();
             expect(componentTree.state('rememberMe')).toBeFalsy();
@@ -119,8 +126,13 @@ describe('LoginPanel Tests.', (): void => {
                             isLoggedIn
                             errorMessage={testString}
                             showRememberMeCheckbox={true}
+                            allowSignup={false}
                     />
             );
+        });
+
+        it('should not show signup link in the panel.', (): void => {
+            expect(componentTree.instance().props.allowSignup).toEqual(false);
         });
 
         it('It should not submit the form when email and password fields are empty.', (): void => {
@@ -141,8 +153,18 @@ describe('LoginPanel Tests.', (): void => {
         }, [
             ['testInput', 'otherInput'],
             ['email', 'password'],
-            ['password', 'email']
+            ['password', 'email'],
         ]);
     });
-    
+
+    describe('When the component is connected to the redux store,', (): void => {
+
+        const componentTree: ReactWrapper<ILoginPanelProps, void> = mount<ILoginPanelProps, void>(
+                <Provider store={configureStore({currentUser: fromJS({isLoggedIn: true, loginErrorMessage: ''})})}>
+                    <LoginPanel onForgotPassword="/" onLoginSuccess="/" onSignup="/" onSubmit="/" />
+                </Provider>
+        );
+
+        expect(componentTree.find(LoginPanelImpl).length).toEqual(1);
+    });    
 });

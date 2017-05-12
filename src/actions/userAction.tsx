@@ -37,7 +37,7 @@ export const saveLoginErrorMessage = (errorMessage: string): IGenericAction => {
     };
 };
 
-export const saveBasicData = (userBasicData: IUserBasicData, userRoles: string[]): IUserAction => {
+export const saveBasicData = (userRoles: string[], userBasicData: IUserBasicData): IUserAction => {
     return {
         type: SAVE_BASIC_DATA,
         payload: {

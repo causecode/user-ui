@@ -1,7 +1,7 @@
 import * as Axios from 'axios';
 import * as React from 'react';
 import * as moment from 'moment';
-import {dispatchToStore, toggleConfirmationModal} from '../utils';
+import {dispatchToStore, toggleConfirmationModal, setRolesInLocalStorage, removeRolesFromLocalStorage} from '../utils';
 import {IAxiosResponse, ISignupData, ILoginData, IUserBasicData} from '../interfaces';
 import {browserHistory} from 'react-router';
 import {HTTP_STATUS, ALERT_DANGER, ALERT_INFO} from '../constants';
@@ -21,6 +21,7 @@ import {
     config,
     getTokenFromLocalStorage,
     showAlert,
+    removeTokenFromLocalStorage,
 } from 'react-hero';
 
 const FileDownload: any = require('react-file-download');
@@ -77,13 +78,18 @@ export class UserModel extends BaseModel {
         );
     }
 
-    static login(requestUrl: string, requestData: ILoginData, successUrl: string): void {
+    static login(requestUrl: string, requestData: ILoginData, successUrl: string, getUserData: boolean = false): void {
         Axios.post(`${config.serverUrl}${requestUrl}`, requestData).then((response: IAxiosResponse): void => {
             if (response.status === HTTP_STATUS.SUCCESS) {
                 let responseData: {access_token: string, roles: string[], username: string} = response.data;
                 setTokenInLocalStorage(responseData.access_token) 
                 dispatchToStore(loginSuccess());
-                this.getUserData();
+                if (getUserData) {
+                    this.getUserData();
+                } else {
+                    dispatchToStore(saveBasicData(responseData.roles, {username: responseData.username}));
+                    setRolesInLocalStorage(responseData.roles);
+                }
                 browserHistory.push(successUrl);
             }
         }).catch((error: IAxiosResponse): void => {
@@ -106,7 +112,7 @@ export class UserModel extends BaseModel {
                         }
                     });
                 });
-                dispatchToStore(saveBasicData(response.data.userInstance, userRoles));
+                dispatchToStore(saveBasicData(userRoles, response.data.userInstance));
             })
             .catch((): void => {
                 browserHistory.push('login');
@@ -121,6 +127,8 @@ export class UserModel extends BaseModel {
         }).then((response: IAxiosResponse): void => {
             if (response.status === HTTP_STATUS.SUCCESS) {
                 dispatchToStore(clearLoggedInUserData());
+                removeRolesFromLocalStorage();
+                removeTokenFromLocalStorage();
                 browserHistory.push('');
             }
         });
