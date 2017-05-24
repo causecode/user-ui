@@ -6,13 +6,14 @@ import {connect, MapStateToProps} from 'react-redux';
 import {ErrorMessage} from './ErrorMessage';
 import {PanelHeader} from './PanelHeader';
 import {UserModel} from '../models/UserModel';
+import {withRouter, RouteComponentProps} from 'react-router';
 import {
-    removeMarginAndPadding, 
+    removeMarginAndPadding,
     defaultFooterContainer,
     defaultPanelContainer,
     defaultInputStyle,
     pullRight,
-    pullLeft
+    pullLeft,
 } from '../constants/palette';
 
 export interface IMapStateToProps {
@@ -28,7 +29,7 @@ export interface ILoginPanelStyleProps {
     inputStyle?: CSS;
 }
 
-export interface ILoginPanelProps extends ILoginPanelStyleProps {
+export interface ILoginPanelProps extends ILoginPanelStyleProps, RouteComponentProps<void> {
     showRememberMeCheckbox?: boolean;
     submitButtonContent?: JSX.Element | string;
     emailPlaceholder?: string;
@@ -80,7 +81,7 @@ export class LoginPanelImpl extends React.Component<ILoginPanelProps, ILoginPane
 
     submitForm = (event: React.FormEvent): void => {
         event.preventDefault();
-        let {onSubmit, onLoginSuccess, getBasicUserData} = this.props;
+        let {onSubmit, onLoginSuccess, history} = this.props;
         let email: string = this.state.email;
         let password: string = this.state.password;
         if (!email && !password) {
@@ -93,9 +94,9 @@ export class LoginPanelImpl extends React.Component<ILoginPanelProps, ILoginPane
             let requestData: {email: string, password: string, remember_me: boolean} = {
                 email,
                 password,
-                remember_me: this.state.rememberMe
+                remember_me: this.state.rememberMe,
             };
-            UserModel.login(onSubmit, requestData, onLoginSuccess, getBasicUserData);
+            UserModel.login(onSubmit, requestData, onLoginSuccess, history);
         }
     }
 
@@ -133,12 +134,12 @@ export class LoginPanelImpl extends React.Component<ILoginPanelProps, ILoginPane
         return (
             <div style={this.props.loginContainerStyle || defaultPanelContainer}>
                 <form onSubmit={this.submitForm} id="loginForm">
-                    <Panel 
+                    <Panel
                             header={
                                 <PanelHeader
-                                        headerStyle={this.props.panelTitleStyle} 
+                                        headerStyle={this.props.panelTitleStyle}
                                         headerText={this.props.panelTitle || 'Please enter your details.'}/>
-                            } 
+                            }
                             footer={this.renderPanelFooter()}>
                         <FormGroup validationState={this.state.emailError} style={removeMarginAndPadding}>
                             <FormControl
@@ -151,7 +152,7 @@ export class LoginPanelImpl extends React.Component<ILoginPanelProps, ILoginPane
                             <HelpBlock>{this.state.emailError ? 'This field is required.' : null}</HelpBlock>
                         </FormGroup>
                         <FormGroup validationState={this.state.passwordError} style={removeMarginAndPadding}>
-                            <FormControl 
+                            <FormControl
                                     id="password"
                                     type="password"
                                     placeholder={this.props.passwordPlaceholder || 'Password'}
@@ -172,9 +173,9 @@ export class LoginPanelImpl extends React.Component<ILoginPanelProps, ILoginPane
 let mapStateToProps: MapStateToProps<IStateProps, ILoginPanelProps> = (state: IStateProps): IMapStateToProps => {
     return {
         isLoggedIn: state.currentUser.get('isLoggedIn'),
-        errorMessage: state.currentUser.get('loginErrorMessage')
+        errorMessage: state.currentUser.get('loginErrorMessage'),
     };
 };
 
-let LoginPanel: React.ComponentClass<ILoginPanelProps> = connect(mapStateToProps)(LoginPanelImpl);
+let LoginPanel = withRouter(connect(mapStateToProps)(LoginPanelImpl));
 export {LoginPanel};

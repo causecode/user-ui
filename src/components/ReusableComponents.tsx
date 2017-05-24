@@ -1,6 +1,6 @@
 import * as Radium from 'radium';
 import * as Bootstrap from 'react-bootstrap';
-import {Link as RouterLink} from 'react-router';
+const reactRouterDom = require<any>('react-router-dom');
 const ReCAPTCHA = require<any>('react-google-recaptcha');
 
 // Bootstrap components
@@ -21,7 +21,7 @@ export const Col = Radium(Bootstrap.Col);
 export const Row = Radium(Bootstrap.Row);
 
 // React-router components
-export const Link = Radium(RouterLink);
+export const Link = Radium(reactRouterDom.Link);
 
 // Google ReCaptcha
 export const ReCaptcha = Radium(ReCAPTCHA);

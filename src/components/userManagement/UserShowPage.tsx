@@ -13,7 +13,7 @@ export interface IUserShowPageProps extends IInstancePageProps {
 @Radium
 export class UserShowPage extends React.Component<IUserShowPageProps, void> {
     static resourceName: string = 'userManagement';
-    
+
     render(): JSX.Element {
         const {instance} =  this.props;
         return (
@@ -35,11 +35,11 @@ export class UserShowPage extends React.Component<IUserShowPageProps, void> {
                     </tr>
                     <tr>
                         <td><strong>First Name</strong></td>
-                        <td>{instance.properties.firstname}</td>
+                        <td>{instance.properties.firstName}</td>
                     </tr>
                     <tr>
                         <td><strong>Last Name</strong></td>
-                        <td>{instance.properties.lastname}</td>
+                        <td>{instance.properties.lastName}</td>
                     </tr>
                     <tr>
                         <td><strong>Gender</strong></td>
