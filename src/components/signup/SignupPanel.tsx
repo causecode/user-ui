@@ -35,7 +35,7 @@ export interface ISignupPanelState {
 }
 
 @Radium
-class SignupPanelImpl extends React.Component<ISignupPanelProps, ISignupPanelState> {
+export class SignupPanelImpl extends React.Component<ISignupPanelProps, ISignupPanelState> {
 
     constructor() {
         super();
@@ -126,7 +126,7 @@ let mapStateToProps: MapStateToProps<IStateProps, ISignupPanelProps> =
     };
 };
 
-let SignupPanel = withRouter(connect(mapStateToProps)(SignupPanelImpl));
+let SignupPanel: React.ComponentClass<ISignupPanelProps> = withRouter(connect(mapStateToProps)(SignupPanelImpl));
 export {SignupPanel}
 
 const defaultOptionStyle: CSS = {

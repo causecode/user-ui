@@ -37,7 +37,7 @@ let token: string = '';
 let email: string = '';
 
 @Radium
-class ResetPasswordPanelImpl extends
+export class ResetPasswordPanelImpl extends
         React.Component<IResetPasswordPanelProps & RouteComponentProps<void>, IResetPasswordPanelState> {
 
     constructor() {
@@ -165,4 +165,4 @@ class ResetPasswordPanelImpl extends
     }
 }
 
-export let ResetPasswordPanel = withRouter(ResetPasswordPanelImpl);
+export let ResetPasswordPanel: React.ComponentClass<IResetPasswordPanelProps> = withRouter(ResetPasswordPanelImpl);

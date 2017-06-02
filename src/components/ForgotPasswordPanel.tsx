@@ -32,7 +32,7 @@ export interface IForgotPasswordPanelState {
 }
 
 @Radium
-class ForgotPasswordPanelImpl extends
+export class ForgotPasswordPanelImpl extends
         React.Component<IForgotPasswordPanelProps & RouteComponentProps<void>, IForgotPasswordPanelState> {
 
     constructor() {
@@ -148,7 +148,7 @@ class ForgotPasswordPanelImpl extends
     }
 }
 
-export let ForgotPasswordPanel = withRouter(ForgotPasswordPanelImpl);
+export let ForgotPasswordPanel: React.ComponentClass<IForgotPasswordPanelProps> = withRouter(ForgotPasswordPanelImpl);
 
 const successMessage: CSS = {
     fontSize: '16px',
