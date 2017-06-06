@@ -9,7 +9,7 @@ const reactRouterDom = require<any>('react-router-dom');
 
 export class BasePage extends React.Component<void, void> {
     render(): JSX.Element {
-        let {Switch, Route} = reactRouterDom;
+        const {Switch, Route} = reactRouterDom;
 
         return (
             <StyleRoot>

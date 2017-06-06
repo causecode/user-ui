@@ -80,10 +80,5 @@ var config = {
     },
     plugins: plugins
 };
-if (isRunningOnServer) {
-    config.devServer = {
-        historyApiFallback: true
-    }
-}
 
 module.exports = config;

@@ -148,7 +148,7 @@ export class ForgotPasswordPanelImpl extends
     }
 }
 
-export let ForgotPasswordPanel: React.ComponentClass<IForgotPasswordPanelProps> = withRouter(ForgotPasswordPanelImpl);
+export const ForgotPasswordPanel: React.ComponentClass<IForgotPasswordPanelProps> = withRouter(ForgotPasswordPanelImpl);
 
 const successMessage: CSS = {
     fontSize: '16px',

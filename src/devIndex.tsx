@@ -8,7 +8,7 @@ const reactRouterDom = require<any>('react-router-dom');
 
 ModelService.registerAll();
 ComponentService.registerAll();
-let{BrowserRouter, Route} = reactRouterDom;
+const {BrowserRouter, Route} = reactRouterDom;
 
 render(
     <Provider store={store}>

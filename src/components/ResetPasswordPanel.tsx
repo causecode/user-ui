@@ -165,4 +165,4 @@ export class ResetPasswordPanelImpl extends
     }
 }
 
-export let ResetPasswordPanel: React.ComponentClass<IResetPasswordPanelProps> = withRouter(ResetPasswordPanelImpl);
+export const ResetPasswordPanel: React.ComponentClass<IResetPasswordPanelProps> = withRouter(ResetPasswordPanelImpl);

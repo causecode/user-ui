@@ -4,13 +4,14 @@ jest.mock('react-router');
 
 import * as React from 'react';
 import {shallow, ShallowWrapper} from 'enzyme';
-import {browserHistory} from 'react-router';
 import {UserModel} from '../../src/models/UserModel';
 import {HTTP} from 'react-hero';
+import {match} from 'react-router';
+import * as H from 'history';
+import {ResetPasswordPanelImpl} from '../../src/components/ResetPasswordPanel';
 import {
-    ResetPasswordPanel,
     IResetPasswordPanelProps,
-    IResetPasswordPanelState
+    IResetPasswordPanelState,
 } from '../../src/components/ResetPasswordPanel';
 
 const unroll: any = require<any>('unroll');
@@ -25,13 +26,22 @@ let testToken: string = 'qwerty12345';
 
 Object.defineProperty(window.location, 'href', {
     writable: true,
-    value: `http://validate=true&token=${testToken}&email=${testEmail}`
+    value: `http://validate=true&token=${testToken}&email=${testEmail}`,
 });
 
 describe('ResetPasswordPanel Tests.', (): void => {
 
     let testPath: string = 'http://some/path';
     let componentTree: ShallowWrapper<IShallowWrapperProps, IResetPasswordPanelState>;
+    let match: match<void>;
+    let location: H.Location;
+    let push: jest.Mock<void> = jest.fn<void>();
+    /**
+     * Using any here because, if exact type is used with createHistory() test case fails with a
+     * SecurityError caused due to mismatching instances.
+     * TODO: Figure out a way to use exact type for history and run the test cases
+     */
+    let history: any = {push};
 
     beforeEach(() => {
         HTTP.postRequest = jest.fn((url, {}, data: {email: string, token: string}) => {
@@ -45,9 +55,12 @@ describe('ResetPasswordPanel Tests.', (): void => {
             });
 
         componentTree = shallow<IShallowWrapperProps, IResetPasswordPanelState>(
-                <ResetPasswordPanel
+                <ResetPasswordPanelImpl
                         onSubmitUrl={testPath}
                         successUrl={testPath}
+                        match={match}
+                        location={location}
+                        history={history}
                 />
         );
     });
@@ -67,7 +80,7 @@ describe('ResetPasswordPanel Tests.', (): void => {
         ['FormGroup', 2],
         ['FormControl', 2],
         ['HelpBlock', 2],
-        ['label', 3]
+        ['label', 3],
     ]);
 
     unroll('It should not save #input to the state when value is empty.', (
@@ -81,7 +94,7 @@ describe('ResetPasswordPanel Tests.', (): void => {
     }, [
         ['input'],
         ['newPassword'],
-        ['confirmPassword']
+        ['confirmPassword'],
     ]);
 
     unroll('It should save #input to the state when changed.', (done: () => void, args: {input: string}): void => {
@@ -92,7 +105,7 @@ describe('ResetPasswordPanel Tests.', (): void => {
     }, [
         ['input'],
         ['newPassword'],
-        ['confirmPassword']
+        ['confirmPassword'],
     ]);
 
     describe('When submit button is clicked.', (): void => {
@@ -104,7 +117,7 @@ describe('ResetPasswordPanel Tests.', (): void => {
                 newPasswordError: null,
                 confirmPasswordError: null,
                 passwordChanged: false,
-                errorMessage: ''
+                errorMessage: '',
             });
         });
 
@@ -120,7 +133,7 @@ describe('ResetPasswordPanel Tests.', (): void => {
         }, [
             ['testInput', 'otherInput'],
             ['newPassword', 'confirmPassword'],
-            ['confirmPassword', 'newPassword']
+            ['confirmPassword', 'newPassword'],
         ]);
 
         it('It should not submit the form when the passwords are different in both the fields.', (): void => {
@@ -143,7 +156,7 @@ describe('ResetPasswordPanel Tests.', (): void => {
                         .then((): void => {
                             expect(componentTree.state('passwordChanged')).toBeTruthy();
                             expect(componentTree.state('errorMessage')).toEqual('');
-                            expect(browserHistory.push).toBeCalledWith(testPath);
+                            expect(history.push).toBeCalledWith(testPath);
                         });
         });
     });
