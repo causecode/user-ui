@@ -4,7 +4,7 @@ import {FormInput, IInstancePageProps} from 'react-hero';
 import {FormGroup, Col, Button, Grid} from '../ReusableComponents';
 import {UserModel} from '../../models/UserModel';
 import {store} from '../../store';
-import {Link} from 'react-router';
+import {Link} from '../ReusableComponents';
 import {CSS} from '../../interfaces';
 
 export interface IUserEditPageProps extends IInstancePageProps {
@@ -43,12 +43,12 @@ export class UserEditPage extends React.Component<IUserEditPageProps, void> {
                         <FormInput
                                 type="text"
                                 propertyName="First Name"
-                                model="rhForms.userManagementEdit.properties.firstname"
+                                model="rhForms.userManagementEdit.properties.firstName"
                         />
                         <FormInput
                                 type="text"
                                 propertyName="Last Name"
-                                model="rhForms.userManagementEdit.properties.lastname"
+                                model="rhForms.userManagementEdit.properties.lastName"
                         />
                         <FormInput
                                 type="date"
@@ -57,15 +57,15 @@ export class UserEditPage extends React.Component<IUserEditPageProps, void> {
                         />
                         <FormGroup>
                             <Col sm={4} smOffset={3}>
-                                <Button 
-                                        style={this.props.submitButtonStyle || defaultButtonStyles} 
-                                        bsStyle="primary" 
+                                <Button
+                                        style={this.props.submitButtonStyle || defaultButtonStyles}
+                                        bsStyle="primary"
                                         type="submit">
                                     Update
                                 </Button>
-                                <Link 
-                                        style={this.props.cancelButtonStyle || defaultButtonStyles} 
-                                        className="btn btn-default" 
+                                <Link
+                                        style={this.props.cancelButtonStyle || defaultButtonStyles}
+                                        className="btn btn-default"
                                         to={'/userManagement/list'}>
                                     Cancel
                                 </Link>
@@ -79,5 +79,5 @@ export class UserEditPage extends React.Component<IUserEditPageProps, void> {
 };
 
 let defaultButtonStyles: CSS = {
-    margin: '0px 10px'
+    margin: '0px 10px',
 };

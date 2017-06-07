@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {ForgotPasswordPanel} from '../components';
-import {Link} from 'react-router';
+import {Link} from '../components/ReusableComponents';
 
 export class ForgotPasswordPage extends React.Component<void, void> {
-    
+
     render(): JSX.Element {
         return (
             <div>

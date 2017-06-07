@@ -1,8 +1,8 @@
 import * as React from 'react';
 import * as Radium from 'radium';
 import {connect, MapStateToProps} from 'react-redux';
+import {RouteComponentProps, withRouter} from 'react-router';
 import {CSS, ISignupData, IStateProps, ISubmitButton, ILoginButton} from '../../interfaces';
-import {browserHistory} from 'react-router';
 import {Panel, Button} from '../ReusableComponents';
 import {SignupForm} from './SignupForm';
 import {UserModel} from '../../models/UserModel';
@@ -20,7 +20,8 @@ export interface ISignupPanelStyleProps {
     signupOptionsButtonStyle?: CSS;
 }
 
-export interface ISignupPanelProps extends ISignupPanelStyleProps, ISubmitButton, ILoginButton {
+export interface ISignupPanelProps extends
+        ISignupPanelStyleProps, ISubmitButton, ILoginButton, RouteComponentProps<void> {
     panelTitle?: string;
     onSubmitUrl: string;
     onLoginUrl: string;
@@ -42,7 +43,7 @@ export class SignupPanelImpl extends React.Component<ISignupPanelProps, ISignupP
     }
 
     submitForm = (): void => {
-        let {userData, onSubmitUrl, onSuccess} = this.props;
+        let {userData, onSubmitUrl, onSuccess, history} = this.props;
         delete userData.signupErrorMessage;
         let error: string = '';
 
@@ -52,7 +53,7 @@ export class SignupPanelImpl extends React.Component<ISignupPanelProps, ISignupP
             }
         }
 
-        error ? dispatchToStore(updateSignupError(error)) : UserModel.signup(onSubmitUrl, userData, onSuccess);
+        error ? dispatchToStore(updateSignupError(error)) : UserModel.signup(onSubmitUrl, userData, onSuccess, history);
     }
 
     showSignupForm = (): void => {
@@ -60,7 +61,7 @@ export class SignupPanelImpl extends React.Component<ISignupPanelProps, ISignupP
     }
 
     handleLoginButton = (): void => {
-        browserHistory.push(this.props.onLoginUrl);
+        this.props.history.push(this.props.onLoginUrl);
     }
 
     renderPanelFooter = (): JSX.Element => {
@@ -78,7 +79,7 @@ export class SignupPanelImpl extends React.Component<ISignupPanelProps, ISignupP
 
     renderSignupForm = (): JSX.Element => {
         return (
-            <SignupForm 
+            <SignupForm
                     id="signupForm"
                     inputStyle={this.props.inputStyle}
                     recaptchaSiteKey={this.props.recaptchaSiteKey}
@@ -89,7 +90,7 @@ export class SignupPanelImpl extends React.Component<ISignupPanelProps, ISignupP
     showSignupOptions = (): JSX.Element => {
         return (
             <div>
-                <Button 
+                <Button
                         id="signupWithEmail"
                         style={this.props.signupOptionsButtonStyle || defaultOptionStyle}
                         onClick={this.showSignupForm}>
@@ -102,13 +103,13 @@ export class SignupPanelImpl extends React.Component<ISignupPanelProps, ISignupP
     render(): JSX.Element {
         return (
             <div style={this.props.signupContainerStyle || defaultPanelContainer}>
-                <Panel 
+                <Panel
                         header={
                             <PanelHeader
                                     headerText={this.props.panelTitle || 'Sign up'}
                                     headerStyle={this.props.panelTitleStyle}
                             />
-                        } 
+                        }
                         footer={this.renderPanelFooter()}>
                     {this.state.displaySignupForm ? this.renderSignupForm() : this.showSignupOptions()}
                     <ErrorMessage message={this.props.userData.signupErrorMessage}/>
@@ -118,23 +119,23 @@ export class SignupPanelImpl extends React.Component<ISignupPanelProps, ISignupP
     }
 }
 
-let mapStateToProps: MapStateToProps<IStateProps, ISignupPanelProps> = 
+let mapStateToProps: MapStateToProps<IStateProps, ISignupPanelProps> =
         (state: IStateProps): {userData: ISignupData} => {
     return {
-        userData: state.signupData.toJS()
+        userData: state.signupData.toJS(),
     };
 };
 
-let SignupPanel: React.ComponentClass<ISignupPanelProps> = connect(mapStateToProps)(SignupPanelImpl);
+let SignupPanel: React.ComponentClass<ISignupPanelProps> = withRouter(connect(mapStateToProps)(SignupPanelImpl));
 export {SignupPanel}
 
 const defaultOptionStyle: CSS = {
     width: '100%',
-    textAlign: 'center'
+    textAlign: 'center',
 };
 
 const defaultPanelContainer: CSS = {
     maxWidth: '650px',
     margin: '0px auto',
-    padding: '30px'
+    padding: '30px',
 };

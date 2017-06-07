@@ -2,8 +2,10 @@ jest.unmock('../../src/components/ForgotPasswordPanel');
 jest.mock('../../src/utils');
 
 import * as React from 'react';
+import * as H from 'history';
 import {shallow, ShallowWrapper} from 'enzyme';
-import {ForgotPasswordPanel, IForgotPasswordPanelProps} from '../../src/components/ForgotPasswordPanel';
+import {match} from 'react-router';
+import {IForgotPasswordPanelProps, ForgotPasswordPanelImpl} from '../../src/components/ForgotPasswordPanel';
 import {UserModel} from '../../src/models/UserModel';
 import {HTTP} from 'react-hero';
 
@@ -19,6 +21,15 @@ describe('ForgotPasswordPanel Tests.', (): void => {
     let testPath: string = 'http://some/path';
     let testEmail: string = 'something@example.com';
     let componentTree: ShallowWrapper<IShallowWrapperProps, void>;
+    let match: match<void>;
+    let location: H.Location;
+    let push: jest.Mock<void> = jest.fn<void>();
+    /**
+     * Using any here because, if exact type is used with createHistory() test case fails with a
+     * SecurityError caused due to mismatching instances.
+     * TODO: Figure out a way to use exact type for history and run the test cases
+     */
+    let history: any = {push};
 
     beforeEach(() => {
         HTTP.postRequest = jest.fn((url, {}, data: {email: string}): PromiseLike<{success?: boolean}> => {
@@ -32,8 +43,11 @@ describe('ForgotPasswordPanel Tests.', (): void => {
             });
 
         componentTree = shallow<IShallowWrapperProps, void>(
-                <ForgotPasswordPanel
+                <ForgotPasswordPanelImpl
                         onSubmitUrl={testPath}
+                        match={match}
+                        location={location}
+                        history={history}
                 />
         );
     });
@@ -52,7 +66,7 @@ describe('ForgotPasswordPanel Tests.', (): void => {
         ['form', 1],
         ['FormGroup', 2],
         ['FormControl', 1],
-        ['HelpBlock', 1]
+        ['HelpBlock', 1],
     ]);
 
     it('It should not submit form when the email value is not valid.', (): void => {
@@ -87,7 +101,7 @@ describe('ForgotPasswordPanel Tests.', (): void => {
                                 ['email', ''],
                                 ['usernameError', null],
                                 ['errorMessage', ''],
-                                ['showInputField', true]
+                                ['showInputField', true],
                             ]);
                             
                         });
