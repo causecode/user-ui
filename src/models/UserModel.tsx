@@ -2,16 +2,15 @@ import * as Axios from 'axios';
 import * as React from 'react';
 import * as moment from 'moment';
 import {dispatchToStore, toggleConfirmationModal, setRolesInLocalStorage, removeRolesFromLocalStorage} from '../utils';
+import {History} from 'history';
 import {IAxiosResponse, ISignupData, ILoginData, IUserBasicData} from '../interfaces';
-import {browserHistory} from 'react-router';
 import {HTTP_STATUS, ALERT_DANGER, ALERT_INFO} from '../constants';
 import {updateSignupError} from '../actions/signupAction';
 import {
-    saveLoggedInUserData,
     saveLoginErrorMessage,
     loginSuccess,
     clearLoggedInUserData,
-    saveBasicData
+    saveBasicData,
 } from '../actions/userAction';
 import {
     BaseModel,
@@ -49,7 +48,7 @@ export class UserModel extends BaseModel {
         firstName: ModelPropTypes.STRING,
         lastName: ModelPropTypes.STRING,
         email: ModelPropTypes.STRING,
-        birthdate: ModelPropTypes.DATE
+        birthdate: ModelPropTypes.DATE,
     };
 
     static defaultProps = {
@@ -57,7 +56,7 @@ export class UserModel extends BaseModel {
         lastName: '',
         email: '',
         dateCreated: '',
-        birthdate: ''
+        birthdate: '',
     };
 
     static resourceName: string = 'userManagement';
@@ -67,7 +66,7 @@ export class UserModel extends BaseModel {
         'firstName',
         'lastName',
         'email',
-        'birthdate'
+        'birthdate',
     ];
 
     getHTMLBirthdate(properties: IUser): JSX.Element {
@@ -78,19 +77,16 @@ export class UserModel extends BaseModel {
         );
     }
 
-    static login(requestUrl: string, requestData: ILoginData, successUrl: string, getUserData: boolean = false): void {
+    static login(requestUrl: string, requestData: ILoginData, successUrl: string, history: History): void {
         Axios.post(`${config.serverUrl}${requestUrl}`, requestData).then((response: IAxiosResponse): void => {
             if (response.status === HTTP_STATUS.SUCCESS) {
                 let responseData: {access_token: string, roles: string[], username: string} = response.data;
-                setTokenInLocalStorage(responseData.access_token) 
+                setTokenInLocalStorage(responseData.access_token);
                 dispatchToStore(loginSuccess());
-                if (getUserData) {
-                    this.getUserData();
-                } else {
-                    dispatchToStore(saveBasicData(responseData.roles, {username: responseData.username}));
-                    setRolesInLocalStorage(responseData.roles);
-                }
-                browserHistory.push(successUrl);
+                dispatchToStore(saveBasicData(responseData.roles, {username: responseData.username}));
+                setRolesInLocalStorage(responseData.roles);
+                this.getUserData(history);
+                history.push(successUrl);
             }
         }).catch((error: IAxiosResponse): void => {
             if (error.status === HTTP_STATUS.UNAUTHORIZED) {
@@ -101,25 +97,25 @@ export class UserModel extends BaseModel {
         });
     }
 
-    static getUserData() {
+    static getUserData(history: History) {
         HTTP.getRequest('home/action/basicData')
             .then((response: Axios.AxiosXHR<IUserDataResponse>): void => {
                 let userRoles: string[] = [];
                 response.data.userRoles.forEach((roleId: number): void => {
                     response.data.roleList.forEach((item: {id: number, authority: string}): void => {
                         if (item.id === roleId) {
-                            userRoles.push(item.authority);    
+                            userRoles.push(item.authority);
                         }
                     });
                 });
                 dispatchToStore(saveBasicData(userRoles, response.data.userInstance));
             })
             .catch((): void => {
-                browserHistory.push('login');
+                history.push('login');
             });
     }
 
-    static logout(requestUrl: string): void {
+    static logout(requestUrl: string, history: History): void {
         Axios({
             method: 'post',
             url: `${config.serverUrl}${requestUrl}`,
@@ -129,16 +125,16 @@ export class UserModel extends BaseModel {
                 dispatchToStore(clearLoggedInUserData());
                 removeRolesFromLocalStorage();
                 removeTokenFromLocalStorage();
-                browserHistory.push('');
+                history.push('/');
             }
         });
     }
 
-    static signup(requestUrl: string, requestData: ISignupData, successUrl: string): void {
+    static signup(requestUrl: string, requestData: ISignupData, successUrl: string, history: History): void {
         dispatchToStore(updateSignupError(''));
         HTTP.postRequest(requestUrl, {}, requestData).then((response: IAxiosResponse): void => {
             if (response.status === HTTP_STATUS.SUCCESS) {
-                browserHistory.push(successUrl);
+                history.push(successUrl);
             }
         }).catch((error: IAxiosResponse): void => {
             dispatchToStore(updateSignupError(error.data.message));
@@ -168,7 +164,7 @@ export class UserModel extends BaseModel {
             .catch((): void => {
                 showAlert(ALERT_DANGER, 'Unable to perform the operation.');
             });
-            
+
         toggleConfirmationModal(false);
     }
 

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as Radium from 'radium';
+import {withRouter, RouteComponentProps} from 'react-router';
 import {removeMarginAndPadding, defaultPanelContainer, defaultInputStyle} from '../constants/palette';
 import {CSS, validationType, IAxiosResponse, ILoginButton, ISubmitButton} from '../interfaces';
 import {Panel, FormControl, FormGroup, HelpBlock} from './ReusableComponents';
-import {browserHistory} from 'react-router';
 import {ErrorMessage} from './ErrorMessage';
 import {PanelHeader} from './PanelHeader';
 import {PanelFooter} from './PanelFooter';
@@ -32,15 +32,16 @@ export interface IForgotPasswordPanelState {
 }
 
 @Radium
-export class ForgotPasswordPanel extends React.Component<IForgotPasswordPanelProps, IForgotPasswordPanelState> {
+export class ForgotPasswordPanelImpl extends
+        React.Component<IForgotPasswordPanelProps & RouteComponentProps<void>, IForgotPasswordPanelState> {
 
     constructor() {
         super();
         this.state = {
-            email: '', 
-            usernameError: null, 
+            email: '',
+            usernameError: null,
             errorMessage: '',
-            showInputField: true
+            showInputField: true,
         };
     }
 
@@ -68,7 +69,7 @@ export class ForgotPasswordPanel extends React.Component<IForgotPasswordPanelPro
     }
 
     handleLoginButton = (): void => {
-        browserHistory.push(this.props.onLoginUrl);
+        this.props.history.push(this.props.onLoginUrl);
     }
 
     renderSuccessMessage = (): JSX.Element => {
@@ -100,10 +101,10 @@ export class ForgotPasswordPanel extends React.Component<IForgotPasswordPanelPro
 
     resetState = (): void => {
         this.setState({
-            email: '', 
-            usernameError: null, 
+            email: '',
+            usernameError: null,
             errorMessage: '',
-            showInputField: true
+            showInputField: true,
         });
     }
 
@@ -117,7 +118,7 @@ export class ForgotPasswordPanel extends React.Component<IForgotPasswordPanelPro
                     submitButtonContent={this.props.submitButtonContent || 'Reset Password'}
                     submitButtonStyle={[
                         this.props.submitButtonStyle,
-                        {visibility: this.state.showInputField ? 'visible' : 'hidden'}
+                        {visibility: this.state.showInputField ? 'visible' : 'hidden'},
                     ]}
             />
         );
@@ -125,13 +126,13 @@ export class ForgotPasswordPanel extends React.Component<IForgotPasswordPanelPro
 
     render(): JSX.Element {
         let bodyText: string = this.props.bodyText || 'Please enter the email you use for your account.';
-        let panelTitle: string = this.state.showInputField ? 
+        let panelTitle: string = this.state.showInputField ?
                 this.props.panelTitle || 'Forgot Password?' : 'Check Your Email';
         return (
             <div style={this.props.forgotPasswordContainerStyle || defaultPanelContainer}>
                 <form onSubmit={this.submitForm} id="forgotPasswordForm">
-                    <Panel 
-                            header={<PanelHeader headerText={panelTitle} headerStyle={this.props.panelTitleStyle}/>} 
+                    <Panel
+                            header={<PanelHeader headerText={panelTitle} headerStyle={this.props.panelTitleStyle}/>}
                             footer={this.renderFooter()}>
                         <FormGroup style={removeMarginAndPadding}>
                             <label style={this.props.bodyTextStyle}>
@@ -147,7 +148,9 @@ export class ForgotPasswordPanel extends React.Component<IForgotPasswordPanelPro
     }
 }
 
+export const ForgotPasswordPanel: React.ComponentClass<IForgotPasswordPanelProps> = withRouter(ForgotPasswordPanelImpl);
+
 const successMessage: CSS = {
     fontSize: '16px',
-    fontWeight: 400
+    fontWeight: 400,
 };

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {ResetPasswordPanel} from '../components';
-import {Link, IInjectedProps} from 'react-router';
+import {Link} from '../components/ReusableComponents';
 
-export class ResetPasswordPage extends React.Component<IInjectedProps, void> {
-    
+export class ResetPasswordPage extends React.Component<void, void> {
+
     render(): JSX.Element {
         return (
             <div>

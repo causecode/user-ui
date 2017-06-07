@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as Radium from 'radium';
+import {RouteComponentProps, withRouter} from 'react-router';
 import {removeMarginAndPadding, defaultPanelContainer, defaultInputStyle} from '../constants/palette';
 import {Panel, FormControl, FormGroup, HelpBlock} from './ReusableComponents';
 import {CSS, validationType, ISubmitButton, IAxiosResponse} from '../interfaces';
-import {browserHistory} from 'react-router';
 import {ErrorMessage} from './ErrorMessage';
 import {PanelHeader} from './PanelHeader';
 import {PanelFooter} from './PanelFooter';
@@ -37,17 +37,18 @@ let token: string = '';
 let email: string = '';
 
 @Radium
-export class ResetPasswordPanel extends React.Component<IResetPasswordPanelProps, IResetPasswordPanelState> {
+export class ResetPasswordPanelImpl extends
+        React.Component<IResetPasswordPanelProps & RouteComponentProps<void>, IResetPasswordPanelState> {
 
     constructor() {
         super();
         this.state = {
-            newPassword: '', 
-            confirmPassword: '', 
+            newPassword: '',
+            confirmPassword: '',
             newPasswordError: null,
             confirmPasswordError: null,
             passwordChanged: false,
-            errorMessage: ''
+            errorMessage: '',
         };
     }
 
@@ -55,7 +56,7 @@ export class ResetPasswordPanel extends React.Component<IResetPasswordPanelProps
         let redirectUrl: string = window.location.href;
         if (redirectUrl.indexOf('token') >= 0 && redirectUrl.indexOf('email') >= 0) {
             /**
-             * Extracting the query parameters this way because this.props.location 
+             * Extracting the query parameters this way because this.props.location
              * was not present in the route.
              */
             let urlArray: String[] = redirectUrl.split('&');
@@ -87,7 +88,7 @@ export class ResetPasswordPanel extends React.Component<IResetPasswordPanelProps
                 .then((response: IAxiosResponse): void => {
                     this.setState({passwordChanged: true, errorMessage: ''});
                     if (this.props.successUrl) {
-                        browserHistory.push(this.props.successUrl);
+                        this.props.history.push(this.props.successUrl);
                     }
                 }).catch((error: {data: {message: string}}): void => {
                     this.setState({passwordChanged: false, errorMessage: error.data.message});
@@ -96,7 +97,7 @@ export class ResetPasswordPanel extends React.Component<IResetPasswordPanelProps
     }
 
     handleLoginButton = (): void => {
-        browserHistory.push(this.props.onLoginUrl || 'login');
+        this.props.history.push(this.props.onLoginUrl || 'login');
     }
 
     renderPanelFooter = (): JSX.Element => {
@@ -122,8 +123,8 @@ export class ResetPasswordPanel extends React.Component<IResetPasswordPanelProps
         return (
             <div style={this.props.resetPasswordContainerStyle || defaultPanelContainer}>
                 <form style={{padding: '10px 0px'}} onSubmit={this.submitForm} id="resetPaswordForm">
-                    <Panel 
-                            header={<PanelHeader headerText={headerText} headerStyle={this.props.panelTitleStyle}/>} 
+                    <Panel
+                            header={<PanelHeader headerText={headerText} headerStyle={this.props.panelTitleStyle}/>}
                             footer={this.renderPanelFooter()}>
                         <label style={{visibility: this.state.passwordChanged ? 'visible' : 'hidden'}}>
                             Password changed successfully. Please login to continue.
@@ -163,3 +164,5 @@ export class ResetPasswordPanel extends React.Component<IResetPasswordPanelProps
         );
     }
 }
+
+export const ResetPasswordPanel: React.ComponentClass<IResetPasswordPanelProps> = withRouter(ResetPasswordPanelImpl);

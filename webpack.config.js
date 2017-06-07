@@ -4,6 +4,8 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var isProduction = process.argv.indexOf('--production') != -1;
 var path = require('path');
 
+var isRunningOnServer = process.argv.find(v => v.includes('webpack-dev-server'))
+
 var plugins = [];
 
 var entryPoints = [
@@ -52,7 +54,11 @@ var config = {
     entry: entryPoints,
     output: {
         path:'./dist',
-        filename: isProduction ? 'bundle.[hash].min.js' : 'bundle.js'
+        filename: isProduction ? 'bundle.[hash].min.js' : 'bundle.js',
+        publicPath: '/'
+    },
+    devServer: {
+        historyApiFallback: true
     },
     devtool: 'source-map',
     resolve: {
