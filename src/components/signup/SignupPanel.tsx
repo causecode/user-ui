@@ -21,7 +21,7 @@ export interface ISignupPanelStyleProps {
 }
 
 export interface ISignupPanelProps extends
-        ISignupPanelStyleProps, ISubmitButton, ILoginButton, RouteComponentProps<void> {
+        ISignupPanelStyleProps, ISubmitButton, ILoginButton {
     panelTitle?: string;
     onSubmitUrl: string;
     onLoginUrl: string;
@@ -35,7 +35,7 @@ export interface ISignupPanelState {
 }
 
 @Radium
-export class SignupPanelImpl extends React.Component<ISignupPanelProps, ISignupPanelState> {
+export class SignupPanelImpl extends React.Component<ISignupPanelProps & RouteComponentProps<void>, ISignupPanelState> {
 
     constructor() {
         super();

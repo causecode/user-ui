@@ -29,7 +29,7 @@ export interface ILoginPanelStyleProps {
     inputStyle?: CSS;
 }
 
-export interface ILoginPanelProps extends ILoginPanelStyleProps, RouteComponentProps<void> {
+export interface ILoginPanelProps extends ILoginPanelStyleProps {
     showRememberMeCheckbox?: boolean;
     submitButtonContent?: JSX.Element | string;
     emailPlaceholder?: string;
@@ -55,7 +55,7 @@ export interface ILoginPanelState {
 }
 
 @Radium
-export class LoginPanelImpl extends React.Component<ILoginPanelProps, ILoginPanelState> {
+export class LoginPanelImpl extends React.Component<ILoginPanelProps & RouteComponentProps<void>, ILoginPanelState> {
 
     constructor() {
         super();

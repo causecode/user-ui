@@ -11,10 +11,10 @@
     "react-bootstrap": "registry:dt/react-bootstrap#0.0.0+20160806072414",
     "react-dom": "registry:dt/react-dom#0.14.0+20160412154040",
     "react-fontawesome": "registry:dt/react-fontawesome#1.1.0+20161121205806",
-    "react-router": "registry:dt/react-router#4.0.0+20170323201651"
+    "react-router": "registry:dt/react-router#4.0.0+20170323201651",
+    "redux": "registry:dt/redux#3.3.1+20160326112656"
   },
   "dependencies": {
-    "react-redux": "registry:dt/react-redux#4.4.0+20170315101812",
     "react-router-redux": "registry:npm/react-router-redux#4.0.0+20160602212457"
   }
 }
