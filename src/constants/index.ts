@@ -1,3 +1,5 @@
+import {IAccessOptions} from '../interfaces';
+
 export enum HTTP_STATUS {
     SUCCESS = 200,
     UNAUTHORIZED = 401
@@ -34,19 +36,19 @@ export const DELETE_BASIC_DATA: string = 'DELETE_BASIC_DATA';
 /**
  * Hardcoding the roles list because there is no end point to get all the existing roles from the server.
  */
-export const rolesList: {id: number, value: string}[] = [
-    {id: 1, value: 'USER'},
-    {id: 2, value: 'ADMIN'},
-    {id: 3, value: 'CONTENT MANAGER'},
-    {id: 4, value: 'JOB BOARD MANAGER'},
-    {id: 5, value: 'EMPLOYEE MANAGER'},
-    {id: 6, value: 'EMPLOYEE'},
-    {id: 7, value: 'ACCELERATOR USER'},
-    {id: 8, value: 'ACCELERATOR JUDGE'},
-    {id: 9, value: 'ACCELERATOR MENTOR'},
-    {id: 10, value: 'USER RATER'},
-    {id: 11, value: 'CRM MANAGER'},
-    {id: 12, value: 'USER MANAGER'},
-    {id: 13, value: 'CRM USER'},
-    {id: 14, value: 'HR'},
+export const rolesList: IAccessOptions[] = [
+    {id: 1, authority: 'USER'},
+    {id: 2, authority: 'ADMIN'},
+    {id: 3, authority: 'CONTENT MANAGER'},
+    {id: 4, authority: 'JOB BOARD MANAGER'},
+    {id: 5, authority: 'EMPLOYEE MANAGER'},
+    {id: 6, authority: 'EMPLOYEE'},
+    {id: 7, authority: 'ACCELERATOR USER'},
+    {id: 8, authority: 'ACCELERATOR JUDGE'},
+    {id: 9, authority: 'ACCELERATOR MENTOR'},
+    {id: 10, authority: 'USER RATER'},
+    {id: 11, authority: 'CRM MANAGER'},
+    {id: 12, authority: 'USER MANAGER'},
+    {id: 13, authority: 'CRM USER'},
+    {id: 14, authority: 'HR'},
 ];

@@ -8,12 +8,14 @@ import {toggleRolesListModal} from '../../utils';
 import {UserModel} from '../../models/UserModel';
 import {HTTP_STATUS, rolesList, ALERT_DANGER, ALERT_INFO} from '../../constants';
 import {showAlert} from 'react-hero';
+import {IAccessOptions} from '../../interfaces';
 
 export interface IRolesModalProps {
     visibility?: boolean;
     recordsSelected?: number;
     selectedIds?: number[];
     selectAll?: boolean;
+    roleList?: IAccessOptions[];
 }
 
 export interface IRolesModalState {
@@ -44,14 +46,16 @@ export class RolesModalImpl extends React.Component<IRolesModalProps, IRolesModa
     }
 
     renderRolesChecklist = (): JSX.Element[] => {
-        return rolesList.map((item: {id: number, value: string}, index: number): JSX.Element => {
+        let roleList: IAccessOptions[] = this.props.roleList || rolesList;
+
+        return roleList.map((item: IAccessOptions, index: number): JSX.Element => {
             return (
                 <Checkbox
                         id={`${item.id}`}
                         onChange={this.updateRoles}
                         key={index}
                         style={listItem}>
-                    {item.value}
+                    {item.authority}
                 </Checkbox>
             );
         });
@@ -76,7 +80,7 @@ export class RolesModalImpl extends React.Component<IRolesModalProps, IRolesModa
             .catch((error: IAxiosResponse): void => {
                 showAlert(ALERT_DANGER, 'Unable to modify roles.');
             });
-        
+
         this.hideModal();
     }
 
@@ -94,7 +98,7 @@ export class RolesModalImpl extends React.Component<IRolesModalProps, IRolesModa
                     </Row><hr/>
                     <Row style={listStyle}>
                         <Checkbox
-                                id="addToExistingRoles" 
+                                id="addToExistingRoles"
                                 onChange={this.updateExistingRoleState}
                                 checked={this.state.addToExistingRoles}>
                             Add to existing roles
