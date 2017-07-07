@@ -7,3 +7,5 @@ export {SignupPanel} from './signup/SignupPanel';
 export {SignupForm} from './signup/SignupForm';
 export {LoginPanel} from './LoginPanel';
 export {BasePage} from './BasePage';
+export {ConfirmationModal} from './modals/ConfirmationModal';
+export {RolesModal} from './modals/RolesModal';

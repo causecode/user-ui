@@ -33,7 +33,7 @@ export interface ILoginData {
 
 export interface IGenericAction {
     type: string;
-    payload?: string | number | boolean; 
+    payload?: string | number | boolean;
 }
 
 export interface IStateProps {
@@ -93,4 +93,9 @@ export interface IUserAction {
         userBasicData: IUserBasicData,
         userRoles: string[]
     };
+}
+
+export interface IAccessOptions {
+    id: number;
+    authority: string;
 }

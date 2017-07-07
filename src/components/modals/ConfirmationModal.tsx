@@ -72,7 +72,7 @@ export class ConfirmationModalImpl extends React.Component<IConfirmationModalPro
     }
 }
 
-let mapStateToProps: MapStateToProps<IStateProps, IConfirmationModalProps> = (state: IStateProps): 
+let mapStateToProps: MapStateToProps<IStateProps, IConfirmationModalProps> = (state: IStateProps):
         IConfirmationModalProps => {
     return {
         visibility: state.modalVisibility.toJS().confirmationModal,

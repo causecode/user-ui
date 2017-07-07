@@ -81,7 +81,7 @@ export class LoginPanelImpl extends React.Component<ILoginPanelProps & RouteComp
 
     submitForm = (event: React.FormEvent): void => {
         event.preventDefault();
-        let {onSubmit, onLoginSuccess, history} = this.props;
+        let {onSubmit, onLoginSuccess, history, getBasicUserData} = this.props;
         let email: string = this.state.email;
         let password: string = this.state.password;
         if (!email && !password) {
@@ -96,7 +96,7 @@ export class LoginPanelImpl extends React.Component<ILoginPanelProps & RouteComp
                 password,
                 remember_me: this.state.rememberMe,
             };
-            UserModel.login(onSubmit, requestData, onLoginSuccess, history);
+            UserModel.login(onSubmit, requestData, onLoginSuccess, history, getBasicUserData);
         }
     }
 

@@ -77,15 +77,24 @@ export class UserModel extends BaseModel {
         );
     }
 
-    static login(requestUrl: string, requestData: ILoginData, successUrl: string, history: History): void {
+    static login(
+            requestUrl: string,
+            requestData: ILoginData,
+            successUrl: string,
+            history: History,
+            getUserData: boolean = false
+    ): void {
         Axios.post(`${config.serverUrl}${requestUrl}`, requestData).then((response: IAxiosResponse): void => {
             if (response.status === HTTP_STATUS.SUCCESS) {
                 let responseData: {access_token: string, roles: string[], username: string} = response.data;
                 setTokenInLocalStorage(responseData.access_token);
                 dispatchToStore(loginSuccess());
-                dispatchToStore(saveBasicData(responseData.roles, {username: responseData.username}));
-                setRolesInLocalStorage(responseData.roles);
-                this.getUserData(history);
+                if (getUserData) {
+                    this.getUserData(history);
+                } else {
+                    dispatchToStore(saveBasicData(responseData.roles, {username: responseData.username}));
+                    setRolesInLocalStorage(responseData.roles);
+                }
                 history.push(successUrl);
             }
         }).catch((error: IAxiosResponse): void => {
