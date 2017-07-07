@@ -1,13 +1,13 @@
 import * as React from 'react';
 import * as Radium from 'radium';
+import {connect, MapStateToProps} from 'react-redux';
+import {showAlert} from 'react-hero';
 import {listStyle, listContainer, listItem} from '../../constants/palette';
 import {Modal, Row, Button, Checkbox} from '../ReusableComponents';
 import {IStateProps, IAxiosResponse} from '../../interfaces';
-import {connect, MapStateToProps} from 'react-redux';
 import {toggleRolesListModal} from '../../utils';
 import {UserModel} from '../../models/UserModel';
 import {HTTP_STATUS, rolesList, ALERT_DANGER, ALERT_INFO} from '../../constants';
-import {showAlert} from 'react-hero';
 import {IAccessOptions} from '../../interfaces';
 
 export interface IRolesModalProps {
@@ -46,7 +46,7 @@ export class RolesModalImpl extends React.Component<IRolesModalProps, IRolesModa
     }
 
     renderRolesChecklist = (): JSX.Element[] => {
-        let roleList: IAccessOptions[] = this.props.roleList || rolesList;
+        const roleList: IAccessOptions[] = this.props.roleList || rolesList;
 
         return roleList.map((item: IAccessOptions, index: number): JSX.Element => {
             return (
