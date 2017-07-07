@@ -8,6 +8,7 @@ import {configureStore, HTTP} from 'react-hero';
 import {UserModel} from '../../../src/models/UserModel';
 import {Provider} from 'react-redux';
 import {fromJS} from 'immutable';
+import {IAccessOptions} from '../../../src/interfaces';
 import {
     RolesModalImpl,
     IRolesModalProps,
@@ -32,7 +33,7 @@ describe('ConfirmationModal tests.', (): void => {
 
     const componentTree: ShallowWrapper<IRolesModalProps, IRolesModalState> =
             shallow<IRolesModalProps, IRolesModalState>(
-            
+
             <RolesModalImpl
                     visibility={true}
                     recordsSelected={5}
@@ -51,10 +52,9 @@ describe('ConfirmationModal tests.', (): void => {
     }, [
         ['elementName', 'count'],
         ['Modal', 1],
-        ['Row', 3],
+        ['Row', 2],
         ['div', 1],
-        ['Checkbox', 15],
-        ['Button', 2]
+        ['Button', 2],
     ]);
 
     unroll('It should #operation #userRole to the state when it is  #checkboxAction', (
@@ -68,7 +68,7 @@ describe('ConfirmationModal tests.', (): void => {
                 idsInStateAfterChange: number[]
             }
         ): void => {
-        
+
         expect(componentTree.state('selectedRoles')).toEqual(args.idsInStateBeforeChange);
         componentTree.find(`#${args.id}`).simulate('change', {target: {id: args.id}});
         expect(componentTree.state('selectedRoles')).toEqual(args.idsInStateAfterChange);
@@ -94,6 +94,19 @@ describe('ConfirmationModal tests.', (): void => {
                     });
 
     });
+
+    unroll('Should render Roles checklist when #condition', (
+        done: () => {},
+        args: {condition: string, rolesList: IAccessOptions[], count: number}
+    ): void => {
+        componentTree.setProps({roleList: args.rolesList});
+        expect(componentTree.find('Checkbox').length).toBe(args.count);
+        done();
+    }, [
+        ['condition', 'rolesList', 'count'],
+        ['Roles are passed as a prop', [{id: 1, authority: 'ROLE_TEST'}, {id: 2, authority: 'ROLE_TEST'}], 3],
+        ['Roles are not passed as a prop', null, 15],
+    ]);
 
     it('It should mount the component correctly when connected to the store.', (): void => {
         const connectedComponent: ReactWrapper<IRolesModalProps, IRolesModalState> =
