@@ -6,6 +6,7 @@ import {CSS, IStateProps} from '../../interfaces';
 import {toggleConfirmationModal, toggleRolesListModal} from '../../utils';
 import {UserModel} from '../../models/UserModel';
 import FontAwesome = require('react-fontawesome');
+import {ButtonProps} from 'react-bootstrap';
 
 export interface IConfirmationModalProps {
     visibility?: boolean;
@@ -18,7 +19,7 @@ export interface IConfirmationModalProps {
 @Radium
 export class ConfirmationModalImpl extends React.Component<IConfirmationModalProps, void> {
 
-    handleAction = (event: React.FormEvent): void => {
+    handleAction = (event: React.FormEvent<React.ClassicComponent<ButtonProps, {}>>): void => {
         let selectedIds: string = this.props.selectedIds ? this.props.selectedIds.join(',') : '';
         switch (this.props.actionName) {
             case 'Export Report':
