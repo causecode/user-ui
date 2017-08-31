@@ -92,7 +92,7 @@
     "react-dom": "15.2.0",
     "react-fontawesome": "1.1.0",
     "react-google-recaptcha": "0.5.4",
-    "react-hero": "git+ssh://git@bitbucket.org/causecode/react-hero.git#v1.1.5",
+    "react-hero": "git+ssh://git@bitbucket.org/causecode/react-hero.git#v1.1.7",
     "react-hot-loader": "1.3.0",
     "react-router": "4.1.1",
     "react-router-dom": "4.1.1",
