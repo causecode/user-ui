@@ -4,6 +4,7 @@ import {ControlLabel, FormControl, FormGroup, ReCaptcha, Radio, Form, Col} from 
 import {removeMarginAndPadding, defaultInputStyle} from '../../constants/palette';
 import {handleSignupInput} from '../../utils';
 import {CSS} from '../../interfaces';
+import {Radio as BootstrapRadio, FormControlProps} from 'react-bootstrap';
 const ReactDateTime = require<any>('react-datetime');
 
 export interface ISignupFormState {
@@ -24,12 +25,12 @@ export class SignupForm extends React.Component<ISignupFormProps, ISignupFormSta
         this.state = {genderSelected: ''};
     }
 
-    changeGender = (event: React.FormEvent): void => {
+    changeGender = (event: React.FormEvent<BootstrapRadio>): void => {
         this.setState({genderSelected : event.target[`value`]});
         handleSignupInput('gender', event.target[`value`]);
     }
 
-    handleTextInputChange = (event: React.FormEvent): void => {
+    handleTextInputChange = (event: React.FormEvent<React.Component<FormControlProps, {}>>): void => {
         handleSignupInput(event.target[`id`], event.target[`value`]);
     }
 

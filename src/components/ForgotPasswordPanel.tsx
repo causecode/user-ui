@@ -8,6 +8,7 @@ import {ErrorMessage} from './ErrorMessage';
 import {PanelHeader} from './PanelHeader';
 import {PanelFooter} from './PanelFooter';
 import {UserModel} from '../models/UserModel';
+import {FormControlProps} from 'react-bootstrap';
 
 export interface IForgotPasswordPanelStyleProps {
     forgotPasswordContainerStyle?: CSS;
@@ -45,14 +46,14 @@ export class ForgotPasswordPanelImpl extends
         };
     }
 
-    handleEmail = (event: React.FormEvent): void => {
+    handleEmail = (event: React.FormEvent<React.Component<FormControlProps, {}>>): void => {
         let value: string = event.target[`value`];
         if (value) {
             this.setState({email: value, usernameError: null});
         }
     }
 
-    submitForm = (event: React.FormEvent): void => {
+    submitForm = (event: React.FormEvent<HTMLFormElement>): void => {
         event.preventDefault();
         let email: string = this.state.email;
         if (!email) {

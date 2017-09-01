@@ -15,6 +15,7 @@ import {
     pullRight,
     pullLeft,
 } from '../constants/palette';
+import {FormControlProps} from 'react-bootstrap';
 
 export interface IMapStateToProps {
     isLoggedIn: boolean;
@@ -71,7 +72,7 @@ export class LoginPanelImpl extends React.Component<ILoginPanelProps & RouteComp
         this.setState({rememberMe: !isChecked});
     }
 
-    handleInput = (event: React.FormEvent): void => {
+    handleInput = (event: React.FormEvent<React.Component<FormControlProps, {}>>): void => {
         let value: string = event.target[`value`];
         let inputType: string = event.target[`id`];
         if (value) {
@@ -79,7 +80,7 @@ export class LoginPanelImpl extends React.Component<ILoginPanelProps & RouteComp
         }
     }
 
-    submitForm = (event: React.FormEvent): void => {
+    submitForm = (event: React.FormEvent<HTMLFormElement>): void => {
         event.preventDefault();
         let {onSubmit, onLoginSuccess, history, getBasicUserData} = this.props;
         let email: string = this.state.email;
