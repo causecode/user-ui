@@ -8,6 +8,7 @@ import {ErrorMessage} from './ErrorMessage';
 import {PanelHeader} from './PanelHeader';
 import {PanelFooter} from './PanelFooter';
 import {UserModel} from '../models/UserModel';
+import {FormControlProps} from 'react-bootstrap';
 
 export interface IResetPasswordPanelStyleProps {
     resetPasswordContainerStyle?: CSS;
@@ -65,7 +66,7 @@ export class ResetPasswordPanelImpl extends
         }
     }
 
-    handleInputChange = (event: React.FormEvent): void => {
+    handleInputChange = (event: React.FormEvent<React.Component<FormControlProps, {}>>): void => {
         let value: string = event.target[`value`];
         let inputType: string = event.target[`id`];
         if (value) {
@@ -73,7 +74,7 @@ export class ResetPasswordPanelImpl extends
         }
     }
 
-    submitForm = (event: React.FormEvent): void => {
+    submitForm = (event: React.FormEvent<HTMLFormElement>): void => {
         event.preventDefault();
         let newPassword: string = this.state.newPassword;
         let confirmPassword: string = this.state.confirmPassword;

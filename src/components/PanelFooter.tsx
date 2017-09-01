@@ -3,14 +3,15 @@ import * as Radium from 'radium';
 import {defaultFooterContainer, pullLeft, pullRight} from '../constants/palette';
 import {Button} from './ReusableComponents';
 import {CSS, ISubmitButton} from '../interfaces';
+import {ButtonProps} from 'react-bootstrap';
 
 export interface IPanelFooterProps extends ISubmitButton {
     showOnlySubmitButton?: boolean;
     submitForm?: boolean;
-    onSubmit?: React.EventHandler<React.MouseEvent>;
+    onSubmit?: React.EventHandler<React.MouseEvent<React.ClassicComponent<ButtonProps, {}>>>;
     otherButtonContent?: string;
     otherButtonStyle?: CSS;
-    otherButtonOnClick?: React.EventHandler<React.MouseEvent>;
+    otherButtonOnClick?: React.EventHandler<React.MouseEvent<React.ClassicComponent<ButtonProps, {}>>>;
 }
 
 @Radium
@@ -27,7 +28,11 @@ export class PanelFooter extends React.Component<IPanelFooterProps, void> {
     }
 
     render(): JSX.Element {
-        let submitButtonProp: {type?: string, onClick?: React.EventHandler<React.MouseEvent>} = {};
+        let submitButtonProp: {
+            type?: string,
+            onClick?: React.EventHandler<React.MouseEvent<React.ClassicComponent<ButtonProps, {}>>>
+        } = {};
+        
         if (this.props.submitForm) {
             submitButtonProp.type = 'submit';
         } else {

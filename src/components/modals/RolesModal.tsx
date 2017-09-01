@@ -9,6 +9,7 @@ import {toggleRolesListModal} from '../../utils';
 import {UserModel} from '../../models/UserModel';
 import {HTTP_STATUS, rolesList, ALERT_DANGER, ALERT_INFO} from '../../constants';
 import {IAccessOptions} from '../../interfaces';
+import {Checkbox as BootstrapCheckBox} from 'react-bootstrap';
 
 export interface IRolesModalProps {
     visibility?: boolean;
@@ -31,7 +32,7 @@ export class RolesModalImpl extends React.Component<IRolesModalProps, IRolesModa
         this.state = {selectedRoles: [], addToExistingRoles: true};
     }
 
-    updateRoles = (event: React.FormEvent): void => {
+    updateRoles = (event: React.FormEvent<BootstrapCheckBox>): void => {
         let oldRolesState: string[] = this.state.selectedRoles;
         let newRole: string = event.target[`id`];
         let wasCheckedBefore: number = oldRolesState.indexOf(newRole);
