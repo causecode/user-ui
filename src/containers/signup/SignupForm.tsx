@@ -1,10 +1,10 @@
 import * as React from 'react';
 import * as Radium from 'radium';
-import {ControlLabel, FormControl, FormGroup, ReCaptcha, Radio, Form, Col} from '../ReusableComponents';
+import {RadioProps, FormControlProps} from 'react-bootstrap';
+import {ControlLabel, FormControl, FormGroup, Radio, Form, Col, ReCaptcha} from '../ReusableComponents';
 import {removeMarginAndPadding, defaultInputStyle} from '../../constants/palette';
 import {handleSignupInput} from '../../utils';
 import {CSS} from '../../interfaces';
-import {Radio as BootstrapRadio, FormControlProps} from 'react-bootstrap';
 const ReactDateTime = require<any>('react-datetime');
 
 export interface ISignupFormState {
@@ -25,7 +25,7 @@ export class SignupForm extends React.Component<ISignupFormProps, ISignupFormSta
         this.state = {genderSelected: ''};
     }
 
-    changeGender = (event: React.FormEvent<BootstrapRadio>): void => {
+    changeGender = (event: React.FormEvent<RadioProps>): void => {
         this.setState({genderSelected : event.target[`value`]});
         handleSignupInput('gender', event.target[`value`]);
     }
@@ -47,7 +47,7 @@ export class SignupForm extends React.Component<ISignupFormProps, ISignupFormSta
             return (
                 <Radio
                         id={item}
-                        inline 
+                        inline
                         value={item}
                         onChange={this.changeGender}
                         checked={item === this.state.genderSelected}
@@ -134,8 +134,8 @@ export class SignupForm extends React.Component<ISignupFormProps, ISignupFormSta
                     <Col sm={10}>
                         <ReactDateTime
                                 id="date"
-                                timeFormat={false} 
-                                closeOnSelect={true} 
+                                timeFormat={false}
+                                closeOnSelect={true}
                                 onChange={this.handleDateChange}
                         />
                     </Col>
@@ -165,9 +165,9 @@ export class SignupForm extends React.Component<ISignupFormProps, ISignupFormSta
 const reCaptchaStyle: CSS = {
     width: '100%',
     textAlign: '-webkit-center',
-    padding: '15px'
+    padding: '15px',
 };
 
 const signupForm: CSS = {
-    padding: '10px 0px'
+    padding: '10px 0px',
 };

@@ -1,12 +1,13 @@
 import * as React from 'react';
 import * as Radium from 'radium';
-import {Panel, FormControl, Button, Checkbox, FormGroup, HelpBlock, Link} from './ReusableComponents';
-import {CSS, validationType, IStateProps} from '../interfaces';
 import {connect, MapStateToProps} from 'react-redux';
+import {withRouter, RouteComponentProps} from 'react-router-dom';
+import {FormControlProps} from 'react-bootstrap';
+import {Button, Checkbox, FormGroup, HelpBlock, Panel, FormControl, Link} from './ReusableComponents';
+import {CSS, validationType, IStateProps} from '../interfaces';
 import {ErrorMessage} from './ErrorMessage';
 import {PanelHeader} from './PanelHeader';
 import {UserModel} from '../models/UserModel';
-import {withRouter, RouteComponentProps} from 'react-router';
 import {
     removeMarginAndPadding,
     defaultFooterContainer,
@@ -15,7 +16,6 @@ import {
     pullRight,
     pullLeft,
 } from '../constants/palette';
-import {FormControlProps} from 'react-bootstrap';
 
 export interface IMapStateToProps {
     isLoggedIn: boolean;
@@ -178,5 +178,5 @@ let mapStateToProps: MapStateToProps<IStateProps, ILoginPanelProps> = (state: IS
     };
 };
 
-let LoginPanel: React.ComponentClass<ILoginPanelProps> = withRouter(connect(mapStateToProps)(LoginPanelImpl));
+const LoginPanel: React.ComponentClass<ILoginPanelProps> = withRouter(connect(mapStateToProps)(LoginPanelImpl));
 export {LoginPanel};

@@ -1,14 +1,14 @@
 import * as React from 'react';
 import * as Radium from 'radium';
 import {RouteComponentProps, withRouter} from 'react-router';
-import {removeMarginAndPadding, defaultPanelContainer, defaultInputStyle} from '../constants/palette';
+import {FormControlProps} from 'react-bootstrap';
 import {Panel, FormControl, FormGroup, HelpBlock} from './ReusableComponents';
+import {removeMarginAndPadding, defaultPanelContainer, defaultInputStyle} from '../constants/palette';
 import {CSS, validationType, ISubmitButton, IAxiosResponse} from '../interfaces';
 import {ErrorMessage} from './ErrorMessage';
 import {PanelHeader} from './PanelHeader';
 import {PanelFooter} from './PanelFooter';
 import {UserModel} from '../models/UserModel';
-import {FormControlProps} from 'react-bootstrap';
 
 export interface IResetPasswordPanelStyleProps {
     resetPasswordContainerStyle?: CSS;
@@ -20,7 +20,7 @@ export interface IResetPasswordPanelStyleProps {
 
 export interface IResetPasswordPanelProps extends IResetPasswordPanelStyleProps, ISubmitButton {
     paneltitle?: string;
-    onSubmitUrl: string;
+    onSubmitUrl?: string;
     successUrl?: string;
     onLoginUrl?: string;
 }
@@ -53,7 +53,7 @@ export class ResetPasswordPanelImpl extends
         };
     }
 
-    componentWillMount = (): void => {
+    componentWillMount(): void {
         let redirectUrl: string = window.location.href;
         if (redirectUrl.indexOf('token') >= 0 && redirectUrl.indexOf('email') >= 0) {
             /**

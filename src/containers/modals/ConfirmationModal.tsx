@@ -1,12 +1,12 @@
 import * as React from 'react';
 import * as Radium from 'radium';
-import {Modal, Col, Row, Button} from '../ReusableComponents';
 import {connect, MapStateToProps} from 'react-redux';
+import {ButtonProps} from 'react-bootstrap';
+import {Modal, Col, Row, Button, ModalBody, ModalFooter} from '../ReusableComponents';
 import {CSS, IStateProps} from '../../interfaces';
 import {toggleConfirmationModal, toggleRolesListModal} from '../../utils';
 import {UserModel} from '../../models/UserModel';
 import FontAwesome = require('react-fontawesome');
-import {ButtonProps} from 'react-bootstrap';
 
 export interface IConfirmationModalProps {
     visibility?: boolean;
@@ -19,7 +19,7 @@ export interface IConfirmationModalProps {
 @Radium
 export class ConfirmationModalImpl extends React.Component<IConfirmationModalProps, void> {
 
-    handleAction = (event: React.FormEvent<React.ClassicComponent<ButtonProps, {}>>): void => {
+    handleAction = (event: React.FormEvent<ButtonProps>): void => {
         let selectedIds: string = this.props.selectedIds ? this.props.selectedIds.join(',') : '';
         switch (this.props.actionName) {
             case 'Export Report':
@@ -51,7 +51,7 @@ export class ConfirmationModalImpl extends React.Component<IConfirmationModalPro
     render(): JSX.Element {
         return (
             <Modal onHide={this.hideModal} show={this.props.visibility} backdrop="static">
-                <Modal.Body>
+                <ModalBody>
                     <Row>
                         <Col sm={3} style={modalIcon}>
                             <FontAwesome name="question-circle" size="3x"/>
@@ -63,11 +63,11 @@ export class ConfirmationModalImpl extends React.Component<IConfirmationModalPro
                             </strong>
                         </Col>
                     </Row>
-                </Modal.Body>
-                <Modal.Footer>
+                </ModalBody>
+                <ModalFooter>
                     <Button id="ok" onClick={this.handleAction} bsStyle="primary">OK</Button>
                     <Button id="cancel" onClick={this.hideModal}>Cancel</Button>
-                </Modal.Footer>
+                </ModalFooter>
             </Modal>
         );
     }
@@ -80,7 +80,7 @@ let mapStateToProps: MapStateToProps<IStateProps, IConfirmationModalProps> = (st
         actionName: state.userAction.action,
         recordsSelected: state.userAction.records,
         selectedIds: state.checkbox.selectedIds,
-        selectAll: state.checkbox.selectAll
+        selectAll: state.checkbox.selectAll,
     };
 };
 
@@ -88,5 +88,5 @@ let ConfirmationModal: React.ComponentClass<IConfirmationModalProps> = connect(m
 export {ConfirmationModal};
 
 const modalIcon: CSS = {
-    textAlign: 'center'
+    textAlign: 'center',
 };

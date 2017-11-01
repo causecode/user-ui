@@ -2,7 +2,7 @@ import {IAccessOptions} from '../interfaces';
 
 export enum HTTP_STATUS {
     SUCCESS = 200,
-    UNAUTHORIZED = 401
+    UNAUTHORIZED = 401,
 }
 
 // Signup action types.

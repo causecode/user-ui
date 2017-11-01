@@ -47,13 +47,14 @@ plugins.push(
         filename: 'index.html',
         template: 'index.ejs'
     }),
-    new ExtractTextPlugin('style.css', {allChunks: true})
+    new ExtractTextPlugin({filename: 'style.css', allChunks: true}),
+    new webpack.optimize.ModuleConcatenationPlugin()
 );
 
 var config = {
     entry: entryPoints,
     output: {
-        path:'./dist',
+        path: path.join(__dirname, 'dist'),
         filename: isProduction ? 'bundle.[hash].min.js' : 'bundle.js',
         publicPath: '/'
     },
@@ -62,18 +63,18 @@ var config = {
     },
     devtool: 'source-map',
     resolve: {
-        root: [
-            path.resolve('./src')
+        modules: [
+            path.resolve('./src'),
+            "node_modules"
         ],
-        extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js', '.css', '.json']
+        extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js', '.css', '.json', '.ejs'],
+        enforceExtension: false
     },
     module: {
-        preLoaders: [
-            {test: /\.tsx?$/, loader: 'tslint', exclude: /node_modules/}
-        ],
         loaders: [
-            {test: /\.tsx?$/, exclude: /node_modules/, loaders: ['react-hot', 'ts-loader']},
-            {test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader')},
+            {test: /\.tsx?$/, loader: 'tslint-loader', exclude: /node_modules/, enforce: 'pre'},
+            {test: /\.tsx?$/, exclude: /node_modules/, loaders: ['react-hot-loader/webpack', 'ts-loader']},
+            {test: /\.css$/, loader: ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader'})},
             {test: /.(png|woff(2)?|eot|ttf|svg)(\?[a-z0-9=\.]+)?$/, loader: 'url-loader?limit=100000'},
             {test: /\.json$/, loader: 'json-loader' }
         ]

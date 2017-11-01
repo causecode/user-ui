@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {LoginPanel} from '../components';
-import {Link} from '../components/ReusableComponents';
+import {Link} from '../containers/ReusableComponents';
+import {LoginPanel} from '../containers';
 
-export class LoginPage extends React.Component<void, void> {
+export class LoginPage extends React.Component {
     render(): JSX.Element {
         return (
             <div>

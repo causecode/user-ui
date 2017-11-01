@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {ForgotPasswordPanel} from '../components';
-import {Link} from '../components/ReusableComponents';
+import {Link} from '../containers/ReusableComponents';
+import {ForgotPasswordPanel} from '../containers';
 
 export class ForgotPasswordPage extends React.Component<void, void> {
 
