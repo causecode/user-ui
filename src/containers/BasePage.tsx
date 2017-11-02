@@ -7,7 +7,7 @@ import {ResetPasswordPage} from '../demo/ResetPasswordPage';
 import {SignupPage} from '../demo/SignupPage';
 import {LoginPage} from '../demo/LoginPage';
 
-export class BasePage extends React.Component<void, void> {
+export class BasePage extends React.Component {
     render(): JSX.Element {
         return (
             <div>
