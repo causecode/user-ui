@@ -178,5 +178,4 @@ let mapStateToProps: MapStateToProps<IStateProps, ILoginPanelProps> = (state: IS
     };
 };
 
-const LoginPanel: React.ComponentClass<ILoginPanelProps> = withRouter(connect(mapStateToProps)(LoginPanelImpl));
-export {LoginPanel};
+export const LoginPanel: React.ComponentClass<ILoginPanelProps> = withRouter(connect(mapStateToProps)(LoginPanelImpl));

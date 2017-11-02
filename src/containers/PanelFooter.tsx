@@ -14,6 +14,11 @@ export interface IPanelFooterProps extends ISubmitButton {
     otherButtonOnClick?: React.EventHandler<React.MouseEvent<React.ClassicComponent<ButtonProps, {}>>>;
 }
 
+export interface ISubmitButtonProps {
+    type?: string;
+    onClick?: React.EventHandler<React.MouseEvent<React.ClassicComponent<ButtonProps, {}>>>;
+}
+
 @Radium
 export class PanelFooter extends React.Component<IPanelFooterProps, {}> {
 
@@ -28,10 +33,7 @@ export class PanelFooter extends React.Component<IPanelFooterProps, {}> {
     }
 
     render(): JSX.Element {
-        let submitButtonProp: {
-            type?: string,
-            onClick?: React.EventHandler<React.MouseEvent<React.ClassicComponent<ButtonProps, {}>>>,
-        } = {};
+        const submitButtonProp: ISubmitButtonProps = {};
 
         if (this.props.submitForm) {
             submitButtonProp.type = 'submit';
