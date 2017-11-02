@@ -12,7 +12,7 @@ export const initialState: IFromJS = fromJS({
     birthdate: '',
     gender: '',
     myRecaptchaResponse: '',
-    signupErrorMessage: ''
+    signupErrorMessage: '',
 });
 
 export const signupReducer = (state: IFromJS = initialState, action: ISignupAction): IFromJS => {

@@ -1,14 +1,14 @@
 import * as React from 'react';
 import * as Radium from 'radium';
 import {withRouter, RouteComponentProps} from 'react-router';
+import {FormControlProps} from 'react-bootstrap';
+import {Panel, FormControl, FormGroup, HelpBlock} from './ReusableComponents';
 import {removeMarginAndPadding, defaultPanelContainer, defaultInputStyle} from '../constants/palette';
 import {CSS, validationType, IAxiosResponse, ILoginButton, ISubmitButton} from '../interfaces';
-import {Panel, FormControl, FormGroup, HelpBlock} from './ReusableComponents';
 import {ErrorMessage} from './ErrorMessage';
 import {PanelHeader} from './PanelHeader';
 import {PanelFooter} from './PanelFooter';
 import {UserModel} from '../models/UserModel';
-import {FormControlProps} from 'react-bootstrap';
 
 export interface IForgotPasswordPanelStyleProps {
     forgotPasswordContainerStyle?: CSS;

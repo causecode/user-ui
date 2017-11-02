@@ -9,7 +9,7 @@ export interface ISignupAction {
     type: string;
     payload?: {
         key: string,
-        value: string
+        value: string,
     };
 }
 
@@ -42,11 +42,11 @@ export interface IStateProps {
     currentUser?: IFromJS;
     userAction?: {
         action: string,
-        records: number
+        records: number,
     };
     checkbox?: {
         selectedIds: number[],
-        selectAll: boolean
+        selectAll: boolean,
     };
     data?: IFromJS;
 }
@@ -62,7 +62,7 @@ export interface ILoggedinData {
     type: string;
     payload: {
         username: string,
-        roles: string[]
+        roles: string[],
     };
 }
 
@@ -91,7 +91,7 @@ export interface IUserAction {
     type: string;
     payload?: {
         userBasicData: IUserBasicData,
-        userRoles: string[]
+        userRoles: string[],
     };
 }
 

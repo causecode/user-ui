@@ -8,7 +8,7 @@ export interface IPanelHeaderProps {
 }
 
 @Radium
-export class PanelHeader extends React.Component<IPanelHeaderProps, void> {
+export class PanelHeader extends React.Component<IPanelHeaderProps, {}> {
 
     render(): JSX.Element {
         return (

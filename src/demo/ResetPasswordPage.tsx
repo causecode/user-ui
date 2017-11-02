@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {ResetPasswordPanel} from '../components';
-import {Link} from '../components/ReusableComponents';
+import {Link} from '../containers/ReusableComponents';
+import {ResetPasswordPanel} from '../containers';
 
-export class ResetPasswordPage extends React.Component<void, void> {
+export class ResetPasswordPage extends React.Component {
 
     render(): JSX.Element {
         return (

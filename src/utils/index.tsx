@@ -4,7 +4,7 @@ import {store} from '../store';
 import {} from 'react-hero';
 import {
     TOGGLE_CONFIRMATION_MODAL,
-    TOGGLE_ROLES_LIST_MODAL
+    TOGGLE_ROLES_LIST_MODAL,
 } from '../constants';
 
 export const handleSignupInput = (key: string, value: string): void => {

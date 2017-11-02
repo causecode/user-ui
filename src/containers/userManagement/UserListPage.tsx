@@ -39,7 +39,7 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
         {label: 'Export Report', action: showConfirmationModal},
         {label: 'Lock account(s)', action: showConfirmationModal},
         {label: 'Unlock account(s)', action: showConfirmationModal},
-        {label: 'Change role', action: showConfirmationModal}
+        {label: 'Change role', action: showConfirmationModal},
     ];
 
     private pageTitle: JSX.Element = (
@@ -47,7 +47,7 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
     );
 
     render(): JSX.Element {
-              
+
         return (
             <div style={listContainer}>
                 <AlertDismissable alertStyle={alertStyle}/>
@@ -68,7 +68,7 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
                                 {label: 'Last Name', value: 'lastName'},
                                 {label: 'Email', value: 'email'},
                                 {label: 'Date Created', value: 'dateCreated'},
-                                {label: 'Last Updated', value: 'lastUpdated'}
+                                {label: 'Last Updated', value: 'lastUpdated'},
                             ]}
                     />
                     <DropDownFilter
@@ -76,7 +76,7 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
                             paramName="order"
                             possibleValues={[
                                 {label: 'Ascending', value: 'asc'},
-                                {label: 'Descending', value: 'desc'}
+                                {label: 'Descending', value: 'desc'},
                             ]}
                     />
                 </PagedList>
@@ -87,14 +87,14 @@ export class UserListPageImpl extends React.Component<IUserListProps, void> {
     }
 }
 
-let mapStateToProps: MapStateToProps<IStateProps, IUserListProps> = 
+let mapStateToProps: MapStateToProps<IStateProps, IUserListProps> =
         (state: IStateProps, ownProps: IUserListProps): IUserListStateProps => {
     let resourceData: IUserListStateProps & IFromJS = state.data.get(`${UserListPageImpl.resourceName}List`, {});
     resourceData = resourceData.toJS ? resourceData.toJS() : resourceData;
     return {
         properties: resourceData.properties,
         instanceList: resourceData.instanceList,
-        totalCount:  resourceData.totalCount
+        totalCount:  resourceData.totalCount,
     };
 };
 

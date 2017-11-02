@@ -2,7 +2,7 @@ const tsc = require('typescript');
 
 const babel = require('babel-core');
 const jestPreset = require('babel-preset-jest');
-const es2015 = require('babel-preset-es2015');
+const env = require('babel-preset-env');
 const stage3 = require('babel-preset-stage-3');
 
 module.exports = {
@@ -20,7 +20,7 @@ module.exports = {
             );
             return babel.transform(es6Code, {
                 auxiliaryCommentBefore: ' istanbul ignore next ',
-                presets: [jestPreset, es2015, stage3],
+                presets: [jestPreset, env, stage3],
                 retainLines: true
             }).code;
         }
