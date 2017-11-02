@@ -1,15 +1,15 @@
 import * as React from 'react';
 import * as Radium from 'radium';
 import {connect, MapStateToProps} from 'react-redux';
+import {CheckboxProps} from 'react-bootstrap';
 import {showAlert} from 'react-hero';
+import {Modal, Row, Button, Checkbox, ModalHeader, ModalBody, ModalFooter} from '../ReusableComponents';
+import {HTTP_STATUS, rolesList, ALERT_DANGER, ALERT_INFO} from '../../constants';
 import {listStyle, listContainer, listItem} from '../../constants/palette';
-import {Modal, Row, Button, Checkbox} from '../ReusableComponents';
 import {IStateProps, IAxiosResponse} from '../../interfaces';
 import {toggleRolesListModal} from '../../utils';
 import {UserModel} from '../../models/UserModel';
-import {HTTP_STATUS, rolesList, ALERT_DANGER, ALERT_INFO} from '../../constants';
 import {IAccessOptions} from '../../interfaces';
-import {Checkbox as BootstrapCheckBox} from 'react-bootstrap';
 
 export interface IRolesModalProps {
     visibility?: boolean;
@@ -32,7 +32,7 @@ export class RolesModalImpl extends React.Component<IRolesModalProps, IRolesModa
         this.state = {selectedRoles: [], addToExistingRoles: true};
     }
 
-    updateRoles = (event: React.FormEvent<BootstrapCheckBox>): void => {
+    updateRoles = (event: React.FormEvent<CheckboxProps>): void => {
         let oldRolesState: string[] = this.state.selectedRoles;
         let newRole: string = event.target[`id`];
         let wasCheckedBefore: number = oldRolesState.indexOf(newRole);
@@ -88,10 +88,10 @@ export class RolesModalImpl extends React.Component<IRolesModalProps, IRolesModa
     render(): JSX.Element {
         return (
             <Modal onHide={this.hideModal} show={this.props.visibility} backdrop="static">
-                <Modal.Header>
+                <ModalHeader>
                     Please select the roles:
-                </Modal.Header>
-                <Modal.Body>
+                </ModalHeader>
+                <ModalBody>
                     <Row style={listStyle}>
                         <div style={listContainer}>
                             {this.renderRolesChecklist()}
@@ -105,11 +105,11 @@ export class RolesModalImpl extends React.Component<IRolesModalProps, IRolesModa
                             Add to existing roles
                         </Checkbox>
                     </Row>
-                </Modal.Body>
-                <Modal.Footer>
+                </ModalBody>
+                <ModalFooter>
                     <Button id="submit" onClick={this.handleSubmit} bsStyle="primary">Submit</Button>
                     <Button id="cancel" onClick={this.hideModal}>Cancel</Button>
-                </Modal.Footer>
+                </ModalFooter>
             </Modal>
         );
     }
@@ -120,7 +120,7 @@ let mapStateToProps: MapStateToProps<IStateProps, IRolesModalProps> = (state: IS
         visibility: state.modalVisibility.toJS().rolesModal,
         recordsSelected: state.userAction.records,
         selectedIds: state.checkbox.selectedIds,
-        selectAll: state.checkbox.selectAll
+        selectAll: state.checkbox.selectAll,
     };
 };
 

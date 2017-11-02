@@ -1,10 +1,9 @@
 import * as React from 'react';
 import * as Radium from 'radium';
 import {FormInput, IInstancePageProps} from 'react-hero';
-import {FormGroup, Col, Button, Grid} from '../ReusableComponents';
+import {FormGroup, Col, Button, Grid, Link} from '../ReusableComponents';
 import {UserModel} from '../../models/UserModel';
 import {store} from '../../store';
-import {Link} from '../ReusableComponents';
 import {CSS} from '../../interfaces';
 
 export interface IUserEditPageProps extends IInstancePageProps {
@@ -76,7 +75,7 @@ export class UserEditPage extends React.Component<IUserEditPageProps, void> {
             </div>
         );
     }
-};
+}
 
 let defaultButtonStyles: CSS = {
     margin: '0px 10px',

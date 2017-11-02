@@ -2,8 +2,8 @@ import * as React from 'react';
 import * as moment from 'moment';
 import * as Radium from 'radium';
 import {IInstancePageProps} from 'react-hero';
-import {defaultTableStyle} from '../../constants/palette';
 import {Table} from '../ReusableComponents';
+import {defaultTableStyle} from '../../constants/palette';
 import {CSS} from '../../interfaces';
 
 export interface IUserShowPageProps extends IInstancePageProps {

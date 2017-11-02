@@ -2,8 +2,8 @@ import * as React from 'react';
 import * as Radium from 'radium';
 import {connect, MapStateToProps} from 'react-redux';
 import {RouteComponentProps, withRouter} from 'react-router';
-import {CSS, ISignupData, IStateProps, ISubmitButton, ILoginButton} from '../../interfaces';
 import {Panel, Button} from '../ReusableComponents';
+import {CSS, ISignupData, IStateProps, ISubmitButton, ILoginButton} from '../../interfaces';
 import {SignupForm} from './SignupForm';
 import {UserModel} from '../../models/UserModel';
 import {dispatchToStore} from '../../utils';
@@ -127,7 +127,7 @@ let mapStateToProps: MapStateToProps<IStateProps, ISignupPanelProps> =
 };
 
 let SignupPanel: React.ComponentClass<ISignupPanelProps> = withRouter(connect(mapStateToProps)(SignupPanelImpl));
-export {SignupPanel}
+export {SignupPanel};
 
 const defaultOptionStyle: CSS = {
     width: '100%',

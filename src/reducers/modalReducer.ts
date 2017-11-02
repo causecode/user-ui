@@ -9,7 +9,7 @@ export interface IActions {
 
 export const initialState: IFromJS = fromJS({
     confirmationModal: false,
-    rolesModal: false
+    rolesModal: false,
 });
 
 export const modalReducer = (state: IFromJS = initialState, action: IActions): IFromJS => {
@@ -19,7 +19,7 @@ export const modalReducer = (state: IFromJS = initialState, action: IActions): I
 
         case TOGGLE_ROLES_LIST_MODAL:
             return state.set('rolesModal', action.payload);
-    
+
         default:
             return state;
     }

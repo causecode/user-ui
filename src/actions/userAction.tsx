@@ -1,8 +1,8 @@
 import {IGenericAction, ILoggedinData, IUserBasicData, IUserAction} from '../interfaces';
 import {
-    LOGIN_SUCCESS, 
-    SAVE_LOGGED_IN_USER_DATA, 
-    CLEAR_LOGGED_IN_USER_DATA, 
+    LOGIN_SUCCESS,
+    SAVE_LOGGED_IN_USER_DATA,
+    CLEAR_LOGGED_IN_USER_DATA,
     SAVE_LOGIN_ERROR_MESSAGE,
     SAVE_BASIC_DATA,
     DELETE_BASIC_DATA,
@@ -10,7 +10,7 @@ import {
 
 export const loginSuccess = (): IGenericAction => {
     return {
-        type: LOGIN_SUCCESS
+        type: LOGIN_SUCCESS,
     };
 };
 
@@ -19,21 +19,21 @@ export const saveLoggedInUserData = (userRoles: string[], username: string): ILo
         type: SAVE_LOGGED_IN_USER_DATA,
         payload: {
             username,
-            roles: userRoles
-        }
+            roles: userRoles,
+        },
     };
 };
 
 export const clearLoggedInUserData = (): IGenericAction => {
     return {
-        type: CLEAR_LOGGED_IN_USER_DATA
+        type: CLEAR_LOGGED_IN_USER_DATA,
     };
 };
 
 export const saveLoginErrorMessage = (errorMessage: string): IGenericAction => {
     return {
         type: SAVE_LOGIN_ERROR_MESSAGE,
-        payload: errorMessage
+        payload: errorMessage,
     };
 };
 

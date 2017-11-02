@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {SignupPanel} from '../components';
-import {Link} from '../components/ReusableComponents';
+import {SignupPanel} from '../containers';
+import {Link} from '../containers/ReusableComponents';
 
 export class SignupPage extends React.Component<void, void> {
     render(): JSX.Element {

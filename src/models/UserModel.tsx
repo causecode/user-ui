@@ -1,6 +1,6 @@
-import * as Axios from 'axios';
 import * as React from 'react';
 import * as moment from 'moment';
+import Axios, {AxiosPromise} from 'axios';
 import {dispatchToStore, toggleConfirmationModal, setRolesInLocalStorage, removeRolesFromLocalStorage} from '../utils';
 import {History} from 'history';
 import {IAxiosResponse, ISignupData, ILoginData, IUserBasicData} from '../interfaces';
@@ -23,7 +23,7 @@ import {
     removeTokenFromLocalStorage,
 } from 'react-hero';
 
-const FileDownload: any = require('react-file-download');
+const FileDownload: any = require('js-file-download');
 
 export interface IUser {
     id: number;
@@ -82,7 +82,7 @@ export class UserModel extends BaseModel {
             requestData: ILoginData,
             successUrl: string,
             history: History,
-            getUserData: boolean = false
+            getUserData: boolean = false,
     ): void {
         Axios.post(`${config.serverUrl}${requestUrl}`, requestData).then((response: IAxiosResponse): void => {
             if (response.status === HTTP_STATUS.SUCCESS) {
@@ -108,7 +108,7 @@ export class UserModel extends BaseModel {
 
     static getUserData(history: History) {
         HTTP.getRequest('home/action/basicData')
-            .then((response: Axios.AxiosXHR<IUserDataResponse>): void => {
+            .then((response: IAxiosResponse): void => {
                 let userRoles: string[] = [];
                 response.data.userRoles.forEach((roleId: number): void => {
                     response.data.roleList.forEach((item: {id: number, authority: string}): void => {
@@ -177,13 +177,13 @@ export class UserModel extends BaseModel {
         toggleConfirmationModal(false);
     }
 
-    static modifyRoles(addToExisting: boolean, userIds: number[], roleIds: string[]): Axios.IPromise<IAxiosResponse> {
+    static modifyRoles(addToExisting: boolean, userIds: number[], roleIds: string[]): AxiosPromise<{}> {
         let roleActionType: string = addToExisting ? 'append' : 'refresh';
         let url: string = `userManagement/action/modifyRoles`;
         return HTTP.postRequest(url, {}, {roleActionType, userIds, roleIds});
     }
 
-    static forgotPassword(url: string, email: string): Axios.IPromise<IAxiosResponse> {
+    static forgotPassword(url: string, email: string): AxiosPromise<{}> {
         return HTTP.postRequest(url, {}, {email});
     }
 
@@ -192,8 +192,8 @@ export class UserModel extends BaseModel {
             token: string,
             email: string,
             password: string,
-            password2: string
-    ): Axios.IPromise<IAxiosResponse> {
+            password2: string,
+    ): AxiosPromise<{}> {
         return HTTP.postRequest(url, {}, {token, email, password, password2});
     }
 
