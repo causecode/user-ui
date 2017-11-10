@@ -16,7 +16,8 @@
 - `ts-rules v0.0.1`
 - Compatible `@types` packages for all modules
 - `enzyme-adapter-react-16 v1.0.0`
-
+- Added `.circleci/config.yml` for continous integration.
+- Added `.circleci/npmSetup.sh` for resolving version dependencies during build.
 ## Removed
 - `typings.json`
 
