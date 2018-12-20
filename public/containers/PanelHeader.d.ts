@@ -1,0 +1,10 @@
+/// <reference types="react" />
+import * as React from 'react';
+import { CSS } from '../interfaces';
+export interface IPanelHeaderProps {
+    headerText: string;
+    headerStyle?: CSS;
+}
+export declare class PanelHeader extends React.Component<IPanelHeaderProps, {}> {
+    render(): JSX.Element;
+}
