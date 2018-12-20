@@ -12,7 +12,7 @@
     "build:prod": "npm run build -- --production",
     "clean": "rimraf public www",
     "compile": "npm run clean && tsc",
-    "postInstall": "npm run compile",
+    "postinstall": "npm run compile",
     "test": "NODE_ENV=test jest --no-cache",
     "lint-ts": "tslint 'src/*.tsx' 'src/**/*.tsx' 'src/*.ts' 'src/**/*.ts'",
     "start:dev": "npm run clean && webpack-dev-server --watch --hot",
@@ -95,7 +95,7 @@
     "react-dom": "16.0.0",
     "react-fontawesome": "1.6.1",
     "react-google-recaptcha": "0.9.7",
-    "react-hero": "2.0.1",
+    "react-hero": "git+https://github.com/causecode/react-hero.git#release-2.0.1",
     "react-hot-loader": "3.1.1",
     "react-router": "4.2.0",
     "react-router-dom": "4.2.2",
@@ -104,11 +104,8 @@
     "react-test-renderer": "16.0.0",
     "ts-jest": "21.1.4",
     "ts-loader": "2.3.7",
-    "ts-rules": "0.0.1",
+    "ts-rules": "git+https://github.com/causecode/ts-rules.git#v0.0.2",
     "typescript": "2.5.3",
     "unroll": "1.5.0"
-  },
-  "publishConfig": {
-    "registry": "https://nexus.causecode.com/repository/npm-private/"
   }
 }
