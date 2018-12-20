@@ -107,8 +107,5 @@
     "ts-rules": "0.0.1",
     "typescript": "2.5.3",
     "unroll": "1.5.0"
-  },
-  "publishConfig": {
-    "registry": "https://nexus.causecode.com/repository/npm-private/"
   }
 }
